@@ -49,14 +49,14 @@ async function initContent() {
                     title: "Mega Transformer Transport",
                     category: "Heavy Haulage",
                     description: "Multi-axle transportation of 250MT transformer across 12 states.",
-                    image: "images/secind.png"
+                    image: "images/secind.webp"
                 },
                 {
                     id: 2,
                     title: "Wind Turbine Logistics",
                     category: "Renewable Energy",
                     description: "Delivery of wind turbine blades to remote hilly terrains.",
-                    image: "images/secind (1).png"
+                    image: "images/secind (1).webp"
                 }
             ],
             contact: {

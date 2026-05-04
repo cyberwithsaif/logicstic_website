@@ -61,10 +61,6 @@
         <p class="loader-text">Loading...</p>
     </div>
 
-            <div class="loader-bar"><div class="loader-progress"></div></div>
-        </div>
-    </div>
-
     <!-- Header -->
     <header class="header">
         <div class="container header-container">
@@ -505,19 +501,23 @@
     <script src="js/script.js" defer></script>
     <script src="js/dynamic-content.js" defer></script>
     <script>
-        // Hide loader as soon as DOM is interactive
-        window.addEventListener('load', () => {
+        // Hide loader as soon as DOM is ready for a faster feel
+        function hideLoader() {
             const loader = document.getElementById('page-loader');
-            if (loader) {
+            if (loader && !loader.classList.contains('loader-hidden')) {
                 loader.classList.add('loader-hidden');
                 setTimeout(() => loader.remove(), 600);
             }
-        });
-        // Safety: hide loader after 2.5s max
-        setTimeout(() => {
-            const loader = document.getElementById('page-loader');
-            if (loader) { loader.classList.add('loader-hidden'); setTimeout(() => loader.remove(), 600); }
-        }, 2500);
+        }
+
+        // Trigger on DOMContentLoaded (faster than window.load)
+        document.addEventListener('DOMContentLoaded', hideLoader);
+
+        // Fallback for window.load
+        window.addEventListener('load', hideLoader);
+
+        // Ultimate Safety: hide loader after 2s max
+        setTimeout(hideLoader, 2000);
     </script>
 </body>
 
