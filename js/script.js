@@ -70,4 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
+    // Expose observer for dynamic content
+    window.siteObserver = observer;
+
 });

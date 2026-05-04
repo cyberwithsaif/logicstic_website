@@ -11,16 +11,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (heroTitle) heroTitle.textContent = content.hero.title;
         if (heroSubtitle) heroSubtitle.textContent = content.hero.subtitle;
-        if (heroStats && content.hero.stats) {
+        if (heroStats && content.hero.stats && content.hero.stats.length > 0) {
+            heroStats.parentElement.parentElement.style.display = 'block'; // Ensure section is visible
             heroStats.innerHTML = content.hero.stats.map(stat => `
                 <div class="stat-item animate-on-scroll">
-                    <div class="stat-number" data-target="${stat.value.replace(/\D/g, '')}">${stat.value}</div>
+                    <div class="stat-number">${stat.value}</div>
                     <div class="stat-label">${stat.label}</div>
                 </div>
             `).join('');
             
-            // Re-trigger counter animation if script.js is already loaded
-            if (window.initCounters) window.initCounters();
+            // Observe newly added elements for animations
+            document.querySelectorAll('.stat-item.animate-on-scroll').forEach(el => {
+                if (window.siteObserver) window.siteObserver.observe(el);
+            });
+        } else if (heroStats) {
+            heroStats.parentElement.parentElement.style.display = 'none'; // Hide if empty
         }
 
         // --- Projects Page Integration ---

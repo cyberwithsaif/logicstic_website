@@ -1242,6 +1242,10 @@ textarea.form-control {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
+.stats-grid:empty {
+  display: none !important;
+}
+
 .stat-item {
   text-align: center;
 }
