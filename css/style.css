@@ -313,7 +313,7 @@ p {
 .hero {
   height: 100vh;
   min-height: 600px;
-  background: linear-gradient(to right, rgba(11, 31, 58, 0.95) 0%, rgba(11, 31, 58, 0.5) 50%, rgba(11, 31, 58, 0) 100%), url('../images/herobg.png') center/cover no-repeat;
+  background: linear-gradient(to right, rgba(11, 31, 58, 0.95) 0%, rgba(11, 31, 58, 0.5) 50%, rgba(11, 31, 58, 0) 100%), url('../images/herobg.webp') center/cover no-repeat;
   position: relative;
 }
 
