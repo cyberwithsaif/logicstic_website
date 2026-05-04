@@ -14,7 +14,8 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
     <!-- Google Fonts (non-blocking) -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
@@ -65,7 +66,7 @@
     <header class="header">
         <div class="container header-container">
             <a href="index" class="logo">
-                <img src="images/logo.webp" alt="Ashtam Global Logistics" class="site-logo">
+                <img src="images/logo.webp" alt="Ashtam Global Logistics" class="site-logo" decoding="async">
                 <span class="logo-text">Ashtam Global Logistics</span>
             </a>
 
@@ -454,7 +455,7 @@
         <div class="container footer-grid">
             <div class="footer-col">
                 <a href="index" class="footer-logo">
-                    <img src="images/logo.webp" alt="Ashtam Global Logistics" class="footer-site-logo">
+                    <img src="images/logo.webp" alt="Ashtam Global Logistics" class="footer-site-logo" loading="lazy" decoding="async">
                 </a>
                 <p class="footer-desc">End-to-end logistics solutions for heavy, over-dimensional, and high-value cargo
                     across India and globally.</p>
