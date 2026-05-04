@@ -1,0 +1,19 @@
+{
+  "name": "aglwebsite",
+  "version": "1.0.0",
+  "description": "A high-performance, premium web application for **Ashtam Global Logistics**, specializing in heavy hauling, ODC cargo, and international freight solutions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "fs-extra": "^11.3.4",
+    "path": "^0.12.7"
+  }
+}

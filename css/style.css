@@ -209,6 +209,16 @@ p {
   transition: var(--transition);
 }
 
+.logo-text {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  margin-left: 15px;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
 .header.scrolled .site-logo {
   height: 50px;
 }

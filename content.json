@@ -1,0 +1,45 @@
+{
+    "hero": {
+        "title": "Delivering Precision. Ensuring Safety. Building Trust.",
+        "subtitle": "India's Leading Specialist in Heavy & Over-Dimensional Cargo Logistics.",
+        "stats": [
+            {
+                "label": "Years of Experience",
+                "value": "15+"
+            },
+            {
+                "label": "Successful Projects",
+                "value": "500+"
+            },
+            {
+                "label": "Cities Covered",
+                "value": "2000+"
+            },
+            {
+                "label": "Commitment to Safety",
+                "value": "100%"
+            }
+        ]
+    },
+    "projects": [
+        {
+            "id": 1,
+            "title": "Mega Transformer Transport",
+            "category": "Heavy Haulage",
+            "description": "Multi-axle transportation of 250MT transformer across 12 states.",
+            "image": "images/secind.png"
+        },
+        {
+            "id": 2,
+            "title": "Wind Turbine Logistics",
+            "category": "Renewable Energy",
+            "description": "Delivery of wind turbine blades to remote hilly terrains.",
+            "image": "images/secind (1).png"
+        }
+    ],
+    "contact": {
+        "address": "699/210 Laxman Vihar-II, G.No-1, Gurugram, Haryana 122001, India",
+        "phone": "+91 1234567890",
+        "email": "info@ashtamglobal.com"
+    }
+}
