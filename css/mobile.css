@@ -1,54 +1,160 @@
-/*
- * ============================================================
- *  ASHTAM GLOBAL LOGISTICS — COMPLETE MOBILE STYLESHEET
- *  Covers: Loader, Header, Hero, All Sections, Footer
- *  Breakpoints: 1024px | 768px | 480px | 360px
- * ============================================================
- */
-
 /* ============================================================
-   LOADER — TRUCK ANIMATION (mobile scale)
+   LOADER — TRUCK ANIMATION FIX (all screens)
+   The SVGs have no explicit size so they inflate on mobile.
+   We constrain everything here absolutely.
 ============================================================ */
+
+/* Always constrain the loader container */
+#page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #0B1F3A;
+  overflow: hidden;  /* critical — clips any oversized SVG */
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 100px;
+  flex-shrink: 0;
+}
+
+.truckWrapper {
+  width: 200px !important;
+  height: 100px !important;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Force SVG inside truck to correct size */
+.trucksvg {
+  width: 130px !important;
+  height: auto !important;
+  display: block;
+}
+
+.tiresvg {
+  width: 24px !important;
+  height: 24px !important;
+  display: block;
+}
+
+.lampPost {
+  width: auto !important;
+  height: 90px !important;
+}
+
+.truckBody {
+  width: 130px !important;
+  height: auto !important;
+  margin-bottom: 6px;
+  animation: motion 1s linear infinite;
+}
+
+.truckTires {
+  width: 130px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px 0 15px;
+  position: absolute;
+  bottom: 0;
+}
+
 @media (max-width: 768px) {
-  #page-loader {
-    padding: 20px;
-  }
-
   .loader {
-    transform: scale(0.8);
-  }
-
-  .loader-text {
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    margin-top: 12px;
+    width: 160px;
+    height: 80px;
   }
 
   .truckWrapper {
-    width: 170px;
-    height: 85px;
+    width: 160px !important;
+    height: 80px !important;
+  }
+
+  .trucksvg {
+    width: 100px !important;
   }
 
   .truckBody {
-    width: 110px;
+    width: 100px !important;
+    margin-bottom: 5px;
   }
 
   .truckTires {
-    width: 110px;
+    width: 100px !important;
     padding: 0 8px 0 12px;
+  }
+
+  .tiresvg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  .lampPost {
+    height: 70px !important;
+  }
+
+  .loader-text {
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    margin-top: 14px;
   }
 }
 
 @media (max-width: 480px) {
   .loader {
-    transform: scale(0.65);
+    width: 140px;
+    height: 70px;
+  }
+
+  .truckWrapper {
+    width: 140px !important;
+    height: 70px !important;
+  }
+
+  .trucksvg {
+    width: 88px !important;
+  }
+
+  .truckBody {
+    width: 88px !important;
+    margin-bottom: 4px;
+  }
+
+  .truckTires {
+    width: 88px !important;
+    padding: 0 6px 0 10px;
+  }
+
+  .tiresvg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .lampPost {
+    height: 60px !important;
   }
 
   .loader-text {
-    font-size: 0.7rem;
-    margin-top: 8px;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    margin-top: 12px;
   }
 }
+
 
 /* ============================================================
    BASE — Global mobile resets
