@@ -1411,14 +1411,9 @@ textarea.form-control {
   margin-right: -40px;
 }
 
-.stats-grid:empty {
-  display: none !important;
-}
+.stats-grid:empty { display: none !important; }
 
-.stat-item {
-  text-align: center;
-  padding: 5px;
-}
+.stat-item { text-align: center; padding: 5px; }
 
 .stat-number {
   font-size: 1.5rem;
@@ -1435,13 +1430,267 @@ textarea.form-control {
   letter-spacing: 0.5px;
 }
 
-@media (max-width: 768px) {
+/* =====================================================
+   COMPREHENSIVE MOBILE RESPONSIVE SYSTEM
+   Breakpoints: 992px (tablet), 768px (mobile), 480px (small)
+===================================================== */
+
+/* ---- TABLET (≤992px) ---- */
+@media (max-width: 992px) {
+  h1 { font-size: 2.6rem; }
+  h2 { font-size: 1.9rem; }
+
+  .header {
+    top: 8px;
+    width: 97%;
+    padding: 6px 20px;
+  }
+
+  /* Nav hidden on tablet too */
+  .mobile-menu-toggle { display: block; }
+
+  .main-nav {
+    position: fixed;
+    top: 65px;
+    left: -100%;
+    width: 100%;
+    height: calc(100vh - 65px);
+    background-color: var(--primary-color);
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    padding: 20px;
+    z-index: 999;
+  }
+  .main-nav.active { left: 0; }
+
+  .main-nav .nav-list { flex-direction: column; gap: 5px; }
+
+  .nav-link {
+    color: #fff;
+    font-size: 1.05rem;
+    padding: 10px 0;
+    display: block;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .header-cta .btn { display: none; }
+
+  .dropdown-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.05);
+    margin-top: 5px;
+    display: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+  }
+  .dropdown.active .dropdown-menu { display: block; }
+  .dropdown-menu a { color: rgba(255,255,255,0.8); padding: 8px 10px; }
+
+  /* Hero */
+  .hero { min-height: 90vh; padding-bottom: 40px; }
+  .hero > .container { padding-top: 100px; }
+  .hero-content h1 { font-size: 2.4rem; }
+
+  /* Grids */
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .industries-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+
+  /* About */
+  .about-preview { flex-direction: column; gap: 30px; }
+  .about-img::before { display: none; }
+
+  /* Process */
+  .process-steps::before { display: none; }
+  .step { width: 50%; }
+
+  /* Stats */
   .stats-grid {
-    margin-top: -60px;
-    padding: 30px 20px;
+    max-width: 100%;
+    margin-right: 0;
+    margin-left: 0;
   }
-  
-  .stat-number {
-    font-size: 2rem;
+
+  /* Why section */
+  .why-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ---- MOBILE (≤768px) ---- */
+@media (max-width: 768px) {
+  /* Typography */
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.6rem; }
+  h3 { font-size: 1.2rem; }
+  p  { font-size: 0.95rem; }
+
+  .container { padding: 0 16px; }
+  .py-5 { padding: 50px 0; }
+  section { padding: 50px 0; }
+
+  /* ---- Header ---- */
+  .header {
+    top: 6px;
+    width: 97%;
+    padding: 5px 15px;
+    border-radius: 40px;
   }
+
+  .site-logo { height: 42px; }
+  .logo-text { font-size: 1rem; }
+
+  /* ---- Hero ---- */
+  .hero {
+    min-height: 100vh;
+    padding-top: 80px;
+    padding-bottom: 30px;
+    background-position: center right;
+  }
+
+  .hero > .container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 90px;
+    gap: 20px;
+  }
+
+  .hero-content { width: 100%; }
+  .hero-content h1 { font-size: 1.9rem; line-height: 1.2; }
+  .hero-content p { font-size: 0.95rem; }
+
+  .hero-btns {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  .hero-btns .btn { width: 100%; text-align: center; }
+
+  .hero-features {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+    width: 100%;
+  }
+  .hero-feature {
+    flex: 1 1 calc(33% - 8px);
+    min-width: 90px;
+    padding: 8px 6px;
+    font-size: 0.7rem;
+    border-radius: 8px;
+    text-align: center;
+    flex-direction: column;
+  }
+  .hero-feature i { font-size: 1.2rem; margin-bottom: 4px; }
+
+  /* ---- Stats ---- */
+  .stats-grid {
+    margin-right: 0;
+    margin-left: 0;
+    margin-top: 20px;
+    max-width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    padding: 15px;
+    gap: 8px;
+  }
+  .stat-number { font-size: 1.4rem; }
+  .stat-label { font-size: 0.6rem; }
+
+  /* ---- About ---- */
+  .about-preview { flex-direction: column; gap: 25px; }
+  .about-img { width: 100%; }
+  .about-img::before { display: none; }
+  .about-text { width: 100%; }
+
+  /* ---- Services ---- */
+  .services-grid { grid-template-columns: 1fr; gap: 16px; }
+  .service-card { min-height: auto; padding: 25px 20px; }
+
+  /* ---- Process ---- */
+  .process-steps { flex-direction: column; gap: 20px; }
+  .process-steps::before { display: none; }
+  .step { width: 100%; }
+
+  /* ---- Industries ---- */
+  .industries-grid { grid-template-columns: 1fr; gap: 16px; }
+  .industry-card { min-height: 220px; }
+
+  /* ---- Features / Why Choose ---- */
+  .features-grid { grid-template-columns: 1fr; gap: 20px; }
+  .why-grid { grid-template-columns: 1fr !important; }
+  .why-card { padding: 18px 15px; }
+
+  /* ---- Contact ---- */
+  .contact-grid { grid-template-columns: 1fr !important; gap: 30px; }
+  .contact-form { padding: 25px 20px; }
+
+  /* ---- Footer ---- */
+  .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+  .footer-site-logo { height: 65px; }
+
+  /* ---- Page Header (inner pages) ---- */
+  .page-header { padding: 100px 0 40px; }
+  .page-header h1 { font-size: 1.8rem; }
+
+  /* ---- Projects / Case Studies ---- */
+  .case-study { flex-direction: column !important; }
+  .case-img img { min-height: 200px; }
+  .case-content { padding: 25px 20px; }
+
+  /* ---- Tables ---- */
+  .comparison-table { overflow-x: auto; display: block; }
+
+  /* ---- Buttons ---- */
+  .btn { padding: 10px 22px; font-size: 0.9rem; }
+
+  /* ---- Loader truck size ---- */
+  .truckWrapper { width: 160px; height: 80px; }
+  .truckBody { width: 100px; }
+  .truckTires { width: 100px; padding: 0 8px 0 12px; }
+}
+
+/* ---- SMALL MOBILE (≤480px) ---- */
+@media (max-width: 480px) {
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.4rem; }
+
+  .container { padding: 0 12px; }
+
+  /* Header logo text hidden on very small screens */
+  .logo-text { display: none; }
+  .site-logo { height: 38px; }
+
+  /* Hero */
+  .hero-content h1 { font-size: 1.6rem; }
+  .hero-btns .btn { padding: 12px 18px; font-size: 0.88rem; }
+
+  /* Stats 2-col on tiny screens */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 10px;
+    gap: 6px;
+  }
+
+  /* Services single col */
+  .services-grid { grid-template-columns: 1fr; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr; }
+
+  /* Section spacing */
+  .py-5 { padding: 35px 0; }
+  section { padding: 35px 0; }
+
+  /* Service detail pages */
+  .services-footer-row { grid-template-columns: 1fr; }
+  .service-card { padding: 20px 15px; }
+
+  /* Page header */
+  .page-header { padding: 90px 0 30px; }
+  .page-header h1 { font-size: 1.5rem; }
 }
