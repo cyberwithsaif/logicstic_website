@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         // Fetch with cache-buster to ensure admin changes show immediately
-        const response = await fetch('/api/content?t=' + Date.now());
+        const response = await fetch('/api/content');
         const content = await response.json();
         
         // --- Homepage Integration ---

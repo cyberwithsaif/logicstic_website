@@ -7,15 +7,18 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// In-memory cache for content.json
+let contentCache = null;
+let contentCacheTime = 0;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    next();
-});
 app.use(express.static(path.join(__dirname, '/'), {
-    extensions: ['html', 'htm']
+    extensions: ['html', 'htm'],
+    maxAge: '7d',       // Cache static assets for 7 days in browser
+    etag: true,
+    lastModified: true
 }));
 app.use(session({
     secret: 'agl-secret-key-2026',
@@ -83,7 +86,16 @@ const checkAuth = (req, res, next) => {
 
 // API Endpoints
 app.get('/api/content', async (req, res) => {
+    const now = Date.now();
+    // Serve from cache if fresh
+    if (contentCache && (now - contentCacheTime) < CACHE_TTL) {
+        res.set('Cache-Control', 'public, max-age=300');
+        return res.json(contentCache);
+    }
     const content = await fs.readJson(CONTENT_FILE);
+    contentCache = content;
+    contentCacheTime = now;
+    res.set('Cache-Control', 'public, max-age=300');
     res.json(content);
 });
 
@@ -100,6 +112,9 @@ app.post('/api/admin/login', (req, res) => {
 app.post('/api/admin/update-content', checkAuth, async (req, res) => {
     try {
         await fs.writeJson(CONTENT_FILE, req.body, { spaces: 4 });
+        // Invalidate cache on update
+        contentCache = null;
+        contentCacheTime = 0;
         res.json({ success: true });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });

@@ -7,15 +7,32 @@
     <meta name="description"
         content="About Ashtam Global Logistics - Your trusted partner in heavy cargo and project logistics.">
     <title>About Us | Ashtam Global Logistics</title>
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- Google Fonts (non-blocking) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- FontAwesome (deferred) -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 </head>
 
 <body>
+
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-inner">
+            <div class="loader-logo">AGL</div>
+            <div class="loader-bar"><div class="loader-progress"></div></div>
+        </div>
+    </div>
+
 
     <!-- Header -->
     <header class="header">
@@ -190,8 +207,19 @@
     </footer>
 
     <!-- JS -->
-    <script src="js/script.js"></script>
-    <script src="js/dynamic-content.js"></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/dynamic-content.js" defer></script>
+
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('page-loader');
+            if (loader) { loader.classList.add('loader-hidden'); setTimeout(() => loader.remove(), 600); }
+        });
+        setTimeout(() => {
+            const loader = document.getElementById('page-loader');
+            if (loader) { loader.classList.add('loader-hidden'); setTimeout(() => loader.remove(), 600); }
+        }, 2500);
+    </script>
 </body>
 
 </html>
