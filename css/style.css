@@ -1234,16 +1234,16 @@ textarea.form-control {
 /* Stats Grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 15px;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  padding: 15px 25px;
-  border-radius: 12px;
+  padding: 12px 20px;
+  border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  max-width: 680px;
+  max-width: 600px;
   margin-left: auto;
   margin-right: -40px;
 }
@@ -1254,18 +1254,18 @@ textarea.form-control {
 
 .stat-item {
   text-align: center;
-  padding: 10px;
+  padding: 5px;
 }
 
 .stat-number {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: var(--bg-white);
-  margin-bottom: 2px;
+  margin-bottom: 0px;
 }
 
 .stat-label {
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
