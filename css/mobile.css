@@ -347,8 +347,9 @@
   h3 { font-size: 1.15rem !important; }
 
   .container { padding: 0 16px !important; }
-  .py-5 { padding: 45px 0 !important; }
-  section { padding: 45px 0 !important; }
+  .py-5 { padding: 30px 0 !important; }
+  section { padding: 30px 0 !important; }
+  .stats-section { display: none !important; }
   .btn { padding: 11px 22px !important; font-size: 0.9rem !important; }
 }
 
@@ -477,10 +478,62 @@
    14. FOOTER
 ========================================================== */
 @media (max-width: 768px) {
-  .footer-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
-  .footer-site-logo { height: 60px !important; }
-  .footer-bottom { font-size: 0.8rem !important; padding: 12px 0 !important; }
-  .contact-info-list li { font-size: 0.85rem !important; }
+  .footer {
+    padding-top: 30px !important;
+    text-align: center !important;
+  }
+  .footer-grid { 
+    grid-template-columns: 1fr !important; 
+    gap: 20px !important; 
+  }
+  .footer-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  .footer-site-logo { 
+    height: 45px !important; 
+    margin: 0 auto 10px !important;
+  }
+  .footer-desc {
+    font-size: 0.8rem !important;
+    margin: 10px 0 !important;
+  }
+  .footer h4 {
+    font-size: 0.95rem !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 5px !important;
+  }
+  .footer h4::after {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  .footer ul li a {
+    font-size: 0.82rem !important;
+  }
+  .social-links {
+    justify-content: center !important;
+    display: flex !important;
+    gap: 8px !important;
+  }
+  .social-links a {
+    margin-right: 0 !important;
+  }
+  .contact-info-list {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 5px !important;
+  }
+  .contact-info-list li { 
+    font-size: 0.82rem !important; 
+    justify-content: center !important;
+    text-align: center !important;
+  }
+  .footer-bottom { 
+    font-size: 0.75rem !important; 
+    padding: 10px 0 !important; 
+  }
 }
 
 
