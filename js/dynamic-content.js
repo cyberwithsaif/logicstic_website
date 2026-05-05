@@ -55,6 +55,18 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (footerPhone) footerPhone.innerHTML = `<i class="fas fa-phone"></i> ${content.contact.phone}`;
         if (footerEmail) footerEmail.innerHTML = `<i class="fas fa-envelope"></i> ${content.contact.email}`;
 
+        // --- WhatsApp Button ---
+        const waBtn = document.getElementById('whatsapp-btn');
+        if (waBtn) {
+            const waNumber = content.settings?.whatsapp || '';
+            if (waNumber) {
+                waBtn.href = `https://wa.me/${waNumber}`;
+                waBtn.style.display = 'flex';
+            } else {
+                waBtn.style.display = 'none';
+            }
+        }
+
     } catch (err) {
         console.error('Error fetching dynamic content:', err);
     }

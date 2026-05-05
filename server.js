@@ -28,6 +28,7 @@ app.use(session({
 }));
 
 const CONTENT_FILE = path.join(__dirname, 'content.json');
+const QUOTES_FILE = path.join(__dirname, 'quotes.json');
 
 // Initialize content.json if it doesn't exist
 async function initContent() {
@@ -133,6 +134,67 @@ app.get('/api/admin/logout', (req, res) => {
 // Serve Admin Panel (Protected)
 app.get('/admin', checkAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'admin', 'index.html'));
+});
+
+// ===== QUOTES / INQUIRIES API =====
+
+// Submit a quote request (public)
+app.post('/api/contact/submit', async (req, res) => {
+    try {
+        const { name, email, phone, service, message } = req.body;
+        if (!name || !email || !phone) {
+            return res.status(400).json({ success: false, message: 'Name, email, and phone are required.' });
+        }
+        const quotes = (await fs.pathExists(QUOTES_FILE)) ? await fs.readJson(QUOTES_FILE) : [];
+        const quote = {
+            id: Date.now(),
+            name, email, phone, service: service || 'Not specified',
+            message: message || '',
+            timestamp: new Date().toISOString(),
+            read: false
+        };
+        quotes.push(quote);
+        await fs.writeJson(QUOTES_FILE, quotes, { spaces: 4 });
+        res.json({ success: true, message: 'Quote request submitted successfully!' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Get all quotes (admin only)
+app.get('/api/admin/quotes', checkAuth, async (req, res) => {
+    try {
+        const quotes = (await fs.pathExists(QUOTES_FILE)) ? await fs.readJson(QUOTES_FILE) : [];
+        res.json({ success: true, quotes: quotes.reverse() });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Delete a quote (admin only)
+app.delete('/api/admin/quotes/:id', checkAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        let quotes = (await fs.pathExists(QUOTES_FILE)) ? await fs.readJson(QUOTES_FILE) : [];
+        quotes = quotes.filter(q => q.id !== id);
+        await fs.writeJson(QUOTES_FILE, quotes, { spaces: 4 });
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// Mark quote as read (admin only)
+app.put('/api/admin/quotes/:id/read', checkAuth, async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const quotes = (await fs.pathExists(QUOTES_FILE)) ? await fs.readJson(QUOTES_FILE) : [];
+        const q = quotes.find(q => q.id === id);
+        if (q) { q.read = true; await fs.writeJson(QUOTES_FILE, quotes, { spaces: 4 }); }
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
 });
 
 app.listen(PORT, () => {

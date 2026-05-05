@@ -10,6 +10,7 @@ const tabTitles = {
     services: 'Service Management',
     industries: 'Industry Sectors',
     contact: 'Contact Information',
+    inquiries: 'Quote Inquiries',
     settings: 'Global Settings'
 };
 
@@ -94,6 +95,7 @@ function populateAll() {
     const sm = document.getElementById('setting-meta-desc'); if (sm) sm.value = siteContent.settings?.metaDesc || '';
     const sl = document.getElementById('setting-linkedin'); if (sl) sl.value = siteContent.settings?.linkedin || '';
     const sx = document.getElementById('setting-twitter'); if (sx) sx.value = siteContent.settings?.twitter || '';
+    const sw = document.getElementById('setting-whatsapp'); if (sw) sw.value = siteContent.settings?.whatsapp || '';
 }
 
 // ===== STATS =====
@@ -338,6 +340,7 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
     const ssm = document.getElementById('setting-meta-desc'); if (ssm) siteContent.settings.metaDesc = ssm.value;
     const ssl = document.getElementById('setting-linkedin'); if (ssl) siteContent.settings.linkedin = ssl.value;
     const ssx = document.getElementById('setting-twitter'); if (ssx) siteContent.settings.twitter = ssx.value;
+    const ssw = document.getElementById('setting-whatsapp'); if (ssw) siteContent.settings.whatsapp = ssw.value;
 
     try {
         const r = await fetch('/api/admin/update-content', {
@@ -357,6 +360,62 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
         console.error(e);
         showToast('Failed to save. Check server connection.', 'error');
     }
+});
+
+// ===== INQUIRIES =====
+async function loadInquiries() {
+    try {
+        const r = await fetch('/api/admin/quotes');
+        const data = await r.json();
+        const el = document.getElementById('inquiries-list');
+        const badge = document.getElementById('inquiries-badge');
+        if (!el) return;
+
+        const quotes = data.quotes || [];
+        const unread = quotes.filter(q => !q.read).length;
+        if (badge) { badge.textContent = unread; badge.style.display = unread > 0 ? 'inline' : 'none'; }
+
+        if (!quotes.length) {
+            el.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No quote requests yet.</p></div>';
+            return;
+        }
+        el.innerHTML = quotes.map(q => `
+            <div class="list-item" style="flex-direction:column;align-items:stretch;${q.read ? 'opacity:0.6' : 'border-color:var(--secondary)'}">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+                    <h4 style="margin:0">${esc(q.name)} ${!q.read ? '<span style="background:var(--danger);color:#fff;font-size:0.6rem;padding:2px 6px;border-radius:8px;margin-left:8px">NEW</span>' : ''}</h4>
+                    <span style="font-size:0.75rem;color:var(--text-muted)">${new Date(q.timestamp).toLocaleString()}</span>
+                </div>
+                <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:0.82rem;color:var(--text-muted);margin-bottom:6px">
+                    <span><i class="fas fa-envelope"></i> ${esc(q.email)}</span>
+                    <span><i class="fas fa-phone"></i> ${esc(q.phone)}</span>
+                    <span><i class="fas fa-tag"></i> ${esc(q.service)}</span>
+                </div>
+                ${q.message ? `<p style="font-size:0.85rem;color:var(--text);margin:6px 0;line-height:1.5;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px">${esc(q.message)}</p>` : ''}
+                <div style="display:flex;gap:8px;margin-top:8px">
+                    ${!q.read ? `<button class="btn btn-save btn-sm" onclick="markRead(${q.id})"><i class="fas fa-check"></i> Mark Read</button>` : ''}
+                    <button class="btn btn-danger btn-sm" onclick="deleteQuote(${q.id})"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`).join('');
+    } catch (e) { console.error(e); }
+}
+
+async function markRead(id) {
+    try { await fetch(`/api/admin/quotes/${id}/read`, { method: 'PUT' }); loadInquiries(); } catch(e) {}
+}
+async function deleteQuote(id) {
+    if (!confirm('Delete this inquiry?')) return;
+    try {
+        await fetch(`/api/admin/quotes/${id}`, { method: 'DELETE' });
+        loadInquiries();
+        showToast('Inquiry deleted');
+    } catch(e) { showToast('Failed to delete', 'error'); }
+}
+
+// Auto-load inquiries when tab switches
+const origTabClick = document.querySelectorAll('.nav-item').forEach(b => {
+    b.addEventListener('click', () => {
+        if (b.dataset.tab === 'inquiries') setTimeout(loadInquiries, 100);
+    });
 });
 
 // ===== INIT =====

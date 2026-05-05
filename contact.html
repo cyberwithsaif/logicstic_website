@@ -321,11 +321,38 @@
     <!-- JS -->
     <script src="js/script.js?v=2" defer></script>
     <script>
-        // Optional form submission handler
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            alert('Thank you for contacting Ashtam Global Logistics! We will get back to you shortly.');
-            this.reset();
+            const btn = this.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+
+            const data = {
+                name: this.querySelector('input[placeholder="Your Name"]').value,
+                email: this.querySelector('input[placeholder="Your Email Address"]').value,
+                phone: this.querySelector('input[placeholder="Phone Number"]').value,
+                service: this.querySelector('select').value,
+                message: this.querySelector('textarea').value
+            };
+
+            try {
+                const r = await fetch('/api/contact/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await r.json();
+                if (result.success) {
+                    this.reset();
+                    alert('Thank you! Your quote request has been submitted. We will contact you shortly.');
+                } else {
+                    alert('Error: ' + (result.message || 'Please try again.'));
+                }
+            } catch (err) {
+                alert('Network error. Please try again.');
+            }
+            btn.disabled = false;
+            btn.innerHTML = 'Send Message <i class="fas fa-paper-plane" style="margin-left: 5px;"></i>';
         });
 
         // Mapbox GL JS Initialization
@@ -359,5 +386,9 @@
             if (loader) { loader.classList.add('loader-hidden'); setTimeout(() => loader.remove(), 600); }
         }, 2500);
     </script>
+<!-- WhatsApp Floating Button -->
+<a href="#" id="whatsapp-btn" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+</a>
 </body>
 </html>
