@@ -1,110 +1,363 @@
+// ===== GLOBAL STATE =====
 let siteContent = {};
+const serviceKeys = ['transformer', 'contract', 'general', 'international'];
+let activeServiceKey = 'transformer';
 
-// Tab Switching
-document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetTab = item.getAttribute('data-tab');
-        
-        // Update Nav
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        item.classList.add('active');
+const tabTitles = {
+    dashboard: 'Dashboard',
+    homepage: 'Homepage Editor',
+    projects: 'Project Portfolio',
+    services: 'Service Management',
+    industries: 'Industry Sectors',
+    contact: 'Contact Information',
+    settings: 'Global Settings'
+};
 
-        // Update Content
-        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-        document.getElementById(`${targetTab}-tab`).classList.remove('hidden');
+// ===== TOAST =====
+function showToast(msg, type = 'success') {
+    const t = document.createElement('div');
+    t.className = `toast toast-${type}`;
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
+}
 
-        // Update Title
-        const titleMap = {
-            dashboard: 'Dashboard Overview',
-            homepage: 'Homepage Editor',
-            projects: 'Project Portfolio',
-            services: 'Service Management',
-            settings: 'Global Settings'
-        };
-        document.getElementById('page-title').textContent = titleMap[targetTab];
+// ===== TAB NAVIGATION =====
+document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        const target = document.getElementById(`tab-${tab}`);
+        if (target) target.classList.add('active');
+        document.getElementById('page-title').textContent = tabTitles[tab] || tab;
+        document.getElementById('page-subtitle').textContent = tab === 'dashboard' ? 'Welcome back, Administrator' : 'Manage your website content';
+        if (tab === 'services' && !document.getElementById('service-transformer-title')) renderServiceEditor();
+        if (tab === 'dashboard') updateDashboardStats();
     });
 });
 
-// Load Content from API
+// ===== MODALS =====
+function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+// ===== LOAD CONTENT =====
 async function loadContent() {
     try {
-        const response = await fetch('/api/content');
-        siteContent = await response.json();
-        populateFields();
-    } catch (err) {
-        console.error('Failed to load content', err);
-    }
+        const r = await fetch('/api/content', { cache: 'no-store' });
+        siteContent = await r.json();
+        if (!siteContent.about) siteContent.about = { title: '', description1: '', description2: '', features: [] };
+        if (!siteContent.services) siteContent.services = {};
+        if (!siteContent.industries) siteContent.industries = [];
+        if (!siteContent.settings) siteContent.settings = {};
+        populateAll();
+        updateDashboardStats();
+    } catch (e) { console.error('Load error:', e); showToast('Failed to load content', 'error'); }
 }
 
-function populateFields() {
+// ===== POPULATE ALL =====
+function populateAll() {
     // Hero
-    document.getElementById('hero-title').value = siteContent.hero.title;
-    document.getElementById('hero-subtitle').value = siteContent.hero.subtitle;
+    const ht = document.getElementById('hero-title'); if (ht) ht.value = siteContent.hero?.title || '';
+    const hs = document.getElementById('hero-subtitle'); if (hs) hs.value = siteContent.hero?.subtitle || '';
 
     // Stats
-    const statsContainer = document.getElementById('stats-container');
-    statsContainer.innerHTML = '';
-    siteContent.hero.stats.forEach((stat, index) => {
-        statsContainer.innerHTML += `
+    const sc = document.getElementById('stats-container');
+    if (sc && siteContent.hero?.stats) {
+        sc.innerHTML = siteContent.hero.stats.map((s, i) => `
             <div class="form-group">
-                <label>${stat.label}</label>
-                <input type="text" value="${stat.value}" onchange="updateStat(${index}, this.value)" class="admin-input">
-            </div>
-        `;
-    });
+                <label>${s.label}</label>
+                <input type="text" value="${s.value}" onchange="updateStat(${i}, this.value)" class="form-input">
+            </div>`).join('');
+    }
+
+    // About
+    const at = document.getElementById('about-title'); if (at) at.value = siteContent.about?.title || '';
+    const ad1 = document.getElementById('about-desc1'); if (ad1) ad1.value = siteContent.about?.description1 || '';
+    const ad2 = document.getElementById('about-desc2'); if (ad2) ad2.value = siteContent.about?.description2 || '';
+    renderAboutFeatures();
 
     // Projects
     renderProjects();
-    document.getElementById('stat-project-count').textContent = siteContent.projects.length;
+
+    // Industries
+    renderIndustries();
+
+    // Contact
+    const ca = document.getElementById('contact-address'); if (ca) ca.value = siteContent.contact?.address || '';
+    const cp = document.getElementById('contact-phone'); if (cp) cp.value = siteContent.contact?.phone || '';
+    const ce = document.getElementById('contact-email'); if (ce) ce.value = siteContent.contact?.email || '';
+
+    // Settings
+    const st = document.getElementById('setting-site-title'); if (st) st.value = siteContent.settings?.siteTitle || '';
+    const sm = document.getElementById('setting-meta-desc'); if (sm) sm.value = siteContent.settings?.metaDesc || '';
+    const sl = document.getElementById('setting-linkedin'); if (sl) sl.value = siteContent.settings?.linkedin || '';
+    const sx = document.getElementById('setting-twitter'); if (sx) sx.value = siteContent.settings?.twitter || '';
 }
 
-function updateStat(index, value) {
-    siteContent.hero.stats[index].value = value;
+// ===== STATS =====
+function updateStat(idx, val) { if (siteContent.hero?.stats) siteContent.hero.stats[idx].value = val; }
+
+function updateDashboardStats() {
+    const sp = document.getElementById('stat-projects'); if (sp) sp.textContent = (siteContent.projects || []).length;
+    const si = document.getElementById('stat-industries'); if (si) si.textContent = (siteContent.industries || []).length;
 }
 
+// ===== ABOUT FEATURES =====
+function renderAboutFeatures() {
+    const el = document.getElementById('about-features-list');
+    if (!el) return;
+    const feats = siteContent.about?.features || [];
+    el.innerHTML = feats.map((f, i) => `
+        <div class="feature-input-row">
+            <input type="text" value="${f}" onchange="updateAboutFeature(${i}, this.value)" class="form-input">
+            <button class="btn btn-danger btn-sm btn-icon" onclick="removeAboutFeature(${i})" title="Remove"><i class="fas fa-times"></i></button>
+        </div>`).join('') + `
+        <button class="btn btn-outline btn-sm" onclick="addAboutFeature()" style="margin-top:8px"><i class="fas fa-plus"></i> Add Feature</button>`;
+}
+function updateAboutFeature(i, v) { if (siteContent.about?.features) siteContent.about.features[i] = v; }
+function addAboutFeature() { if (!siteContent.about) siteContent.about = { features: [] }; if (!siteContent.about.features) siteContent.about.features = []; siteContent.about.features.push('New Feature'); renderAboutFeatures(); }
+function removeAboutFeature(i) { if (siteContent.about?.features) { siteContent.about.features.splice(i, 1); renderAboutFeatures(); } }
+
+// ===== PROJECTS =====
 function renderProjects() {
-    const list = document.getElementById('projects-list');
-    list.innerHTML = '';
-    siteContent.projects.forEach(project => {
-        list.innerHTML += `
-            <div class="stat-card" style="flex-direction: column; align-items: flex-start;">
-                <h3>${project.title}</h3>
-                <span style="color: var(--secondary); font-size: 0.8rem;">${project.category}</span>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 10px 0;">${project.description}</p>
-                <div style="display: flex; gap: 10px; margin-top: 10px;">
-                    <button class="add-btn" style="padding: 5px 15px; font-size: 0.8rem;" onclick="editProject(${project.id})">Edit</button>
-                    <button class="add-btn" style="padding: 5px 15px; font-size: 0.8rem; background: #ff4757;" onclick="deleteProject(${project.id})">Delete</button>
+    const el = document.getElementById('projects-list');
+    if (!el) return;
+    const projs = siteContent.projects || [];
+    if (!projs.length) {
+        el.innerHTML = '<div class="empty-state"><i class="fas fa-folder-open"></i><p>No projects yet. Click "Add Project" to create one.</p></div>';
+    } else {
+        el.innerHTML = projs.map(p => `
+            <div class="list-item">
+                <img src="../${p.image || 'images/logo.webp'}" class="list-item-thumb" onerror="this.src='../images/logo.webp'">
+                <div class="list-item-info"><h4>${p.title}</h4><span>${p.category}</span><p>${p.description}</p></div>
+                <div class="list-item-actions">
+                    <button class="btn btn-outline btn-sm" onclick="editProject(${p.id})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProject(${p.id})"><i class="fas fa-trash"></i></button>
                 </div>
-            </div>
-        `;
-    });
+            </div>`).join('');
+    }
 }
 
-// Save Content
+function openProjectModal(id = null) {
+    document.getElementById('project-modal-title').textContent = id ? 'Edit Project' : 'Add Project';
+    if (id) {
+        const p = siteContent.projects.find(x => x.id === id);
+        if (p) {
+            document.getElementById('modal-project-id').value = p.id;
+            document.getElementById('modal-project-title-field').value = p.title;
+            document.getElementById('modal-project-category').value = p.category;
+            document.getElementById('modal-project-desc').value = p.description;
+            document.getElementById('modal-project-image').value = p.image || '';
+        }
+    } else {
+        document.getElementById('modal-project-id').value = '';
+        document.getElementById('modal-project-title-field').value = '';
+        document.getElementById('modal-project-category').value = '';
+        document.getElementById('modal-project-desc').value = '';
+        document.getElementById('modal-project-image').value = '';
+    }
+    openModal('project-modal');
+}
+
+function saveProject() {
+    const id = parseInt(document.getElementById('modal-project-id').value) || null;
+    const data = {
+        id: id || Math.max(0, ...(siteContent.projects || []).map(p => p.id)) + 1,
+        title: document.getElementById('modal-project-title-field').value.trim(),
+        category: document.getElementById('modal-project-category').value.trim(),
+        description: document.getElementById('modal-project-desc').value.trim(),
+        image: document.getElementById('modal-project-image').value.trim() || 'images/logo.webp'
+    };
+    if (!data.title) { showToast('Title is required', 'error'); return; }
+    if (!siteContent.projects) siteContent.projects = [];
+    if (id) {
+        const idx = siteContent.projects.findIndex(p => p.id === id);
+        if (idx >= 0) siteContent.projects[idx] = data;
+    } else {
+        siteContent.projects.push(data);
+    }
+    closeModal('project-modal');
+    renderProjects();
+    showToast(id ? 'Project updated' : 'Project added');
+}
+
+function editProject(id) { openProjectModal(id); }
+function deleteProject(id) {
+    if (!confirm('Delete this project?')) return;
+    siteContent.projects = (siteContent.projects || []).filter(p => p.id !== id);
+    renderProjects();
+    showToast('Project deleted');
+}
+
+// ===== SERVICES =====
+function renderServiceEditor(key = null) {
+    if (key) activeServiceKey = key;
+
+    // Tab nav
+    const nav = document.getElementById('service-tabs-nav');
+    const labels = { transformer: 'Transformer', contract: 'Contract', general: 'General', international: 'International' };
+    nav.innerHTML = serviceKeys.map(k =>
+        `<button class="btn ${k === activeServiceKey ? 'btn-save' : 'btn-outline'} btn-sm" onclick="renderServiceEditor('${k}')">
+            <i class="fas fa-${k === 'transformer' ? 'bolt' : k === 'contract' ? 'file-signature' : k === 'general' ? 'truck-fast' : 'ship'}"></i> ${labels[k]}
+        </button>`).join('');
+
+    const svc = siteContent.services?.[activeServiceKey] || { title: '', subtitle: '', description: '', features: [] };
+    const area = document.getElementById('service-editor-area');
+    area.innerHTML = `
+        <div class="service-edit-card">
+            <h3><i class="fas fa-edit"></i> ${labels[activeServiceKey]} Services</h3>
+            <div class="form-row">
+                <div class="form-group"><label>Page Title</label><input type="text" id="svc-title" class="form-input" value="${esc(svc.title)}"></div>
+                <div class="form-group"><label>Subtitle</label><input type="text" id="svc-subtitle" class="form-input" value="${esc(svc.subtitle)}"></div>
+            </div>
+            <div class="form-group"><label>Description</label><textarea id="svc-desc" class="form-textarea" rows="3">${esc(svc.description)}</textarea></div>
+            <div class="form-group"><label>Key Features</label>
+                <div id="svc-features">${(svc.features || []).map((f, i) => `
+                    <div class="feature-input-row">
+                        <input type="text" value="${esc(f)}" onchange="updateServiceFeature(${i}, this.value)" class="form-input">
+                        <button class="btn btn-danger btn-sm btn-icon" onclick="removeServiceFeature(${i})" title="Remove"><i class="fas fa-times"></i></button>
+                    </div>`).join('')}</div>
+                <button class="btn btn-outline btn-sm" onclick="addServiceFeature()" style="margin-top:8px"><i class="fas fa-plus"></i> Add Feature</button>
+            </div>
+        </div>`;
+}
+
+function esc(s) { return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+function updateServiceFeature(i, v) {
+    if (!siteContent.services) siteContent.services = {};
+    if (!siteContent.services[activeServiceKey]) siteContent.services[activeServiceKey] = { features: [] };
+    siteContent.services[activeServiceKey].features[i] = v;
+}
+function addServiceFeature() {
+    if (!siteContent.services) siteContent.services = {};
+    if (!siteContent.services[activeServiceKey]) siteContent.services[activeServiceKey] = { features: [] };
+    if (!siteContent.services[activeServiceKey].features) siteContent.services[activeServiceKey].features = [];
+    siteContent.services[activeServiceKey].features.push('New feature');
+    renderServiceEditor(activeServiceKey);
+}
+function removeServiceFeature(i) {
+    if (siteContent.services?.[activeServiceKey]?.features) {
+        siteContent.services[activeServiceKey].features.splice(i, 1);
+        renderServiceEditor(activeServiceKey);
+    }
+}
+
+// ===== INDUSTRIES =====
+function renderIndustries() {
+    const el = document.getElementById('industries-list');
+    if (!el) return;
+    const inds = siteContent.industries || [];
+    if (!inds.length) {
+        el.innerHTML = '<div class="empty-state"><i class="fas fa-industry"></i><p>No industries yet. Click "Add Industry" to create one.</p></div>';
+    } else {
+        el.innerHTML = inds.map(i => `
+            <div class="list-item">
+                <img src="../${i.image || 'images/industry.webp'}" class="list-item-thumb" onerror="this.src='../images/logo.webp'">
+                <div class="list-item-info"><h4>${i.name}</h4><span>Industry Sector</span></div>
+                <div class="list-item-actions">
+                    <button class="btn btn-outline btn-sm" onclick="editIndustry(${i.id})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteIndustry(${i.id})"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>`).join('');
+    }
+}
+
+function openIndustryModal(id = null) {
+    document.getElementById('industry-modal-title').textContent = id ? 'Edit Industry' : 'Add Industry';
+    if (id) {
+        const ind = (siteContent.industries || []).find(x => x.id === id);
+        if (ind) {
+            document.getElementById('modal-industry-id').value = ind.id;
+            document.getElementById('modal-industry-name').value = ind.name;
+            document.getElementById('modal-industry-image').value = ind.image || '';
+        }
+    } else {
+        document.getElementById('modal-industry-id').value = '';
+        document.getElementById('modal-industry-name').value = '';
+        document.getElementById('modal-industry-image').value = '';
+    }
+    openModal('industry-modal');
+}
+
+function saveIndustry() {
+    const id = parseInt(document.getElementById('modal-industry-id').value) || null;
+    const name = document.getElementById('modal-industry-name').value.trim();
+    if (!name) { showToast('Name is required', 'error'); return; }
+    const data = {
+        id: id || Math.max(0, ...(siteContent.industries || []).map(i => i.id)) + 1,
+        name,
+        image: document.getElementById('modal-industry-image').value.trim() || 'images/industry.webp'
+    };
+    if (!siteContent.industries) siteContent.industries = [];
+    if (id) {
+        const idx = siteContent.industries.findIndex(i => i.id === id);
+        if (idx >= 0) siteContent.industries[idx] = data;
+    } else {
+        siteContent.industries.push(data);
+    }
+    closeModal('industry-modal');
+    renderIndustries();
+    showToast(id ? 'Industry updated' : 'Industry added');
+}
+function editIndustry(id) { openIndustryModal(id); }
+function deleteIndustry(id) {
+    if (!confirm('Delete this industry?')) return;
+    siteContent.industries = (siteContent.industries || []).filter(i => i.id !== id);
+    renderIndustries();
+    showToast('Industry deleted');
+}
+
+// ===== SAVE ALL =====
 document.getElementById('save-all-btn').addEventListener('click', async () => {
-    // Collect updated data
-    siteContent.hero.title = document.getElementById('hero-title').value;
-    siteContent.hero.subtitle = document.getElementById('hero-subtitle').value;
+    // Collect homepage
+    const ht = document.getElementById('hero-title'); if (ht) siteContent.hero.title = ht.value;
+    const hs = document.getElementById('hero-subtitle'); if (hs) siteContent.hero.subtitle = hs.value;
+    const at = document.getElementById('about-title'); if (at && siteContent.about) siteContent.about.title = at.value;
+    const ad1 = document.getElementById('about-desc1'); if (ad1 && siteContent.about) siteContent.about.description1 = ad1.value;
+    const ad2 = document.getElementById('about-desc2'); if (ad2 && siteContent.about) siteContent.about.description2 = ad2.value;
+
+    // Collect services
+    const st = document.getElementById('svc-title');
+    if (st && siteContent.services?.[activeServiceKey]) {
+        siteContent.services[activeServiceKey].title = st.value;
+        siteContent.services[activeServiceKey].subtitle = document.getElementById('svc-subtitle')?.value || '';
+        siteContent.services[activeServiceKey].description = document.getElementById('svc-desc')?.value || '';
+    }
+
+    // Collect contact
+    const ca = document.getElementById('contact-address'); if (ca) siteContent.contact.address = ca.value;
+    const cp = document.getElementById('contact-phone'); if (cp) siteContent.contact.phone = cp.value;
+    const ce = document.getElementById('contact-email'); if (ce) siteContent.contact.email = ce.value;
+
+    // Collect settings
+    if (!siteContent.settings) siteContent.settings = {};
+    const sst = document.getElementById('setting-site-title'); if (sst) siteContent.settings.siteTitle = sst.value;
+    const ssm = document.getElementById('setting-meta-desc'); if (ssm) siteContent.settings.metaDesc = ssm.value;
+    const ssl = document.getElementById('setting-linkedin'); if (ssl) siteContent.settings.linkedin = ssl.value;
+    const ssx = document.getElementById('setting-twitter'); if (ssx) siteContent.settings.twitter = ssx.value;
 
     try {
-        const response = await fetch('/api/admin/update-content', {
+        const r = await fetch('/api/admin/update-content', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(siteContent)
         });
-        
-        const data = await response.json();
+        const data = await r.json();
         if (data.success) {
-            alert('✅ Changes saved successfully!');
+            showToast('All changes saved successfully!');
+            document.getElementById('last-save').textContent = new Date().toLocaleTimeString();
+            updateDashboardStats();
         } else {
-            alert('❌ Error: ' + (data.message || 'Unknown server error'));
+            showToast(data.message || 'Save failed', 'error');
         }
-    } catch (err) {
-        console.error('Save Error:', err);
-        alert('❌ Failed to save changes. Please check if the server is running and you are still logged in.');
+    } catch (e) {
+        console.error(e);
+        showToast('Failed to save. Check server connection.', 'error');
     }
 });
 
-// Initial Load
+// ===== INIT =====
 loadContent();

@@ -43,25 +43,29 @@ async function initContent() {
                     { label: "Commitment to Safety", value: "100%" }
                 ]
             },
+            about: {
+                title: "Excellence in Heavy Logistics",
+                description1: "Ashtam Global Logistics Pvt. Ltd. is a dynamic startup logistics company committed to delivering reliable, efficient, and customized logistics solutions.",
+                description2: "We specialize in end-to-end logistics solutions for Defence, Power Transformers, Hydro Projects, Oil & Gas, Energy, Infrastructure, Renewables, and Heavy Engineering industries.",
+                features: ["Zero-Compromise Safety", "Deadline-Focused Execution", "Technical Expertise", "Seamless Global Logistics"]
+            },
             projects: [
-                {
-                    id: 1,
-                    title: "Mega Transformer Transport",
-                    category: "Heavy Haulage",
-                    description: "Multi-axle transportation of 250MT transformer across 12 states.",
-                    image: "images/secind.webp"
-                },
-                {
-                    id: 2,
-                    title: "Wind Turbine Logistics",
-                    category: "Renewable Energy",
-                    description: "Delivery of wind turbine blades to remote hilly terrains.",
-                    image: "images/secind (1).webp"
-                }
+                { id: 1, title: "Mega Transformer Transport", category: "Heavy Haulage", description: "Multi-axle transportation of 250MT transformer across 12 states.", image: "images/secind.webp" },
+                { id: 2, title: "Wind Turbine Logistics", category: "Renewable Energy", description: "Delivery of wind turbine blades to remote hilly terrains.", image: "images/secind (1).webp" }
+            ],
+            services: {
+                transformer: { title: "Transformer Transportation Services", subtitle: "End-to-End Power Logistics", description: "End-to-end logistics for oversized power transformers.", features: ["Route surveys", "Multi-axle trailers", "State approvals", "Escort vehicles"] },
+                contract: { title: "Contract Integrated Logistics", subtitle: "Comprehensive Supply Chain", description: "Contract-based integrated logistics solutions.", features: ["Dedicated fleet", "Real-time tracking", "Customs clearance", "Performance reviews"] },
+                general: { title: "General Logistics Services", subtitle: "Agile Freight Solutions", description: "Urgent and JIT cargo movements.", features: ["Short-notice loads", "Pan-India 48hr", "Multi-modal", "Spot pricing"] },
+                international: { title: "International Logistics Services", subtitle: "Global Freight Forwarding", description: "Global supply chain solutions.", features: ["Ocean freight", "Air freight", "Customs brokerage", "190+ countries"] }
+            },
+            industries: [
+                { id: 1, name: "Defence & Aerospace", image: "images/industry.webp" },
+                { id: 2, name: "Power & Energy", image: "images/industry.webp" }
             ],
             contact: {
                 address: "699/210 Laxman Vihar-II, G.No-1, Gurugram, Haryana 122001, India",
-                phone: "+91 1234567890",
+                phone: "+91 98765 43210",
                 email: "info@ashtamglobal.com"
             }
         };
