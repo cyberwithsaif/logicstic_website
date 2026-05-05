@@ -30,6 +30,8 @@ body {
   line-height: 1.6;
   background-color: var(--bg-white);
   overflow-x: hidden;
+  /* Removed animation that used transform as it breaks position: fixed */
+  opacity: 0;
   animation: pageFadeIn 0.5s ease forwards;
 }
 
@@ -167,8 +169,8 @@ body {
    PAGE FADE-IN
 ===================== */
 @keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 
@@ -1502,9 +1504,8 @@ textarea.form-control {
 /* =====================================================
    COMPREHENSIVE MOBILE RESPONSIVE SYSTEM
    Breakpoints: 992px (tablet), 768px (mobile), 480px (small)
-===================================================== */
+ ===================================================== */
 
-/* ---- TABLET (≤992px) ---- */
 @media (max-width: 992px) {
   h1 { font-size: 2.6rem; }
   h2 { font-size: 1.9rem; }
@@ -1515,7 +1516,6 @@ textarea.form-control {
     padding: 6px 20px;
   }
 
-  /* Nav hidden on tablet too */
   .mobile-menu-toggle { display: block; }
 
   .main-nav {
@@ -1559,39 +1559,31 @@ textarea.form-control {
   .dropdown.active .dropdown-menu { display: block; }
   .dropdown-menu a { color: rgba(255,255,255,0.8); padding: 8px 10px; }
 
-  /* Hero */
   .hero { min-height: 90vh; padding-bottom: 40px; }
   .hero > .container { padding-top: 100px; }
   .hero-content h1 { font-size: 2.4rem; }
 
-  /* Grids */
   .services-grid { grid-template-columns: repeat(2, 1fr); }
   .features-grid { grid-template-columns: 1fr 1fr; }
   .industries-grid { grid-template-columns: 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
 
-  /* About */
   .about-preview { flex-direction: column; gap: 30px; }
   .about-img::before { display: none; }
 
-  /* Process */
   .process-steps::before { display: none; }
   .step { width: 50%; }
 
-  /* Stats */
   .stats-grid {
     max-width: 100%;
     margin-right: 0;
     margin-left: 0;
   }
 
-  /* Why section */
   .why-grid { grid-template-columns: repeat(2, 1fr) !important; }
 }
 
-/* ---- MOBILE (≤768px) ---- */
 @media (max-width: 768px) {
-  /* Typography */
   h1 { font-size: 2rem; }
   h2 { font-size: 1.6rem; }
   h3 { font-size: 1.2rem; }
@@ -1601,7 +1593,6 @@ textarea.form-control {
   .py-5 { padding: 50px 0; }
   section { padding: 50px 0; }
 
-  /* ---- Header ---- */
   .header {
     top: 6px;
     width: 97%;
@@ -1612,7 +1603,6 @@ textarea.form-control {
   .site-logo { height: 42px; }
   .logo-text { font-size: 1rem; }
 
-  /* ---- Hero ---- */
   .hero {
     min-height: 100vh;
     padding-top: 80px;
@@ -1657,7 +1647,6 @@ textarea.form-control {
   }
   .hero-feature i { font-size: 1.2rem; margin-bottom: 4px; }
 
-  /* ---- Stats ---- */
   .stats-grid {
     margin-right: 0;
     margin-left: 0;
@@ -1670,96 +1659,75 @@ textarea.form-control {
   .stat-number { font-size: 1.4rem; }
   .stat-label { font-size: 0.6rem; }
 
-  /* ---- About ---- */
   .about-preview { flex-direction: column; gap: 25px; }
   .about-img { width: 100%; }
   .about-img::before { display: none; }
   .about-text { width: 100%; }
 
-  /* ---- Services ---- */
   .services-grid { grid-template-columns: 1fr; gap: 16px; }
   .service-card { min-height: auto; padding: 25px 20px; }
 
-  /* ---- Process ---- */
   .process-steps { flex-direction: column; gap: 20px; }
   .process-steps::before { display: none; }
   .step { width: 100%; }
 
-  /* ---- Industries ---- */
   .industries-grid { grid-template-columns: 1fr; gap: 16px; }
   .industry-card { min-height: 220px; }
 
-  /* ---- Features / Why Choose ---- */
   .features-grid { grid-template-columns: 1fr; gap: 20px; }
   .why-grid { grid-template-columns: 1fr !important; }
   .why-card { padding: 18px 15px; }
 
-  /* ---- Contact ---- */
   .contact-grid { grid-template-columns: 1fr !important; gap: 30px; }
   .contact-form { padding: 25px 20px; }
 
-  /* ---- Footer ---- */
   .footer-grid { grid-template-columns: 1fr; gap: 30px; }
   .footer-site-logo { height: 65px; }
 
-  /* ---- Page Header (inner pages) ---- */
   .page-header { padding: 100px 0 40px; }
   .page-header h1 { font-size: 1.8rem; }
 
-  /* ---- Projects / Case Studies ---- */
   .case-study { flex-direction: column !important; }
   .case-img img { min-height: 200px; }
   .case-content { padding: 25px 20px; }
 
-  /* ---- Tables ---- */
   .comparison-table { overflow-x: auto; display: block; }
 
-  /* ---- Buttons ---- */
   .btn { padding: 10px 22px; font-size: 0.9rem; }
 
-  /* ---- Loader truck size ---- */
   .truckWrapper { width: 160px; height: 80px; }
   .truckBody { width: 100px; }
   .truckTires { width: 100px; padding: 0 8px 0 12px; }
 }
 
-/* ---- SMALL MOBILE (≤480px) ---- */
 @media (max-width: 480px) {
   h1 { font-size: 1.7rem; }
   h2 { font-size: 1.4rem; }
 
   .container { padding: 0 12px; }
 
-  /* Header logo text hidden on very small screens */
   .logo-text { display: none; }
   .site-logo { height: 38px; }
 
-  /* Hero */
   .hero-content h1 { font-size: 1.6rem; }
   .hero-btns .btn { padding: 12px 18px; font-size: 0.88rem; }
 
-  /* Stats 2-col on tiny screens */
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
     padding: 10px;
     gap: 6px;
   }
 
-  /* Services single col */
   .services-grid { grid-template-columns: 1fr; }
 
-  /* Footer */
   .footer-grid { grid-template-columns: 1fr; }
 
-  /* Section spacing */
   .py-5 { padding: 35px 0; }
   section { padding: 35px 0; }
 
-  /* Service detail pages */
   .services-footer-row { grid-template-columns: 1fr; }
   .service-card { padding: 20px 15px; }
 
-  /* Page header */
   .page-header { padding: 90px 0 30px; }
   .page-header h1 { font-size: 1.5rem; }
 }
