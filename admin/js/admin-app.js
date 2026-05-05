@@ -366,7 +366,15 @@ document.getElementById('save-all-btn').addEventListener('click', async () => {
 async function loadInquiries() {
     try {
         const r = await fetch('/api/admin/quotes');
+        if (r.status === 401) {
+            window.location.href = '/admin/login.html';
+            return;
+        }
         const data = await r.json();
+        if (!data.success) {
+            showToast(data.message || 'Failed to load inquiries', 'error');
+            return;
+        }
         const el = document.getElementById('inquiries-list');
         const badge = document.getElementById('inquiries-badge');
         if (!el) return;

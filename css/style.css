@@ -915,23 +915,23 @@ p {
 
 /* ===== WHATSAPP FLOATING BUTTON ===== */
 .whatsapp-float {
-  position: fixed;
+  position: fixed !important;
   bottom: 28px;
   right: 28px;
-  width: 58px;
-  height: 58px;
+  width: 60px;
+  height: 60px;
   background: #25D366;
-  color: #fff;
+  color: #fff !important;
   border-radius: 50%;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   font-size: 1.8rem;
-  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
-  z-index: 999;
-  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+  z-index: 9999 !important;
+  transition: transform 0.3s ease;
   animation: whatsapp-pulse 2s ease-in-out infinite;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 .whatsapp-float:hover {
   transform: scale(1.1);
