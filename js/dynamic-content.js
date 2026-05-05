@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', async () => {
+// Runs via defer — DOM is fully parsed, no need for DOMContentLoaded
+(async () => {
     try {
         // Fetch with cache-buster to ensure admin changes show immediately
         const response = await fetch('/api/content');
@@ -12,7 +13,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (heroTitle) heroTitle.textContent = content.hero.title;
         if (heroSubtitle) heroSubtitle.textContent = content.hero.subtitle;
         if (heroStats && content.hero.stats && content.hero.stats.length > 0) {
-            heroStats.parentElement.parentElement.style.display = 'block'; // Ensure section is visible
+            const heroStatsParent = heroStats.parentElement;
+            if (heroStatsParent) {
+                const section = heroStatsParent.parentElement || heroStatsParent;
+                section.style.display = 'block';
+            }
             heroStats.innerHTML = content.hero.stats.map(stat => `
                 <div class="stat-item animate-on-scroll">
                     <div class="stat-number">${stat.value}</div>
@@ -24,8 +29,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.querySelectorAll('.stat-item.animate-on-scroll').forEach(el => {
                 if (window.siteObserver) window.siteObserver.observe(el);
             });
-        } else if (heroStats) {
-            heroStats.parentElement.parentElement.style.display = 'none'; // Hide if empty
         }
 
         // --- Projects Page Integration ---
@@ -34,13 +37,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             projectsContainer.innerHTML = content.projects.map(project => `
                 <div class="case-study animate-on-scroll">
                     <div class="case-img">
-                        <img src="${project.image}" alt="${project.title}">
+                        <img src="${project.image}" alt="${project.title}" loading="lazy">
                     </div>
                     <div class="case-content">
                         <span class="case-meta">${project.category}</span>
                         <h3 style="font-size: 1.8rem;">${project.title}</h3>
                         <p style="margin-top: 15px; line-height: 1.6; color: #64748b;">${project.description}</p>
-                        <a href="contact.html" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Enquire About Similar Project</a>
+                        <a href="contact" class="btn btn-primary" style="margin-top: 20px; display: inline-block;">Enquire About Similar Project</a>
                     </div>
                 </div>
             `).join('');
@@ -70,4 +73,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (err) {
         console.error('Error fetching dynamic content:', err);
     }
-});
+})();
