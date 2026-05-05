@@ -349,9 +349,11 @@ p {
 }
 
 .header.scrolled {
-  padding: 5px 0;
-  background: rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .header-container {
