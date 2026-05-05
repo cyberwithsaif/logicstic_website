@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     dropdowns.forEach(dropdown => {
         dropdown.addEventListener('click', (e) => {
-            // Only trigger on mobile screens
-            if (window.innerWidth <= 768) {
+            // Only trigger on mobile screens — matches mobile.css breakpoint
+            if (window.innerWidth <= 1024) {
                 // If they clicked the link, let it navigate unless it's just "#"
                 // But usually we want to toggle the dropdown on the arrow click, or just let CSS hover do it
                 // For mobile touch, a click toggles the active class

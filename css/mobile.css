@@ -529,3 +529,183 @@
   section { padding: 28px 0 !important; }
   .container { padding: 0 10px !important; }
 }
+
+
+/* ==========================================================
+   18. HOMEPAGE-SPECIFIC MOBILE FIXES
+========================================================== */
+
+/* --- Header CTA button on mobile (hide the fancy button) --- */
+@media (max-width: 1024px) {
+  .cssbuttons-io-button { display: none !important; }
+
+  /* About-features grid — single column */
+  .about-features {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Industry section — stack vertically */
+  .bg-subtle-gradient .about-preview {
+    flex-direction: column !important;
+    gap: 30px !important;
+  }
+  .bg-subtle-gradient .about-img,
+  .bg-subtle-gradient .about-text {
+    flex: none !important;
+    width: 100% !important;
+  }
+
+  /* Process section — heading and image */
+  .py-5 > .container.text-center h2 {
+    font-size: 1.9rem !important;
+  }
+  .py-5 > .container.text-center p {
+    font-size: 0.95rem !important;
+  }
+  .py-5 > .container.text-center img {
+    max-width: 100% !important;
+    border-radius: 14px !important;
+  }
+
+  /* SECOND stats-grid inside services — fix negative margin */
+  section.bg-light .stats-grid {
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100% !important;
+  }
+}
+
+/* --- Why Choose Us section — mobile stacking --- */
+@media (max-width: 768px) {
+  /* Main flex row → column */
+  section[style*="background-image"] > .container-fluid > div {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+
+  /* Left image — full-width, reasonable height */
+  section[style*="background-image"] > .container-fluid > div > div[style*="flex: 0.9"] {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  section[style*="background-image"] > .container-fluid > div > div[style*="flex: 0.9"] img {
+    max-height: 300px !important;
+    object-fit: cover !important;
+    width: 100% !important;
+  }
+
+  /* Right content — full-width */
+  section[style*="background-image"] > .container-fluid > div > div[style*="flex: 2"] {
+    flex: none !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* "Why Choose Ashtam" heading */
+  section[style*="background-image"] h2 {
+    font-size: 1.8rem !important;
+  }
+
+  /* Top row 3 cards → stack */
+  .why-card[style*="calc(33.333%"] {
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Bottom row 2 cards → stack */
+  .why-card[style*="calc(40%"] {
+    flex: 0 1 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Bottom bar features */
+  section[style*="background-image"] div[style*="background: #ffffff"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 18px !important;
+    padding: 18px 16px !important;
+  }
+
+  .footer-feature-item {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+
+  /* About-features grid — 1 column */
+  .about-features {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  /* Process section heading */
+  .py-5 > .container.text-center h2 {
+    font-size: 1.55rem !important;
+  }
+  .py-5 > .container.text-center p {
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  section[style*="background-image"] h2 {
+    font-size: 1.5rem !important;
+  }
+  .py-5 > .container.text-center h2 {
+    font-size: 1.35rem !important;
+  }
+  section[style*="background-image"] .why-card {
+    padding: 18px 14px !important;
+  }
+  section[style*="background-image"] .container-fluid {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+
+
+/* ==========================================================
+   19. iOS FIXES & TOUCH POLISH
+========================================================== */
+
+/* --- iOS doesn't support background-attachment: fixed properly --- */
+@supports (-webkit-overflow-scrolling: touch) {
+  section[style*="background-attachment: fixed"],
+  section[style*="background-attachment:fixed"] {
+    background-attachment: scroll !important;
+  }
+}
+
+/* --- Prevent iOS zoom on form inputs --- */
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="search"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+
+  /* Ensure touch targets are at least 44x44px */
+  .nav-link,
+  .dropdown-menu a,
+  .btn,
+  .read-more,
+  .service-btn-modern,
+  .social-links a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .nav-link { min-height: 48px; }
+}
+
+/* --- CTA section mobile polish --- */
+@media (max-width: 480px) {
+  .cta-section { padding: 40px 0 !important; }
+  .cta-section h2 { font-size: 1.4rem !important; }
+  .cta-section p { font-size: 0.9rem !important; margin-bottom: 22px !important; }
+}
