@@ -16,9 +16,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '/'), {
     extensions: ['html', 'htm'],
-    maxAge: '7d',       // Cache static assets for 7 days in browser
-    etag: true,
-    lastModified: true
+    maxAge: 0,         // No caching — always fetch latest
+    etag: false,
+    lastModified: false
 }));
 app.use(session({
     secret: 'agl-secret-key-2026',
