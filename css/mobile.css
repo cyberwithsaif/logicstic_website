@@ -309,28 +309,31 @@
    4. STATS GRID
 ========================================================== */
 @media (max-width: 1024px) {
-  .stats-section { margin-top: -40px !important; }
-  .stats-grid {
+  .hero-stats { margin-top: 30px !important; }
+
+  .hero-stats .stats-grid {
     max-width: 100% !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    padding: 14px 16px !important;
   }
 }
 
 @media (max-width: 768px) {
-  .stats-section { margin-top: -20px !important; }
-  .stats-grid {
+  .hero-stats { margin-top: 20px !important; }
+
+  .hero-stats .stats-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 8px !important;
-    padding: 14px !important;
-    border-radius: 12px !important;
+    padding: 12px 14px !important;
+    border-radius: 10px !important;
   }
   .stat-number { font-size: 1.3rem !important; }
   .stat-label { font-size: 0.58rem !important; }
 }
 
 @media (max-width: 480px) {
-  .stats-grid { padding: 10px !important; gap: 6px !important; }
+  .hero-stats .stats-grid { padding: 10px !important; gap: 6px !important; }
   .stat-number { font-size: 1.15rem !important; }
 }
 
