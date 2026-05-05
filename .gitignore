@@ -4,3 +4,4 @@ node_modules/
 package-lock.json
 old website/
 old website/
+vps_access/*
