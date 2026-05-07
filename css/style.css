@@ -335,7 +335,7 @@ p {
 .header {
   background: rgba(255, 255, 255, 0.7);
   position: fixed;
-  top: 30px;
+  top: 60px;
   left: 50%;
   transform: translateX(-50%);
   width: 95%;
