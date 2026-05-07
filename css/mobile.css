@@ -58,6 +58,12 @@
 }
 
 
+/* Hide mobile-only nav elements on desktop */
+.nav-header,
+.nav-close-btn,
+.mobile-menu-toggle,
+.menu-overlay { display: none; }
+
 /* ==========================================================
    2. HEADER & NAVIGATION — mobile only (≤1024px)
 ========================================================== */
