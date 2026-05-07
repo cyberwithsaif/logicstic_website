@@ -98,7 +98,15 @@
             <nav class="main-nav">
                 <ul class="nav-list">
                     <li><a href="index" class="nav-link active">Home</a></li>
-                    <li><a href="about" class="nav-link">About Us</a></li>
+                    <li class="dropdown">
+                        <a href="about" class="nav-link">About Us <i class="fas fa-chevron-down" style="font-size:0.8rem; margin-left:5px;"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="about">Our Story</a></li>
+                            <li><a href="infrastructure">Infrastructure &amp; Resources</a></li>
+                            <li><a href="safety">Safety &amp; Compliance</a></li>
+                            <li><a href="careers">Careers</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown">
                         <a href="services" class="nav-link">Services <i class="fas fa-chevron-down"
                                 style="font-size:0.8rem; margin-left:5px;"></i></a>
@@ -111,6 +119,7 @@
                     </li>
                     <li><a href="industries" class="nav-link">Industries</a></li>
                     <li><a href="projects" class="nav-link">Projects</a></li>
+                    <li><a href="blog" class="nav-link">Blog</a></li>
                     <li><a href="contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
@@ -141,7 +150,8 @@
                 <p class="animate-on-scroll" id="hero-subtitle-display">India's Leading Specialist in Heavy & Over-Dimensional Cargo Logistics.</p>
                 <div class="hero-btns">
                     <a href="contact" class="btn btn-primary">Get a Quote</a>
-                    <a href="services" class="btn btn-outline">Our Services</a>
+                    <a href="contact" class="btn btn-outline">Contact Us</a>
+                    <a href="services" class="btn btn-outline" style="border-color: rgba(255,255,255,0.5); color: rgba(255,255,255,0.85);">Our Services</a>
                 </div>
             </div>
 
@@ -480,12 +490,11 @@
                 <a href="index" class="footer-logo">
                     <img src="images/logo.webp" alt="Ashtam Global Logistics" class="footer-site-logo" loading="lazy" decoding="async">
                 </a>
-                <p class="footer-desc">End-to-end logistics solutions for heavy, over-dimensional, and high-value cargo
-                    across India and globally.</p>
+                <p class="footer-desc">End-to-end logistics solutions for heavy, over-dimensional, and high-value cargo across India and globally.</p>
                 <div class="social-links">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
             <div class="footer-col">
@@ -495,12 +504,16 @@
                     <li><a href="services">Services</a></li>
                     <li><a href="industries">Industries We Serve</a></li>
                     <li><a href="projects">Case Studies</a></li>
+                    <li><a href="blog">Blog</a></li>
                     <li><a href="contact">Contact Us</a></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h4>Our Services</h4>
+                <h4>Company</h4>
                 <ul>
+                    <li><a href="infrastructure">Infrastructure &amp; Resources</a></li>
+                    <li><a href="safety">Safety &amp; Compliance</a></li>
+                    <li><a href="careers">Careers</a></li>
                     <li><a href="service-transformer">Transformer Transport</a></li>
                     <li><a href="service-contract">Contract Logistics</a></li>
                     <li><a href="service-general">General Logistics</a></li>
@@ -510,14 +523,15 @@
             <div class="footer-col">
                 <h4>Contact Info</h4>
                 <ul class="contact-info-list">
-                    <li><i class="fas fa-map-marker-alt"></i> New Delhi, India</li>
-                    <li><i class="fas fa-phone"></i> +91 98765 43210</li>
-                    <li><i class="fas fa-envelope"></i> info@ashtamglobal.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i> 692/210 Laxman Vihar - II, G.NO-1, Gurugram, Haryana 122001</li>
+                    <li><i class="fas fa-phone"></i> <a href="tel:+919350445354" style="color: #aaa;">+91 9350445354</a></li>
+                    <li><i class="fas fa-envelope"></i> <a href="mailto:info@aglbharat.com" style="color: #aaa;">info@aglbharat.com</a></li>
+                    <li><i class="fas fa-globe"></i> www.aglbharat.com</li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom container">
-            <p>&copy; 2026 Ashtam Global Logistics Pvt. Ltd. All Rights Reserved.</p>
+            <p>&copy; 2026 Ashtam Global Logistics Pvt. Ltd. All Rights Reserved. | CIN: U52241HR2026PTC140056</p>
         </div>
     </footer>
 
