@@ -60,9 +60,10 @@
 
 /* ==========================================================
    2. HEADER & NAVIGATION — mobile only (≤1024px)
-   Desktop header keeps its top: 20px floating pill style
 ========================================================== */
 @media (max-width: 1024px) {
+
+  /* Header bar */
   .header,
   .header.scrolled {
     top: 0 !important;
@@ -73,159 +74,225 @@
     padding: 10px 16px !important;
     border-radius: 0 !important;
     position: fixed !important;
+    z-index: 900 !important;
     background: rgba(255, 255, 255, 0.98) !important;
     box-shadow: 0 2px 15px rgba(0,0,0,0.1) !important;
   }
 
+  /* Hamburger button */
   .mobile-menu-toggle {
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--primary-color), #1e3a5f) !important;
-    color: var(--secondary-color) !important;
-    border: 2px solid var(--secondary-color) !important;
-    font-size: 1.4rem !important;
-    width: 44px !important;
-    height: 44px !important;
-    border-radius: 12px !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-  }
-  .mobile-menu-toggle:active {
-    transform: scale(0.95) !important;
-  }
-
-  /* When menu is open, style the close button */
-  .main-nav.active {
-    z-index: 999 !important;
-  }
-
-  /* Make close button visible and styled inside menu area */
-  .main-nav.active + .header-cta .mobile-menu-toggle {
-    position: fixed !important;
-    top: 12px !important;
-    right: 12px !important;
-    background: rgba(201, 161, 74, 0.2) !important;
-    border: 2px solid #C9A14A !important;
-    color: #C9A14A !important;
-    width: 40px !important;
-    height: 40px !important;
-    z-index: 1001 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    border-radius: 8px !important;
-    font-size: 1.2rem !important;
+    background: linear-gradient(135deg, #0B1F3A, #1e3a5f) !important;
+    color: #C9A14A !important;
+    border: 2px solid #C9A14A !important;
+    font-size: 1.3rem !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2) !important;
   }
+  .mobile-menu-toggle:active { transform: scale(0.92) !important; }
 
   .cssbuttons-io-button { display: none !important; }
-  .header-cta .btn { display: none !important; }
 
+  /* ---- Full-screen overlay (backdrop) ---- */
+  .menu-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 990;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  .menu-overlay.active { display: block; }
+
+  /* ---- Sidebar panel ---- */
   .main-nav {
     position: fixed !important;
     top: 0 !important;
-    left: -50% !important;
-    width: 50% !important;
-    max-width: 320px !important;
+    left: 0 !important;
+    transform: translateX(-105%) !important;
+    width: 78vw !important;
+    max-width: 310px !important;
     height: 100vh !important;
-    background: linear-gradient(180deg, var(--primary-color) 0%, rgba(11,31,58,0.99) 100%) !important;
-    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background: linear-gradient(160deg, #0B1F3A 0%, #0d2647 60%, #0a1c35 100%) !important;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    padding: 0 !important;
-    z-index: 998 !important;
-    box-shadow: 5px 0 40px rgba(0,0,0,0.6) !important;
-  }
-  .main-nav.active { left: 0 !important; }
-
-  /* Backdrop overlay when menu is open */
-  .main-nav.active::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 50%;
-    width: 50%;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: -1;
-  }
-
-  .main-nav .nav-list {
+    z-index: 995 !important;
+    box-shadow: 4px 0 30px rgba(0,0,0,0.5) !important;
+    display: flex !important;
     flex-direction: column !important;
-    gap: 0 !important;
-    padding: 70px 16px 40px 16px !important;
-    margin: 0 !important;
-    list-style: none !important;
+    padding: 0 !important;
   }
-  .main-nav .nav-list > li {
-    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
-    position: relative !important;
-    margin: 0 !important;
-  }
+  .main-nav.active { transform: translateX(0) !important; }
 
-  .nav-link {
-    color: #fff !important;
-    font-size: 1.05rem !important;
-    font-weight: 600 !important;
-    padding: 14px 16px !important;
+  /* ---- Nav header (brand + X close button) ---- */
+  .nav-header {
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
-    transition: all 0.2s ease !important;
-    letter-spacing: 0.3px !important;
-    border-radius: 8px !important;
-    margin: 4px 0 !important;
+    padding: 18px 20px 16px !important;
+    border-bottom: 1px solid rgba(201,161,74,0.25) !important;
+    background: rgba(0,0,0,0.2) !important;
+    flex-shrink: 0 !important;
   }
-  .nav-link:active {
-    background: rgba(201, 161, 74, 0.2) !important;
-    padding-left: 12px !important;
-    border-left: 3px solid var(--secondary-color) !important;
-  }
-  .nav-link::after { display: none !important; }
 
-  .dropdown-menu {
+  .nav-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+  .nav-brand-icon {
+    width: 34px !important;
+    height: 34px !important;
+    background: linear-gradient(135deg, #C9A14A, #e8b85a) !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #0B1F3A !important;
+    font-size: 0.95rem !important;
+    flex-shrink: 0 !important;
+  }
+  .nav-brand-text {
+    color: #fff !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+  }
+
+  /* X Close button inside nav */
+  .nav-close-btn {
+    width: 36px !important;
+    height: 36px !important;
+    background: rgba(255,255,255,0.08) !important;
+    border: 1.5px solid rgba(255,255,255,0.2) !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    flex-shrink: 0 !important;
+  }
+  .nav-close-btn:active {
+    background: rgba(201,161,74,0.3) !important;
+    border-color: #C9A14A !important;
+    color: #C9A14A !important;
+    transform: scale(0.9) !important;
+  }
+
+  /* ---- Nav list ---- */
+  .main-nav .nav-list {
+    flex-direction: column !important;
+    gap: 2px !important;
+    padding: 12px 12px 30px !important;
+    margin: 0 !important;
+    list-style: none !important;
+    flex: 1 !important;
+  }
+
+  .main-nav .nav-list > li {
+    margin: 0 !important;
+    border-bottom: none !important;
+  }
+
+  /* Each nav link row */
+  .main-nav .nav-link {
+    color: rgba(255,255,255,0.88) !important;
+    font-size: 0.98rem !important;
+    font-weight: 600 !important;
+    padding: 12px 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    border-radius: 10px !important;
+    margin: 2px 0 !important;
+    transition: background 0.2s, color 0.2s, padding-left 0.2s !important;
+    text-decoration: none !important;
+  }
+  .main-nav .nav-link:hover,
+  .main-nav .nav-link.active {
+    background: rgba(201,161,74,0.15) !important;
+    color: #C9A14A !important;
+    padding-left: 18px !important;
+  }
+  .main-nav .nav-link::after { display: none !important; }
+
+  /* Chevron icon rotation when dropdown active */
+  .main-nav .dropdown.active > .nav-link .fa-chevron-down {
+    transform: rotate(180deg) !important;
+    color: #C9A14A !important;
+  }
+  .main-nav .nav-link .fa-chevron-down {
+    transition: transform 0.25s ease !important;
+    font-size: 0.75rem !important;
+    opacity: 0.7 !important;
+  }
+
+  /* ---- Dropdown submenu ---- */
+  .main-nav .dropdown-menu {
     position: static !important;
     opacity: 1 !important;
     visibility: visible !important;
     transform: none !important;
     box-shadow: none !important;
-    background: rgba(201, 161, 74, 0.06) !important;
-    border-radius: 6px !important;
-    padding: 6px 12px 6px 30px !important;
+    background: rgba(255,255,255,0.04) !important;
+    border-radius: 8px !important;
+    padding: 4px 0 4px 12px !important;
     display: none !important;
-    margin: 4px 0 !important;
-    border-left: 3px solid rgba(201, 161, 74, 0.4) !important;
+    margin: 2px 0 6px !important;
+    border-left: 2px solid rgba(201,161,74,0.4) !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    transition: max-height 0.3s ease !important;
   }
-  .dropdown.active .dropdown-menu { display: block !important; }
-  .dropdown-menu a {
-    color: rgba(255,255,255,0.7) !important;
-    padding: 8px 12px !important;
-    font-size: 0.9rem !important;
+  .main-nav .dropdown.active .dropdown-menu {
     display: block !important;
-    transition: all 0.2s ease !important;
-    border-radius: 5px !important;
-    margin-bottom: 2px !important;
-  }
-  .dropdown-menu a:active {
-    color: var(--secondary-color) !important;
-    background: rgba(201, 161, 74, 0.15) !important;
-    padding-left: 16px !important;
+    max-height: 300px !important;
   }
 
-  .site-logo { height: 46px !important; }
-  .logo-text { font-size: 1.05rem !important; }
-
-  /* Mobile menu close button styling */
-  .mobile-menu-toggle[data-active="true"] {
-    color: #fff !important;
+  .main-nav .dropdown-menu a {
+    color: rgba(255,255,255,0.65) !important;
+    padding: 9px 14px !important;
+    font-size: 0.875rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    border-radius: 7px !important;
+    transition: all 0.18s ease !important;
+    text-decoration: none !important;
   }
+  .main-nav .dropdown-menu a::before {
+    content: "›" !important;
+    color: #C9A14A !important;
+    font-size: 1.1rem !important;
+    line-height: 1 !important;
+  }
+  .main-nav .dropdown-menu a:hover,
+  .main-nav .dropdown-menu a:active {
+    color: #C9A14A !important;
+    background: rgba(201,161,74,0.1) !important;
+    padding-left: 18px !important;
+  }
+
+  /* Logo */
+  .site-logo { height: 42px !important; }
+  .logo-text { font-size: 1rem !important; }
 }
 
 @media (max-width: 600px) {
   .header, .header.scrolled { padding: 8px 12px !important; }
-  .site-logo { height: 38px !important; }
-  .logo-text { font-size: 0.85rem !important; max-width: 130px !important; overflow: hidden !important; white-space: nowrap !important; text-overflow: ellipsis !important; }
+  .site-logo { height: 36px !important; }
+  .logo-text { font-size: 0.85rem !important; max-width: 120px !important; overflow: hidden !important; white-space: nowrap !important; text-overflow: ellipsis !important; }
 }
 
 
