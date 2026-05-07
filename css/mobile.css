@@ -104,10 +104,8 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 990;
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
   }
   .menu-overlay.active { display: block; }
 
