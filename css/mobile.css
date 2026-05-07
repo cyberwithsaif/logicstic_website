@@ -100,16 +100,23 @@
   .main-nav.active {
     z-index: 999 !important;
   }
-  .main-nav.active ~ .header-cta .mobile-menu-toggle {
+
+  /* Make close button visible and styled inside menu area */
+  .main-nav.active + .header-cta .mobile-menu-toggle {
     position: fixed !important;
-    top: 14px !important;
-    left: calc(50% + 160px - 60px) !important;
-    background: transparent !important;
-    border: 2px solid #fff !important;
-    color: #fff !important;
+    top: 12px !important;
+    right: 12px !important;
+    background: rgba(201, 161, 74, 0.2) !important;
+    border: 2px solid #C9A14A !important;
+    color: #C9A14A !important;
     width: 40px !important;
     height: 40px !important;
     z-index: 1001 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px !important;
+    font-size: 1.2rem !important;
   }
 
   .cssbuttons-io-button { display: none !important; }

@@ -17,57 +17,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const mainNav = document.querySelector('.main-nav');
 
-    const updateMenuIcon = () => {
-        if (!mobileMenuToggle) return;
-        const icon = mobileMenuToggle.querySelector('i');
-        if (!icon) return;
-
-        if (mainNav.classList.contains('active')) {
-            icon.classList.remove('fa-bars');
-            icon.classList.add('fa-times');
-        } else {
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
-        }
-    };
-
-    const closeMenu = () => {
-        if (!mainNav) return;
-        mainNav.classList.remove('active');
-        updateMenuIcon();
-    };
-
-    const toggleMenu = () => {
-        if (!mainNav) return;
-        mainNav.classList.toggle('active');
-        updateMenuIcon();
-    };
-
-    // Toggle menu when clicking the burger/close button
     if (mobileMenuToggle && mainNav) {
+        // Toggle menu open/close
         mobileMenuToggle.addEventListener('click', (e) => {
+            e.preventDefault();
             e.stopPropagation();
-            toggleMenu();
-        });
+            mainNav.classList.toggle('active');
 
-        // Close menu when clicking regular nav links (non-dropdowns)
-        const navLinks = mainNav.querySelectorAll('.nav-list > li > .nav-link');
-        navLinks.forEach(link => {
-            // Only close for non-dropdown links
-            if (!link.parentElement.classList.contains('dropdown')) {
-                link.addEventListener('click', () => {
-                    closeMenu();
-                });
+            // Update icon
+            const icon = mobileMenuToggle.querySelector('i');
+            if (icon) {
+                if (mainNav.classList.contains('active')) {
+                    icon.classList.remove('fa-bars');
+                    icon.classList.add('fa-times');
+                } else {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
             }
         });
 
-        // Close menu when clicking outside
+        // Close menu when clicking regular nav links (not dropdowns)
+        const regularLinks = mainNav.querySelectorAll('.nav-list > li:not(.dropdown) > a');
+        regularLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mainNav.classList.remove('active');
+                const icon = mobileMenuToggle.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fa-times');
+                    icon.classList.add('fa-bars');
+                }
+            });
+        });
+
+        // Close menu when clicking outside (on desktop background or backdrop)
         document.addEventListener('click', (e) => {
             if (mainNav.classList.contains('active')) {
-                const isClickOnMenu = mainNav.contains(e.target);
-                const isClickOnToggle = mobileMenuToggle.contains(e.target);
-                if (!isClickOnMenu && !isClickOnToggle) {
-                    closeMenu();
+                // Check if click is outside the menu and toggle button
+                const clickedInMenu = mainNav.contains(e.target);
+                const clickedOnToggle = mobileMenuToggle.contains(e.target);
+
+                if (!clickedInMenu && !clickedOnToggle) {
+                    mainNav.classList.remove('active');
+                    const icon = mobileMenuToggle.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
                 }
             }
         });
