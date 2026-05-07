@@ -17,55 +17,92 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const mainNav = document.querySelector('.main-nav');
 
-    const closeMenu = () => {
-        if (mainNav && mainNav.classList.contains('active')) {
-            mainNav.classList.remove('active');
-            if (mobileMenuToggle) {
-                const icon = mobileMenuToggle.querySelector('i');
-                if (icon) {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            }
+    const updateMenuIcon = () => {
+        if (!mobileMenuToggle) return;
+        const icon = mobileMenuToggle.querySelector('i');
+        if (!icon) return;
+
+        if (mainNav.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
         }
     };
 
+    const closeMenu = () => {
+        if (!mainNav) return;
+        mainNav.classList.remove('active');
+        updateMenuIcon();
+    };
+
+    const toggleMenu = () => {
+        if (!mainNav) return;
+        mainNav.classList.toggle('active');
+        updateMenuIcon();
+    };
+
+    // Toggle menu when clicking the burger/close button
     if (mobileMenuToggle && mainNav) {
-        mobileMenuToggle.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
-            // Toggle icon between bars and times
-            const icon = mobileMenuToggle.querySelector('i');
-            if (icon) {
-                if (mainNav.classList.contains('active')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
+        mobileMenuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
+
+        // Close menu when clicking regular nav links (non-dropdowns)
+        const navLinks = mainNav.querySelectorAll('.nav-list > li > .nav-link');
+        navLinks.forEach(link => {
+            // Only close for non-dropdown links
+            if (!link.parentElement.classList.contains('dropdown')) {
+                link.addEventListener('click', () => {
+                    closeMenu();
+                });
             }
         });
 
-        // Close menu when clicking nav links
-        const navLinks = mainNav.querySelectorAll('a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', closeMenu);
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (mainNav.classList.contains('active')) {
+                const isClickOnMenu = mainNav.contains(e.target);
+                const isClickOnToggle = mobileMenuToggle.contains(e.target);
+                if (!isClickOnMenu && !isClickOnToggle) {
+                    closeMenu();
+                }
+            }
         });
     }
 
     // 3. Mobile Dropdown Toggle
-    const dropdowns = document.querySelectorAll('.dropdown');
-    
+    const dropdowns = document.querySelectorAll('.main-nav .dropdown');
+
     dropdowns.forEach(dropdown => {
-        dropdown.addEventListener('click', (e) => {
-            // Only trigger on mobile screens — matches mobile.css breakpoint
-            if (window.innerWidth <= 1024) {
-                // If they clicked the link, let it navigate unless it's just "#"
-                // But usually we want to toggle the dropdown on the arrow click, or just let CSS hover do it
-                // For mobile touch, a click toggles the active class
-                dropdown.classList.toggle('active');
-            }
-        });
+        const dropdownLink = dropdown.querySelector('.nav-link');
+        const dropdownMenu = dropdown.querySelector('.dropdown-menu');
+
+        if (dropdownLink) {
+            dropdownLink.addEventListener('click', (e) => {
+                // Only toggle on mobile/tablet screens
+                if (window.innerWidth <= 1024) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropdown.classList.toggle('active');
+                }
+            });
+        }
+
+        // Close dropdown when clicking submenu items (menu stays open)
+        if (dropdownMenu) {
+            const submenuLinks = dropdownMenu.querySelectorAll('a');
+            submenuLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (window.innerWidth <= 1024) {
+                        // Close dropdown but keep menu open
+                        dropdown.classList.remove('active');
+                    }
+                });
+            });
+        }
     });
 
     // 4. Scroll Animations using IntersectionObserver

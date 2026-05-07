@@ -96,14 +96,14 @@
     transform: scale(0.95) !important;
   }
 
-  /* When menu is open, move toggle button inside as close button */
+  /* When menu is open, style the close button */
   .main-nav.active {
     z-index: 999 !important;
   }
-  .main-nav.active ~ .header .mobile-menu-toggle {
+  .main-nav.active ~ .header-cta .mobile-menu-toggle {
     position: fixed !important;
     top: 14px !important;
-    left: calc(50% - 60px) !important;
+    left: calc(50% + 160px - 60px) !important;
     background: transparent !important;
     border: 2px solid #fff !important;
     color: #fff !important;
