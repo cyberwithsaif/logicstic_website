@@ -99,13 +99,16 @@
 
   .cssbuttons-io-button { display: none !important; }
 
-  /* ---- Full-screen overlay (backdrop) ---- */
+  /* ---- Overlay covers only the area OUTSIDE the sidebar ---- */
   .menu-overlay {
     display: none;
     position: fixed;
-    inset: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: min(78vw, 310px);
     background: rgba(0, 0, 0, 0.5);
-    z-index: 990;
+    z-index: 992;
   }
   .menu-overlay.active { display: block; }
 
