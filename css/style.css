@@ -2272,7 +2272,7 @@ textarea.form-control {
 .equip-list li i { color: var(--secondary-color); font-size: 0.75rem; flex-shrink: 0; }
 
 /* Stats Strip */
-.stats-strip { background: linear-gradient(135deg, #0B1F3A, #1e3a5f); padding: 55px 0; }
+.stats-strip { background: linear-gradient(135deg, #0B1F3A, #1e3a5f); padding: 35px 0; }
 
 .stats-strip-grid {
   display: grid;
