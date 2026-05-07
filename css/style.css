@@ -335,7 +335,7 @@ p {
 .header {
   background: rgba(255, 255, 255, 0.7);
   position: fixed;
-  top: 60px;
+  top: 20px !important;
   left: 50%;
   transform: translateX(-50%);
   width: 95%;
@@ -1511,7 +1511,7 @@ textarea.form-control {
   h2 { font-size: 1.9rem; }
 
   .header {
-    top: 8px;
+    top: 15px !important;
     width: 97%;
     padding: 6px 20px;
   }
@@ -1594,7 +1594,7 @@ textarea.form-control {
   section { padding: 50px 0; }
 
   .header {
-    top: 6px;
+    top: 10px !important;
     width: 97%;
     padding: 5px 15px;
     border-radius: 40px;
