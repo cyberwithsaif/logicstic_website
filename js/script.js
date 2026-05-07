@@ -16,6 +16,9 @@
         if (!isInternal(link.getAttribute('href'))) return;
         if (e.metaKey || e.ctrlKey || e.shiftKey) return;
 
+        // Skip loader for dropdown toggle links — they expand submenus, not navigate
+        if (link.closest('.main-nav .dropdown') && link.classList.contains('nav-link')) return;
+
         // The truck loader is already in the DOM (just hidden) — un-hide it instantly
         var loader = document.getElementById('page-loader');
         if (loader) {
