@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git ls-remote *)"
+      "Bash(git ls-remote *)",
+      "Bash(curl -I http://localhost:3000/certificates/ASHTAM-GLOBAL-LOGISTICS-QMS.pdf)",
+      "Bash(ssh -o StrictHostKeyChecking=no -i __TRACKED_VAR__/.ssh/vps_keys/vps_key root@72.61.171.190 'ls -la /var/www/ 2>/dev/null || ls -la /home/ 2>/dev/null || echo '\\\\''Need to check web root'\\\\''')",
+      "Bash(ssh -o StrictHostKeyChecking=no -i __TRACKED_VAR__/.ssh/vps_keys/vps_key root@72.61.171.190 'ls -la /var/www/aglbharat/')",
+      "Bash(ssh -o StrictHostKeyChecking=no -i __TRACKED_VAR__/.ssh/vps_keys/vps_key root@72.61.171.190 'cd /var/www/aglbharat && git pull origin main')",
+      "Bash(ssh -o StrictHostKeyChecking=no -i __TRACKED_VAR__/.ssh/vps_keys/vps_key root@72.61.171.190 'cd /var/www/aglbharat && git stash && git pull origin main')",
+      "Bash(ssh -o StrictHostKeyChecking=no -i __TRACKED_VAR__/.ssh/vps_keys/vps_key root@72.61.171.190 'cd /var/www/aglbharat && ps aux | grep '\\\\''node server'\\\\'' | grep -v grep && echo '\\\\''---Server is running---'\\\\'' || echo '\\\\''---Server is NOT running---'\\\\''')",
+      "Bash(ssh -o StrictHostKeyChecking=no -i __TRACKED_VAR__/.ssh/vps_keys/vps_key root@72.61.171.190 'cd /var/www/aglbharat && pkill -f '\\\\''node server'\\\\'' && sleep 2 && nohup node server.js -p 4000 > /tmp/agl.log 2>&1 &')",
+      "Bash(ssh -o StrictHostKeyChecking=no -i __TRACKED_VAR__/.ssh/vps_keys/vps_key root@72.61.171.190 'sleep 3 && ps aux | grep '\\\\''node server'\\\\'' | grep -v grep && echo '\\\\''---✓ Server restarted successfully---'\\\\'' || echo '\\\\''---✗ Server failed to start---'\\\\''')",
+      "Bash(curl -I http://72.61.171.190:4000/certificates/ASHTAM-GLOBAL-LOGISTICS-QMS.pdf)"
     ]
   }
 }

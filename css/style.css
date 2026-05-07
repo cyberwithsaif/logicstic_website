@@ -1826,7 +1826,7 @@ textarea.form-control {
 ===================== */
 .cert-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 25px;
   margin-top: 40px;
 }
