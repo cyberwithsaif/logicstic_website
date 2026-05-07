@@ -1,3 +1,52 @@
+// Instant page transition overlay — fires before DOMContentLoaded
+(function () {
+    // Skip anchors, external links, mailto, tel
+    function isInternalLink(href) {
+        if (!href) return false;
+        if (href.startsWith('#'))         return false;
+        if (href.startsWith('http'))      return false;
+        if (href.startsWith('mailto'))    return false;
+        if (href.startsWith('tel'))       return false;
+        if (href.startsWith('javascript')) return false;
+        return true;
+    }
+
+    function showTransitionOverlay() {
+        // Reuse existing loader if still in DOM
+        var existing = document.getElementById('page-loader');
+        if (existing) {
+            existing.classList.remove('loader-hidden');
+            existing.style.cssText = 'position:fixed;inset:0;background:#0B1F3A;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;opacity:1;visibility:visible;';
+            return;
+        }
+        // Create a minimal instant overlay (no truck, just navy screen)
+        var overlay = document.createElement('div');
+        overlay.id = 'nav-transition-overlay';
+        overlay.style.cssText = 'position:fixed;inset:0;background:#0B1F3A;z-index:99999;display:flex;align-items:center;justify-content:center;';
+        overlay.innerHTML = '<div style="width:40px;height:40px;border:3px solid rgba(201,161,74,0.3);border-top-color:#C9A14A;border-radius:50%;animation:spin .7s linear infinite;"></div>';
+
+        // Inject keyframe if needed
+        if (!document.getElementById('spin-style')) {
+            var s = document.createElement('style');
+            s.id = 'spin-style';
+            s.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+            document.head.appendChild(s);
+        }
+        document.body.appendChild(overlay);
+    }
+
+    document.addEventListener('click', function (e) {
+        var link = e.target.closest('a');
+        if (!link) return;
+        var href = link.getAttribute('href');
+        if (!isInternalLink(href)) return;
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return; // allow open-in-tab
+
+        showTransitionOverlay();
+        // No e.preventDefault — let the browser navigate normally
+    }, true); // capture phase so it fires before any other handler
+}());
+
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
 
