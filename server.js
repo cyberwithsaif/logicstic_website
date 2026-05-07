@@ -14,6 +14,16 @@ const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 // Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve PDFs with correct MIME type
+app.use('/certificates', express.static(path.join(__dirname, 'certificates'), {
+    type: 'application/pdf',
+    setHeaders: (res, path) => {
+        res.set('Content-Type', 'application/pdf');
+        res.set('Content-Disposition', 'inline');
+    }
+}));
+
 app.use(express.static(path.join(__dirname, '/'), {
     extensions: ['html', 'htm'],
     maxAge: 0,         // No caching — always fetch latest
