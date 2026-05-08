@@ -206,8 +206,9 @@
     let typingTimer= null;
     let connected  = false;
 
-    // Restore messages from localStorage
-    const STORAGE_KEY = 'agl_chat_msgs';
+    // Restore messages and identity from localStorage
+    const STORAGE_KEY  = 'agl_chat_msgs';
+    const USERNAME_KEY = 'agl_chat_username';
     let history = [];
     try { history = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch(e) {}
 
@@ -243,11 +244,13 @@
             socket.on('connect', () => {
                 connected = true;
                 sendBtn.disabled = false;
-                socket.emit('visitor:join', { page: location.pathname });
+                const savedUsername = localStorage.getItem(USERNAME_KEY) || '';
+                socket.emit('visitor:join', { page: location.pathname, username: savedUsername });
             });
 
             socket.on('visitor:ready', (data) => {
                 username = data.username;
+                localStorage.setItem(USERNAME_KEY, username);
                 userBar.style.display = 'flex';
                 userDisp.textContent  = username;
                 statusTxt.textContent = 'Online — we\'ll reply shortly';

@@ -65,7 +65,8 @@ io.on('connection', (socket) => {
 
     // ── VISITOR: join ──────────────────────────────────────────────────────────
     socket.on('visitor:join', (data) => {
-        const username = generateUsername();
+        const saved = typeof data?.username === 'string' && /^[A-Za-z]+#\d{4}$/.test(data.username);
+        const username = saved ? data.username : generateUsername();
         const session  = {
             id: socket.id, username, ip,
             page     : data.page || '/',
