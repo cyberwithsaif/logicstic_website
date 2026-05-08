@@ -116,7 +116,7 @@ app.get('/api/content', async (req, res) => {
 
 app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
-    if (username === 'admin' && password === 'agl2026') { // Default credentials
+    if (username === 'naveenagl' && password === 'Naveen@agl2026') {
         req.session.authenticated = true;
         res.json({ success: true });
     } else {

@@ -3,178 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AGL Control Center | Admin Dashboard</title>
+    <title>AGL Admin Panel | Ashtam Global Logistics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/admin-style.css?v=1777985927">
+    <link rel="stylesheet" href="css/admin-style.css?v=1778100001">
 </head>
 <body>
 <div class="admin-wrapper">
+
     <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <img src="../images/logo.webp" alt="Logo" class="sidebar-logo">
-            <div class="sidebar-title"><h3>AGL Admin</h3><span>v2.0.0</span></div>
+            <div class="sidebar-title">
+                <h3>AGL Admin</h3>
+                <span>Control Panel</span>
+            </div>
         </div>
         <nav class="sidebar-nav">
-            <button class="nav-item active" data-tab="dashboard"><i class="fas fa-th-large"></i> Dashboard</button>
-            <button class="nav-item" data-tab="homepage"><i class="fas fa-home"></i> Homepage</button>
-            <button class="nav-item" data-tab="projects"><i class="fas fa-project-diagram"></i> Projects</button>
-            <button class="nav-item" data-tab="services"><i class="fas fa-truck-loading"></i> Services</button>
-            <button class="nav-item" data-tab="industries"><i class="fas fa-industry"></i> Industries</button>
-            <button class="nav-item" data-tab="contact"><i class="fas fa-address-book"></i> Contact</button>
-            <button class="nav-item" data-tab="inquiries"><i class="fas fa-envelope-open-text"></i> Inquiries</button>
-            <button class="nav-item" data-tab="settings"><i class="fas fa-cog"></i> Settings</button>
+            <button class="nav-item active" data-tab="dashboard">
+                <i class="fas fa-th-large"></i> Dashboard
+            </button>
+            <button class="nav-item" data-tab="quotes">
+                <i class="fas fa-envelope-open-text"></i> Quote Requests
+                <span class="nav-badge" id="nav-unread-badge" style="display:none">0</span>
+            </button>
+            <button class="nav-item" data-tab="settings">
+                <i class="fas fa-cog"></i> Settings
+            </button>
         </nav>
         <div class="sidebar-footer">
-            <a href="/api/admin/logout" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            <a href="/api/admin/logout" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
         </div>
     </aside>
 
     <!-- ===== MAIN CONTENT ===== -->
     <main class="main-content">
         <header class="content-header">
-            <div class="header-left"><h1 id="page-title">Dashboard</h1><p id="page-subtitle">Welcome back, Administrator</p></div>
+            <div class="header-left">
+                <h1 id="page-title">Dashboard</h1>
+                <p id="page-subtitle">Welcome back, Administrator</p>
+            </div>
             <div class="header-right">
-                <button class="btn btn-save" id="save-all-btn"><i class="fas fa-save"></i> Save All Changes</button>
+                <button class="btn btn-save" id="save-btn" style="display:none" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
             </div>
         </header>
 
         <!-- ===== DASHBOARD TAB ===== -->
         <div class="tab-content active" id="tab-dashboard">
             <div class="stats-grid">
-                <div class="stat-card"><div class="stat-icon"><i class="fas fa-eye"></i></div><div class="stat-info"><h4>Total Visits</h4><span class="value">12,840</span></div></div>
-                <div class="stat-card"><div class="stat-icon" style="background:rgba(217,165,33,0.1);color:var(--secondary)"><i class="fas fa-tasks"></i></div><div class="stat-info"><h4>Active Projects</h4><span class="value" id="stat-projects">0</span></div></div>
-                <div class="stat-card"><div class="stat-icon" style="background:rgba(30,86,211,0.1);color:var(--accent)"><i class="fas fa-industry"></i></div><div class="stat-info"><h4>Industries</h4><span class="value" id="stat-industries">0</span></div></div>
-                <div class="stat-card"><div class="stat-icon" style="background:rgba(46,213,115,0.1);color:var(--success)"><i class="fas fa-check-circle"></i></div><div class="stat-info"><h4>System Status</h4><span class="value" style="color:var(--success)">Online</span></div></div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-inbox"></i></div>
+                    <div class="stat-info">
+                        <h4>Unread Quotes</h4>
+                        <span class="value" id="stat-unread">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(217,165,33,0.1);color:var(--secondary)">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>Total Quotes</h4>
+                        <span class="value" id="stat-total">0</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(37,211,102,0.1);color:#25d366">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>WhatsApp</h4>
+                        <span class="value" id="stat-wa" style="font-size:1rem">—</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" style="background:rgba(46,213,115,0.1);color:var(--success)">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h4>System</h4>
+                        <span class="value" style="color:var(--success)">Online</span>
+                    </div>
+                </div>
             </div>
+
             <div class="card">
-                <div class="card-header"><h3><i class="fas fa-info-circle"></i> System Overview</h3></div>
+                <div class="card-header">
+                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                </div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap">
+                    <button class="btn btn-add" onclick="switchTab('quotes')">
+                        <i class="fas fa-envelope-open-text"></i> View Quote Requests
+                    </button>
+                    <button class="btn btn-outline" onclick="switchTab('settings')">
+                        <i class="fas fa-cog"></i> Open Settings
+                    </button>
+                    <a href="/" target="_blank" class="btn btn-outline">
+                        <i class="fas fa-external-link-alt"></i> View Live Website
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-info-circle"></i> System Info</h3></div>
                 <div style="display:flex;gap:30px;flex-wrap:wrap">
-                    <div><span style="color:var(--text-muted);font-size:0.8rem">Backend Server</span><br><span style="color:var(--success);font-weight:700">Online</span></div>
+                    <div><span style="color:var(--text-muted);font-size:0.8rem">Backend</span><br><span style="color:var(--success);font-weight:700">Online</span></div>
                     <div><span style="color:var(--text-muted);font-size:0.8rem">Data Store</span><br><span style="font-weight:700">content.json</span></div>
                     <div><span style="color:var(--text-muted);font-size:0.8rem">Last Save</span><br><span style="font-weight:700" id="last-save">Not yet</span></div>
+                    <div><span style="color:var(--text-muted);font-size:0.8rem">Chat Widget</span><br><span style="font-weight:700" id="dash-chat-status">—</span></div>
                 </div>
             </div>
         </div>
 
-        <!-- ===== HOMEPAGE TAB ===== -->
-        <div class="tab-content" id="tab-homepage">
-            <div class="card">
-                <div class="card-header"><h3><i class="fas fa-image"></i> Hero Section</h3></div>
-                <div class="form-group"><label>Hero Title</label><input type="text" id="hero-title" class="form-input"></div>
-                <div class="form-group"><label>Hero Subtitle</label><textarea id="hero-subtitle" class="form-textarea" rows="2"></textarea></div>
-            </div>
-            <div class="card">
-                <div class="card-header"><h3><i class="fas fa-chart-bar"></i> Impact Stats</h3></div>
-                <div id="stats-container" class="form-row" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr))"></div>
-            </div>
-            <div class="card">
-                <div class="card-header"><h3><i class="fas fa-building"></i> About Section</h3></div>
-                <div class="form-group"><label>Section Title</label><input type="text" id="about-title" class="form-input"></div>
-                <div class="form-group"><label>Description Paragraph 1</label><textarea id="about-desc1" class="form-textarea" rows="3"></textarea></div>
-                <div class="form-group"><label>Description Paragraph 2</label><textarea id="about-desc2" class="form-textarea" rows="3"></textarea></div>
-                <div class="form-group"><label>Features (edit inline)</label><div id="about-features-list"></div></div>
-            </div>
-        </div>
-
-        <!-- ===== PROJECTS TAB ===== -->
-        <div class="tab-content" id="tab-projects">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
-                <h3 style="color:var(--secondary);font-size:1.1rem"><i class="fas fa-project-diagram"></i> Portfolio Management</h3>
-                <button class="btn btn-add" onclick="openProjectModal()"><i class="fas fa-plus"></i> Add Project</button>
-            </div>
-            <div id="projects-list"></div>
-        </div>
-
-        <!-- ===== SERVICES TAB ===== -->
-        <div class="tab-content" id="tab-services">
-            <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap" id="service-tabs-nav"></div>
-            <div id="service-editor-area"></div>
-        </div>
-
-        <!-- ===== INDUSTRIES TAB ===== -->
-        <div class="tab-content" id="tab-industries">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
-                <h3 style="color:var(--secondary);font-size:1.1rem"><i class="fas fa-industry"></i> Industry Sectors</h3>
-                <button class="btn btn-add" onclick="openIndustryModal()"><i class="fas fa-plus"></i> Add Industry</button>
-            </div>
-            <div id="industries-list"></div>
-        </div>
-
-        <!-- ===== CONTACT TAB ===== -->
-        <div class="tab-content" id="tab-contact">
-            <div class="card">
-                <div class="card-header"><h3><i class="fas fa-address-card"></i> Contact Information</h3></div>
-                <div class="form-row">
-                    <div class="form-group"><label>Address</label><textarea id="contact-address" class="form-textarea" rows="2"></textarea></div>
-                    <div class="form-group"><label>Phone</label><input type="text" id="contact-phone" class="form-input"></div>
+        <!-- ===== QUOTE REQUESTS TAB ===== -->
+        <div class="tab-content" id="tab-quotes">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+                <h3 style="color:var(--secondary);font-size:1.1rem">
+                    <i class="fas fa-envelope-open-text"></i> Quote Requests
+                    <span id="quotes-badge" style="background:var(--danger);color:#fff;font-size:0.7rem;padding:2px 8px;border-radius:10px;margin-left:8px;display:none">0</span>
+                </h3>
+                <div style="display:flex;gap:8px">
+                    <button class="btn btn-outline btn-sm" onclick="loadQuotes()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                    <button class="btn btn-danger btn-sm" id="mark-all-read-btn" onclick="markAllRead()" style="display:none">
+                        <i class="fas fa-check-double"></i> Mark All Read
+                    </button>
                 </div>
-                <div class="form-group"><label>Email</label><input type="text" id="contact-email" class="form-input"></div>
             </div>
-        </div>
-
-        <!-- ===== INQUIRIES TAB ===== -->
-        <div class="tab-content" id="tab-inquiries">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px">
-                <h3 style="color:var(--secondary);font-size:1.1rem"><i class="fas fa-envelope-open-text"></i> Quote Requests <span id="inquiries-badge" style="background:var(--danger);color:#fff;font-size:0.7rem;padding:2px 8px;border-radius:10px;margin-left:8px;display:none">0</span></h3>
-                <button class="btn btn-outline btn-sm" onclick="loadInquiries()"><i class="fas fa-sync-alt"></i> Refresh</button>
-            </div>
-            <div id="inquiries-list"></div>
+            <div id="quotes-list"></div>
         </div>
 
         <!-- ===== SETTINGS TAB ===== -->
         <div class="tab-content" id="tab-settings">
+
+            <!-- Chat System -->
             <div class="card">
-                <div class="card-header"><h3><i class="fas fa-sliders-h"></i> Site Settings</h3></div>
-                <div class="settings-section"><h3>Meta Information</h3>
-                    <div class="form-group"><label>Site Title</label><input type="text" id="setting-site-title" class="form-input" placeholder="Ashtam Global Logistics"></div>
-                    <div class="form-group"><label>Meta Description</label><textarea id="setting-meta-desc" class="form-textarea" rows="2" placeholder="End-to-end logistics solutions..."></textarea></div>
-                </div>
-                <div class="settings-section"><h3>Social Links</h3>
-                    <div class="form-row">
-                        <div class="form-group"><label><i class="fab fa-linkedin"></i> LinkedIn</label><input type="text" id="setting-linkedin" class="form-input" placeholder="https://linkedin.com/company/..."></div>
-                        <div class="form-group"><label><i class="fab fa-twitter"></i> Twitter</label><input type="text" id="setting-twitter" class="form-input" placeholder="https://twitter.com/..."></div>
+                <div class="card-header">
+                    <h3><i class="fas fa-comments"></i> Chat System</h3>
+                    <div class="toggle-row">
+                        <span style="font-size:0.82rem;color:var(--text-muted)">Enable on website</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="chat-enabled">
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
                 </div>
-                <div class="settings-section"><h3>WhatsApp Button</h3>
-                    <div class="form-group"><label><i class="fab fa-whatsapp"></i> WhatsApp Number (with country code, e.g. 919876543210)</label><input type="text" id="setting-whatsapp" class="form-input" placeholder="919876543210"></div>
-                    <p style="font-size:0.78rem;color:var(--text-muted)">Leave empty to hide the button. Format: country code + number, no + or spaces.</p>
+                <div class="form-group">
+                    <label>Chat Widget Embed Code</label>
+                    <textarea id="chat-code" class="form-textarea" rows="5" placeholder="Paste your Tawk.to, Crisp, LiveChat, or any chat widget script here..."></textarea>
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px">
+                        <i class="fas fa-info-circle"></i> Toggle on to inject this code on every page of the website.
+                    </p>
                 </div>
             </div>
+
+            <!-- WhatsApp Button -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fab fa-whatsapp"></i> WhatsApp Button</h3>
+                    <div class="toggle-row">
+                        <span style="font-size:0.82rem;color:var(--text-muted)">Show on website</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="wa-enabled">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fab fa-whatsapp" style="color:#25d366"></i> WhatsApp Number</label>
+                    <input type="text" id="wa-number" class="form-input" placeholder="e.g. 919876543210 (country code + number, no + or spaces)">
+                    <p style="font-size:0.78rem;color:var(--text-muted);margin-top:6px">
+                        Format: country code + number. Example: <strong>919310445354</strong> for +91 9310445354
+                    </p>
+                </div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-share-alt"></i> Social Links</h3>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fab fa-linkedin" style="color:#0077b5"></i> LinkedIn URL</label>
+                        <input type="url" id="social-linkedin" class="form-input" placeholder="https://linkedin.com/company/ashtam-global">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-twitter" style="color:#1da1f2"></i> Twitter / X URL</label>
+                        <input type="url" id="social-twitter" class="form-input" placeholder="https://twitter.com/ashtamglobal">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fab fa-facebook" style="color:#1877f2"></i> Facebook URL</label>
+                        <input type="url" id="social-facebook" class="form-input" placeholder="https://facebook.com/ashtamglobal">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-instagram" style="color:#e1306c"></i> Instagram URL</label>
+                        <input type="url" id="social-instagram" class="form-input" placeholder="https://instagram.com/ashtamglobal">
+                    </div>
+                </div>
+                <p style="font-size:0.78rem;color:var(--text-muted)">
+                    <i class="fas fa-info-circle"></i> Leave empty to hide that icon from the website footer.
+                </p>
+            </div>
+
+            <!-- Contact Information -->
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-address-card"></i> Contact Information</h3>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> Office Address</label>
+                    <textarea id="contact-address" class="form-textarea" rows="2" placeholder="Full address shown in footer and contact page"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-phone"></i> Phone Number</label>
+                        <input type="text" id="contact-phone" class="form-input" placeholder="+91 9310445354">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email Address</label>
+                        <input type="email" id="contact-email" class="form-input" placeholder="info@aglbharat.com">
+                    </div>
+                </div>
+                <p style="font-size:0.78rem;color:var(--text-muted)">
+                    <i class="fas fa-info-circle"></i> These values update live in the footer and contact page across all website pages.
+                </p>
+            </div>
+
+            <div style="text-align:right;margin-top:8px">
+                <button class="btn btn-save" onclick="saveSettings()">
+                    <i class="fas fa-save"></i> Save All Settings
+                </button>
+            </div>
         </div>
+
     </main>
 </div>
 
-<!-- ===== PROJECT MODAL ===== -->
-<div class="modal-overlay" id="project-modal" style="display:none">
-    <div class="modal">
-        <h2 id="project-modal-title">Add Project</h2>
-        <input type="hidden" id="modal-project-id">
-        <div class="form-group"><label>Project Title</label><input type="text" id="modal-project-title-field" class="form-input"></div>
-        <div class="form-group"><label>Category</label><input type="text" id="modal-project-category" class="form-input"></div>
-        <div class="form-group"><label>Description</label><textarea id="modal-project-desc" class="form-textarea" rows="3"></textarea></div>
-        <div class="form-group"><label>Image Path</label><input type="text" id="modal-project-image" class="form-input" placeholder="images/example.webp"></div>
-        <div class="modal-actions">
-            <button class="btn btn-outline" onclick="closeModal('project-modal')">Cancel</button>
-            <button class="btn btn-save" onclick="saveProject()">Save Project</button>
-        </div>
-    </div>
-</div>
-
-<!-- ===== INDUSTRY MODAL ===== -->
-<div class="modal-overlay" id="industry-modal" style="display:none">
-    <div class="modal">
-        <h2 id="industry-modal-title">Add Industry</h2>
-        <input type="hidden" id="modal-industry-id">
-        <div class="form-group"><label>Industry Name</label><input type="text" id="modal-industry-name" class="form-input"></div>
-        <div class="form-group"><label>Image Path</label><input type="text" id="modal-industry-image" class="form-input" placeholder="images/industry.webp"></div>
-        <div class="modal-actions">
-            <button class="btn btn-outline" onclick="closeModal('industry-modal')">Cancel</button>
-            <button class="btn btn-save" onclick="saveIndustry()">Save Industry</button>
-        </div>
-    </div>
-</div>
-
-<script src="js/admin-app.js?v=1777985927"></script>
+<script src="js/admin-app.js?v=1778100001"></script>
 </body>
 </html>

@@ -1,10 +1,9 @@
 // Runs via defer — DOM is fully parsed, no need for DOMContentLoaded
 (async () => {
     try {
-        // Fetch with cache-buster to ensure admin changes show immediately
         const response = await fetch('/api/content');
         const content = await response.json();
-        
+
         // --- Homepage Integration ---
         const heroTitle = document.getElementById('hero-title-display');
         const heroSubtitle = document.getElementById('hero-subtitle-display');
@@ -13,19 +12,12 @@
         if (heroTitle) heroTitle.textContent = content.hero.title;
         if (heroSubtitle) heroSubtitle.textContent = content.hero.subtitle;
         if (heroStats && content.hero.stats && content.hero.stats.length > 0) {
-            const heroStatsParent = heroStats.parentElement;
-            if (heroStatsParent) {
-                const section = heroStatsParent.parentElement || heroStatsParent;
-                section.style.display = 'block';
-            }
             heroStats.innerHTML = content.hero.stats.map(stat => `
                 <div class="stat-item animate-on-scroll">
                     <div class="stat-number">${stat.value}</div>
                     <div class="stat-label">${stat.label}</div>
                 </div>
             `).join('');
-            
-            // Observe newly added elements for animations
             document.querySelectorAll('.stat-item.animate-on-scroll').forEach(el => {
                 if (window.siteObserver) window.siteObserver.observe(el);
             });
@@ -49,25 +41,60 @@
             `).join('');
         }
 
-        // --- Global Contact Info ---
-        const footerAddress = document.querySelector('.contact-info-list li:nth-child(1)');
-        const footerPhone = document.querySelector('.contact-info-list li:nth-child(2)');
-        const footerEmail = document.querySelector('.contact-info-list li:nth-child(3)');
+        // --- Contact Info (footer + contact page) ---
+        const contactData = content.settings?.contact || content.contact || {};
+        const footerItems = document.querySelectorAll('.contact-info-list li');
+        if (footerItems[0] && contactData.address)
+            footerItems[0].innerHTML = `<i class="fas fa-map-marker-alt"></i> ${contactData.address}`;
+        if (footerItems[1] && contactData.phone)
+            footerItems[1].innerHTML = `<i class="fas fa-phone"></i> <a href="tel:${contactData.phone}" style="color:#aaa">${contactData.phone}</a>`;
+        if (footerItems[2] && contactData.email)
+            footerItems[2].innerHTML = `<i class="fas fa-envelope"></i> <a href="mailto:${contactData.email}" style="color:#aaa">${contactData.email}</a>`;
 
-        if (footerAddress) footerAddress.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${content.contact.address}`;
-        if (footerPhone) footerPhone.innerHTML = `<i class="fas fa-phone"></i> ${content.contact.phone}`;
-        if (footerEmail) footerEmail.innerHTML = `<i class="fas fa-envelope"></i> ${content.contact.email}`;
+        // --- Social Links (footer) ---
+        const links = content.settings?.socialLinks || {};
+        const socialMap = { 'LinkedIn': links.linkedin, 'Twitter': links.twitter, 'Facebook': links.facebook, 'Instagram': links.instagram };
+        document.querySelectorAll('.social-links a').forEach(a => {
+            const label = a.getAttribute('aria-label');
+            if (label && socialMap[label] !== undefined) {
+                if (socialMap[label]) {
+                    a.href = socialMap[label];
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.style.display = '';
+                } else {
+                    a.style.display = 'none';
+                }
+            }
+        });
 
         // --- WhatsApp Button ---
         const waBtn = document.getElementById('whatsapp-btn');
         if (waBtn) {
             const waNumber = content.settings?.whatsapp || '';
-            if (waNumber) {
+            const waEnabled = content.settings?.whatsappEnabled !== false;
+            if (waNumber && waEnabled) {
                 waBtn.href = `https://wa.me/${waNumber}`;
                 waBtn.style.display = 'flex';
             } else {
                 waBtn.style.display = 'none';
             }
+        }
+
+        // --- Chat Widget ---
+        const chat = content.settings?.chat;
+        if (chat?.enabled && chat?.code && chat.code.trim()) {
+            const chatContainer = document.createElement('div');
+            chatContainer.id = 'agl-chat-widget';
+            chatContainer.innerHTML = chat.code;
+            document.body.appendChild(chatContainer);
+            // Re-execute any script tags injected via innerHTML
+            chatContainer.querySelectorAll('script').forEach(oldScript => {
+                const newScript = document.createElement('script');
+                Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+                newScript.textContent = oldScript.textContent;
+                oldScript.parentNode.replaceChild(newScript, oldScript);
+            });
         }
 
     } catch (err) {
