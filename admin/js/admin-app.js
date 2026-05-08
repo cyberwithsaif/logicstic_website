@@ -26,6 +26,8 @@ const tabTitles = {
     dashboard: ['Dashboard', 'Welcome back, Administrator'],
     quotes:    ['Quote Requests', 'Manage incoming quote requests'],
     chat:      ['Live Chat', 'Real-time chat with website visitors'],
+    clients:   ['Client Logos', 'Manage the marquee of client logos shown on the homepage'],
+    projects:  ['Project Portfolio', 'Manage case studies and project showcase on the website'],
     settings:  ['Settings', 'Configure website options — changes go live on save']
 };
 
@@ -40,8 +42,12 @@ function switchTab(tab) {
     document.getElementById('page-subtitle').textContent = info[1];
     const saveBtn = document.getElementById('save-btn');
     if (saveBtn) saveBtn.style.display = tab === 'settings' ? 'inline-flex' : 'none';
-    if (tab === 'quotes') loadQuotes();
-    if (tab === 'chat')   initAdminChat();
+    if (tab === 'quotes')   loadQuotes();
+    if (tab === 'chat')     initAdminChat();
+    if (tab === 'clients')  renderClientRows(siteContent.clients || []);
+    if (tab === 'projects') renderProjectRows(siteContent.projects || []);
+    // Persist active tab so page refresh stays on same tab
+    history.replaceState(null, '', '#' + tab);
 }
 
 document.querySelectorAll('.nav-item').forEach(btn => {
@@ -57,6 +63,10 @@ async function loadContent() {
         if (!siteContent.settings) siteContent.settings = {};
         populateSettings();
         updateDashboardStats();
+        // Restore tab AFTER content is loaded so data is available
+        const valid = ['dashboard','quotes','chat','clients','settings'];
+        const hash = location.hash.slice(1);
+        if (hash && valid.includes(hash)) switchTab(hash);
     } catch (e) {
         console.error('Load error:', e);
         showToast('Failed to load content from server', 'error');
@@ -85,6 +95,391 @@ function populateSettings() {
     const ca = document.getElementById('contact-address'); if (ca) ca.value = c.address || '';
     const cp = document.getElementById('contact-phone');   if (cp) cp.value = c.phone   || '';
     const ce = document.getElementById('contact-email');   if (ce) ce.value = c.email   || '';
+
+    // Pre-render list tabs so data is ready when user switches to them
+    renderClientRows(siteContent.clients || []);
+    renderProjectRows(siteContent.projects || []);
+}
+
+// ===== CLIENTS MANAGEMENT =====
+let _editingClientIdx = -1;
+
+function renderClientRows(clients) {
+    const el = document.getElementById('clients-list');
+    if (!el) return;
+    if (!clients.length) {
+        el.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;padding:12px 0">No clients yet. Click <strong>Add Client</strong> to add one.</p>';
+        return;
+    }
+    el.innerHTML = clients.map((c, i) => `
+        <div class="client-admin-row" data-index="${i}">
+            <div class="car-preview">
+                <img src="${esc(c.logo)}" alt="" class="car-logo-img" onerror="this.style.opacity=0.2">
+            </div>
+            <input type="hidden" class="car-logo" value="${esc(c.logo)}">
+            <input type="hidden" class="car-name" value="${esc(c.name)}">
+            <div class="car-info">
+                <div class="car-name-display">${esc(c.name)}</div>
+                <div class="car-logo-display">${esc(c.logo)}</div>
+            </div>
+            <button class="btn btn-outline btn-sm car-edit-btn" onclick="openClientEdit(${i})">
+                <i class="fas fa-pen"></i> Edit
+            </button>
+        </div>`).join('');
+}
+
+function addClientRow() {
+    const el = document.getElementById('clients-list');
+    if (!el) return;
+    const empty = el.querySelector('p');
+    if (empty) empty.remove();
+    // Open modal for a new (empty) entry
+    _editingClientIdx = -1;
+    document.getElementById('cme-logo').value = '';
+    document.getElementById('cme-name').value = '';
+    const prev = document.getElementById('cme-preview');
+    prev.src = ''; prev.style.opacity = '0.2';
+    document.getElementById('client-modal').style.display = 'flex';
+    document.getElementById('cme-name').focus();
+}
+
+function openClientEdit(index) {
+    _editingClientIdx = index;
+    const rows = document.querySelectorAll('#clients-list .client-admin-row');
+    const row = rows[index];
+    if (!row) return;
+    const logo = row.querySelector('.car-logo').value;
+    const name = row.querySelector('.car-name').value;
+    document.getElementById('cme-logo').value = logo;
+    document.getElementById('cme-name').value = name;
+    const prev = document.getElementById('cme-preview');
+    prev.src = logo || ''; prev.style.opacity = logo ? '1' : '0.2';
+    document.getElementById('client-modal').style.display = 'flex';
+}
+
+function closeClientModal() {
+    document.getElementById('client-modal').style.display = 'none';
+    _editingClientIdx = -1;
+}
+
+function saveClientFromModal() {
+    const logo = document.getElementById('cme-logo').value.trim();
+    const name = document.getElementById('cme-name').value.trim();
+    if (!logo || !name) { showToast('Logo URL and name are required', 'error'); return; }
+    const el = document.getElementById('clients-list');
+    if (_editingClientIdx >= 0) {
+        // Update existing row
+        const rows = el.querySelectorAll('.client-admin-row');
+        const row = rows[_editingClientIdx];
+        if (row) {
+            row.querySelector('.car-logo').value = logo;
+            row.querySelector('.car-name').value = name;
+            row.querySelector('.car-logo-img').src = logo;
+            row.querySelector('.car-logo-img').style.opacity = '1';
+            row.querySelector('.car-name-display').textContent = name;
+            row.querySelector('.car-logo-display').textContent = logo;
+        }
+    } else {
+        // Add new row
+        const idx = el.querySelectorAll('.client-admin-row').length;
+        const div = document.createElement('div');
+        div.className = 'client-admin-row';
+        div.dataset.index = idx;
+        div.innerHTML = `
+            <div class="car-preview">
+                <img src="${esc(logo)}" alt="" class="car-logo-img" onerror="this.style.opacity=0.2">
+            </div>
+            <input type="hidden" class="car-logo" value="${esc(logo)}">
+            <input type="hidden" class="car-name" value="${esc(name)}">
+            <div class="car-info">
+                <div class="car-name-display">${esc(name)}</div>
+                <div class="car-logo-display">${esc(logo)}</div>
+            </div>
+            <button class="btn btn-outline btn-sm car-edit-btn" onclick="openClientEdit(${idx})">
+                <i class="fas fa-pen"></i> Edit
+            </button>`;
+        el.appendChild(div);
+    }
+    closeClientModal();
+}
+
+function deleteClientFromModal() {
+    if (!confirm('Delete this client?')) return;
+    const rows = document.querySelectorAll('#clients-list .client-admin-row');
+    const row = rows[_editingClientIdx];
+    if (row) row.remove();
+    const el = document.getElementById('clients-list');
+    if (el && !el.querySelector('.client-admin-row')) {
+        el.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;padding:12px 0">No clients yet. Click <strong>Add Client</strong> to add one.</p>';
+    }
+    closeClientModal();
+}
+
+function handleLogoUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const status = document.getElementById('cme-upload-status');
+    status.textContent = 'Uploading…';
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const r = await fetch('/api/admin/upload-logo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename: file.name, data: e.target.result })
+            });
+            const data = await r.json();
+            if (data.success) {
+                document.getElementById('cme-logo').value = data.path;
+                const prev = document.getElementById('cme-preview');
+                prev.src = data.path; prev.style.opacity = '1';
+                status.textContent = 'Uploaded!';
+                status.style.color = 'var(--success)';
+            } else {
+                status.textContent = 'Failed: ' + (data.message || 'error');
+                status.style.color = 'var(--danger)';
+            }
+        } catch(err) {
+            status.textContent = 'Upload error';
+            status.style.color = 'var(--danger)';
+        }
+        input.value = '';
+    };
+    reader.readAsDataURL(file);
+}
+
+async function saveClients() {
+    const rows = document.querySelectorAll('#clients-list .client-admin-row');
+    siteContent.clients = Array.from(rows).map(r => ({
+        logo: (r.querySelector('.car-logo')?.value || '').trim(),
+        name: (r.querySelector('.car-name')?.value || '').trim()
+    })).filter(c => c.logo && c.name);
+    try {
+        const r = await fetch('/api/admin/update-content', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(siteContent)
+        });
+        const data = await r.json();
+        if (data.success) {
+            showToast('Clients saved! Changes are now live on the website.');
+        } else {
+            showToast(data.message || 'Save failed', 'error');
+        }
+    } catch(e) { showToast('Connection error', 'error'); }
+}
+
+// ===== PROJECTS MANAGEMENT =====
+let _editingProjectIdx = -1;
+
+function renderProjectRows(projects) {
+    const el = document.getElementById('projects-list');
+    if (!el) return;
+    if (!projects.length) {
+        el.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;padding:12px 0">No projects yet. Click <strong>Add Project</strong> to add one.</p>';
+        return;
+    }
+    el.innerHTML = projects.map((p, i) => `
+        <div class="client-admin-row" data-index="${i}" data-id="${p.id || i+1}">
+            <div class="car-preview" style="width:80px;height:56px">
+                <img src="${esc(p.image)}" alt="" class="car-logo-img" onerror="this.style.opacity=0.2">
+            </div>
+            <input type="hidden" class="prj-image"       value="${esc(p.image||'')}">
+            <input type="hidden" class="prj-title"       value="${esc(p.title||'')}">
+            <input type="hidden" class="prj-category"    value="${esc(p.category||'')}">
+            <input type="hidden" class="prj-description" value="${esc(p.description||'')}">
+            <input type="hidden" class="prj-client"      value="${esc(p.client||'')}">
+            <input type="hidden" class="prj-location"    value="${esc(p.location||'')}">
+            <input type="hidden" class="prj-year"        value="${esc(p.year||'')}">
+            <div class="car-info">
+                <div class="car-name-display">${esc(p.title)}</div>
+                <div class="car-logo-display">
+                    <span style="color:var(--secondary);font-size:0.7rem">${esc(p.category)}</span>
+                    ${p.year     ? `<span style="color:var(--text-muted);font-size:0.7rem"> · ${esc(p.year)}</span>` : ''}
+                    ${p.client   ? `<span style="color:var(--text-muted);font-size:0.7rem"> · ${esc(p.client)}</span>` : ''}
+                    ${p.location ? `<span style="color:var(--text-muted);font-size:0.7rem"> · ${esc(p.location)}</span>` : ''}
+                </div>
+            </div>
+            <button class="btn btn-outline btn-sm car-edit-btn" onclick="openProjectEdit(${i})">
+                <i class="fas fa-pen"></i> Edit
+            </button>
+        </div>`).join('');
+}
+
+function addProjectRow() {
+    _editingProjectIdx = -1;
+    ['cpm-image','cpm-title','cpm-category','cpm-year','cpm-description','cpm-client','cpm-location'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+    });
+    const prev = document.getElementById('cpm-preview');
+    if (prev) { prev.src = ''; prev.style.opacity = '0.2'; }
+    const st = document.getElementById('cpm-upload-status'); if (st) { st.textContent = ''; }
+    document.getElementById('project-modal').style.display = 'flex';
+    setTimeout(() => document.getElementById('cpm-title')?.focus(), 50);
+}
+
+function openProjectEdit(index) {
+    _editingProjectIdx = index;
+    const rows = document.querySelectorAll('#projects-list .client-admin-row');
+    const row = rows[index];
+    if (!row) return;
+    const get = cls => row.querySelector(cls)?.value || '';
+    document.getElementById('cpm-image').value       = get('.prj-image');
+    document.getElementById('cpm-title').value       = get('.prj-title');
+    document.getElementById('cpm-category').value    = get('.prj-category');
+    document.getElementById('cpm-year').value        = get('.prj-year');
+    document.getElementById('cpm-description').value = get('.prj-description');
+    document.getElementById('cpm-client').value      = get('.prj-client');
+    document.getElementById('cpm-location').value    = get('.prj-location');
+    const img = get('.prj-image');
+    const prev = document.getElementById('cpm-preview');
+    prev.src = img; prev.style.opacity = img ? '1' : '0.2';
+    const st = document.getElementById('cpm-upload-status'); if (st) st.textContent = '';
+    document.getElementById('project-modal').style.display = 'flex';
+}
+
+function closeProjectModal() {
+    document.getElementById('project-modal').style.display = 'none';
+    _editingProjectIdx = -1;
+}
+
+function saveProjectFromModal() {
+    const image       = document.getElementById('cpm-image').value.trim();
+    const title       = document.getElementById('cpm-title').value.trim();
+    const category    = document.getElementById('cpm-category').value.trim();
+    const description = document.getElementById('cpm-description').value.trim();
+    const year        = document.getElementById('cpm-year').value.trim();
+    const client      = document.getElementById('cpm-client').value.trim();
+    const location    = document.getElementById('cpm-location').value.trim();
+    if (!title || !category || !description) {
+        showToast('Title, category and description are required', 'error'); return;
+    }
+    const el = document.getElementById('projects-list');
+    const metaHtml = () => `
+        <span style="color:var(--secondary);font-size:0.7rem">${esc(category)}</span>
+        ${year     ? `<span style="color:var(--text-muted);font-size:0.7rem"> · ${esc(year)}</span>` : ''}
+        ${client   ? `<span style="color:var(--text-muted);font-size:0.7rem"> · ${esc(client)}</span>` : ''}
+        ${location ? `<span style="color:var(--text-muted);font-size:0.7rem"> · ${esc(location)}</span>` : ''}`;
+
+    if (_editingProjectIdx >= 0) {
+        const row = el.querySelectorAll('.client-admin-row')[_editingProjectIdx];
+        if (row) {
+            row.querySelector('.prj-image').value       = image;
+            row.querySelector('.prj-title').value       = title;
+            row.querySelector('.prj-category').value    = category;
+            row.querySelector('.prj-description').value = description;
+            row.querySelector('.prj-year').value        = year;
+            row.querySelector('.prj-client').value      = client;
+            row.querySelector('.prj-location').value    = location;
+            const imgEl = row.querySelector('.car-logo-img');
+            imgEl.src = image; imgEl.style.opacity = image ? '1' : '0.3';
+            row.querySelector('.car-name-display').textContent = title;
+            row.querySelector('.car-logo-display').innerHTML   = metaHtml();
+        }
+    } else {
+        const idx = el.querySelectorAll('.client-admin-row').length;
+        const div = document.createElement('div');
+        div.className = 'client-admin-row';
+        div.dataset.index = idx;
+        div.dataset.id    = Date.now();
+        div.innerHTML = `
+            <div class="car-preview" style="width:80px;height:56px">
+                <img src="${esc(image)}" alt="" class="car-logo-img" onerror="this.style.opacity=0.2">
+            </div>
+            <input type="hidden" class="prj-image"       value="${esc(image)}">
+            <input type="hidden" class="prj-title"       value="${esc(title)}">
+            <input type="hidden" class="prj-category"    value="${esc(category)}">
+            <input type="hidden" class="prj-description" value="${esc(description)}">
+            <input type="hidden" class="prj-client"      value="${esc(client)}">
+            <input type="hidden" class="prj-location"    value="${esc(location)}">
+            <input type="hidden" class="prj-year"        value="${esc(year)}">
+            <div class="car-info">
+                <div class="car-name-display">${esc(title)}</div>
+                <div class="car-logo-display">${metaHtml()}</div>
+            </div>
+            <button class="btn btn-outline btn-sm car-edit-btn" onclick="openProjectEdit(${idx})">
+                <i class="fas fa-pen"></i> Edit
+            </button>`;
+        const empty = el.querySelector('p');
+        if (empty) empty.remove();
+        el.appendChild(div);
+    }
+    closeProjectModal();
+}
+
+function deleteProjectFromModal() {
+    if (!confirm('Delete this project?')) return;
+    const rows = document.querySelectorAll('#projects-list .client-admin-row');
+    const row  = rows[_editingProjectIdx];
+    if (row) row.remove();
+    const el = document.getElementById('projects-list');
+    if (el && !el.querySelector('.client-admin-row')) {
+        el.innerHTML = '<p style="color:var(--text-muted);font-size:0.85rem;padding:12px 0">No projects yet. Click <strong>Add Project</strong> to add one.</p>';
+    }
+    closeProjectModal();
+}
+
+function handleProjectImageUpload(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const status = document.getElementById('cpm-upload-status');
+    status.textContent = 'Uploading…';
+    status.style.color = 'var(--text-muted)';
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const r = await fetch('/api/admin/upload-project-image', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ filename: file.name, data: e.target.result })
+            });
+            const data = await r.json();
+            if (data.success) {
+                document.getElementById('cpm-image').value = data.path;
+                const prev = document.getElementById('cpm-preview');
+                prev.src = data.path; prev.style.opacity = '1';
+                status.textContent = 'Uploaded!';
+                status.style.color = 'var(--success)';
+            } else {
+                status.textContent = 'Failed: ' + (data.message || 'error');
+                status.style.color = 'var(--danger)';
+            }
+        } catch(err) {
+            status.textContent = 'Upload error';
+            status.style.color = 'var(--danger)';
+        }
+        input.value = '';
+    };
+    reader.readAsDataURL(file);
+}
+
+async function saveProjects() {
+    const rows = document.querySelectorAll('#projects-list .client-admin-row');
+    siteContent.projects = Array.from(rows).map((r, i) => ({
+        id:          parseInt(r.dataset.id) || (i + 1),
+        image:       (r.querySelector('.prj-image')?.value       || '').trim(),
+        title:       (r.querySelector('.prj-title')?.value       || '').trim(),
+        category:    (r.querySelector('.prj-category')?.value    || '').trim(),
+        description: (r.querySelector('.prj-description')?.value || '').trim(),
+        year:        (r.querySelector('.prj-year')?.value        || '').trim(),
+        client:      (r.querySelector('.prj-client')?.value      || '').trim(),
+        location:    (r.querySelector('.prj-location')?.value    || '').trim()
+    })).filter(p => p.title && p.category && p.description);
+    try {
+        const r = await fetch('/api/admin/update-content', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(siteContent)
+        });
+        const data = await r.json();
+        if (data.success) {
+            showToast('Projects saved! Changes are now live on the website.');
+            const ls = document.getElementById('last-save');
+            if (ls) ls.textContent = 'Saved at ' + new Date().toLocaleTimeString();
+        } else {
+            showToast(data.message || 'Save failed', 'error');
+        }
+    } catch(e) { showToast('Connection error', 'error'); }
 }
 
 // ===== DASHBOARD CLOCK =====
@@ -265,6 +660,31 @@ async function quickSave() {
 // ===== SAVE SETTINGS =====
 async function saveSettings() {
     if (!siteContent.settings) siteContent.settings = {};
+    // Guards: never let saveSettings wipe clients or projects
+    if (!Array.isArray(siteContent.clients) || siteContent.clients.length === 0) {
+        const rows = document.querySelectorAll('#clients-list .client-admin-row');
+        if (rows.length) {
+            siteContent.clients = Array.from(rows).map(r => ({
+                logo: (r.querySelector('.car-logo')?.value || '').trim(),
+                name: (r.querySelector('.car-name')?.value || '').trim()
+            })).filter(c => c.logo && c.name);
+        }
+    }
+    if (!Array.isArray(siteContent.projects) || siteContent.projects.length === 0) {
+        const rows = document.querySelectorAll('#projects-list .client-admin-row');
+        if (rows.length) {
+            siteContent.projects = Array.from(rows).map((r, i) => ({
+                id: i + 1,
+                image:       (r.querySelector('.prj-image')?.value || '').trim(),
+                title:       (r.querySelector('.prj-title')?.value || '').trim(),
+                category:    (r.querySelector('.prj-category')?.value || '').trim(),
+                description: (r.querySelector('.prj-description')?.value || '').trim(),
+                year:        (r.querySelector('.prj-year')?.value || '').trim(),
+                client:      (r.querySelector('.prj-client')?.value || '').trim(),
+                location:    (r.querySelector('.prj-location')?.value || '').trim()
+            })).filter(p => p.title && p.category);
+        }
+    }
     const s = siteContent.settings;
 
     // WhatsApp
@@ -570,8 +990,10 @@ function openChatSession(sessionId) {
     updateChatNavBadge();
 
     const main = document.getElementById('ca-main');
+    const isMobile = window.innerWidth <= 768;
     main.innerHTML = `
         <div class="ca-chat-header" id="ca-chat-header">
+            ${isMobile ? `<button class="ca-back-btn" onclick="closeMobileChat()" title="Back"><i class="fas fa-arrow-left"></i></button>` : ''}
             <div class="ca-ch-avatar" style="background:${strColor(s.username)}">${s.username.charAt(0)}</div>
             <div class="ca-ch-info">
                 <div class="ca-ch-name">${esc(s.username)}</div>
@@ -610,6 +1032,9 @@ function openChatSession(sessionId) {
     }
     scrollChatToBottom();
 
+    // Slide in on mobile
+    if (isMobile) main.classList.add('mobile-open');
+
     // Input events
     const inp = document.getElementById('ca-input');
     if (inp) {
@@ -624,6 +1049,14 @@ function openChatSession(sessionId) {
             adminTypingTimer = setTimeout(() => adminSocket.emit('admin:typing', { sessionId, isTyping: false }), 1500);
         });
     }
+}
+
+// ── MOBILE BACK (return to session list) ─────────────────────────────────────
+function closeMobileChat() {
+    const main = document.getElementById('ca-main');
+    if (main) main.classList.remove('mobile-open');
+    activeChatId = null;
+    renderSessionList();
 }
 
 // ── SEND REPLY ───────────────────────────────────────────────────────────────
@@ -680,10 +1113,12 @@ function setConnStatus(online) {
 
 function updateChatNavBadge() {
     const b = document.getElementById('nav-chat-badge');
-    if (!b) return;
-    const total = Object.values(chatSessions).reduce((a, s) => a + (s.unread || 0), 0);
-    b.textContent = total;
-    b.style.display = total > 0 ? 'inline-flex' : 'none';
+    if (b) { b.textContent = totalChatUnread; b.style.display = totalChatUnread > 0 ? 'inline-flex' : 'none'; }
+    // Dashboard stat card
+    const dashNum  = document.getElementById('stat-chat-unread');
+    const dashCard = document.getElementById('dash-unread-chat-card');
+    if (dashNum)  dashNum.textContent = totalChatUnread;
+    if (dashCard) dashCard.classList.toggle('has-unread', totalChatUnread > 0);
 }
 
 function fmtTime(ts) {
@@ -736,3 +1171,24 @@ startClock();
 loadContent();
 loadQuotes();
 initAdminChat(); // connect socket on load so nav badge updates immediately
+
+// Dashboard live refresh every 30 seconds
+setInterval(async () => {
+    try {
+        const r = await fetch('/api/admin/quotes', { cache: 'no-store' });
+        if (!r.ok) return;
+        const data = await r.json();
+        if (!data.success) return;
+        const quotes = data.quotes || [];
+        const unread = quotes.filter(q => !q.read).length;
+        const su = document.getElementById('stat-unread');
+        const st = document.getElementById('stat-total');
+        const nb = document.getElementById('nav-unread-badge');
+        if (su) su.textContent = unread;
+        if (st) st.textContent = quotes.length;
+        if (nb) { nb.textContent = unread; nb.style.display = unread > 0 ? 'inline-flex' : 'none'; }
+        if (document.getElementById('tab-dashboard')?.classList.contains('active')) {
+            renderRecentQuotes(quotes.slice().reverse().slice(0, 5));
+        }
+    } catch(e) {}
+}, 30000);

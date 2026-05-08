@@ -377,13 +377,12 @@ p {
 }
 
 .logo-text {
-  font-size: 1.35rem;
+  font-size: 1.1rem;
   font-weight: 800;
   color: var(--primary-color);
   margin-left: 15px;
-  text-transform: uppercase;
-  letter-spacing: -0.5px;
-  line-height: 1;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
 }
 
 .header.scrolled .site-logo {
@@ -824,8 +823,8 @@ p {
 
 /* Footer */
 .footer {
-  background-color: #051020;
-  color: #ccc;
+  background-color: #f3f4f6;
+  color: #444;
   padding-top: 50px;
 }
 
@@ -837,12 +836,12 @@ p {
 }
 
 .footer-logo .logo-text {
-  color: var(--bg-white);
+  color: #1a1e3a;
 }
 
 .footer-desc {
   margin: 15px 0;
-  color: #aaa;
+  color: #666;
   font-size: 0.9rem;
 }
 
@@ -858,9 +857,9 @@ p {
   justify-content: center;
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
-  border: 1.5px solid rgba(201, 161, 74, 0.3);
-  color: var(--bg-white);
+  background: rgba(0, 0, 0, 0.06);
+  border: 1.5px solid rgba(201, 161, 74, 0.4);
+  color: #333;
   border-radius: 50%;
   font-size: 1rem;
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -910,7 +909,7 @@ p {
 }
 
 .footer h4 {
-  color: var(--bg-white);
+  color: #1a1e3a;
   font-size: 1.05rem;
   margin-bottom: 15px;
   position: relative;
@@ -932,7 +931,7 @@ p {
 }
 
 .footer ul li a {
-  color: #aaa;
+  color: #555;
   font-size: 0.9rem;
 }
 
@@ -947,6 +946,7 @@ p {
   gap: 10px;
   margin-bottom: 10px;
   font-size: 0.9rem;
+  color: #555;
 }
 
 .contact-info-list i {
@@ -954,10 +954,11 @@ p {
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   padding: 15px 0;
   text-align: center;
   font-size: 0.85rem;
+  color: #666;
 }
 
 /* ===== WHATSAPP FLOATING BUTTON ===== */

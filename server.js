@@ -205,6 +205,51 @@ app.post('/api/admin/update-content', checkAuth, async (req, res) => {
     } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
 
+// ===== API: LOGO UPLOAD =====
+app.post('/api/admin/upload-logo', checkAuth, async (req, res) => {
+    try {
+        const { filename, data } = req.body;
+        if (!filename || !data) return res.status(400).json({ success: false, message: 'Missing filename or data' });
+        // Sanitise filename — strip path separators, allow only safe chars
+        const safe = path.basename(filename).replace(/[^a-zA-Z0-9._-]/g, '_');
+        if (!safe || safe.length > 120) return res.status(400).json({ success: false, message: 'Invalid filename' });
+        // Only allow image types
+        const ext = safe.split('.').pop().toLowerCase();
+        if (!['png','jpg','jpeg','webp','svg','gif'].includes(ext)) {
+            return res.status(400).json({ success: false, message: 'Only image files allowed' });
+        }
+        // Decode base64 (strip data URI prefix if present)
+        const base64 = data.replace(/^data:[^;]+;base64,/, '');
+        const buf = Buffer.from(base64, 'base64');
+        if (buf.length > 2 * 1024 * 1024) return res.status(400).json({ success: false, message: 'File too large (max 2MB)' });
+        const dest = path.join(__dirname, 'images', 'clients', safe);
+        await fs.ensureDir(path.join(__dirname, 'images', 'clients'));
+        await fs.writeFile(dest, buf);
+        res.json({ success: true, path: '/images/clients/' + safe });
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
+// ===== API: PROJECT IMAGE UPLOAD =====
+app.post('/api/admin/upload-project-image', checkAuth, async (req, res) => {
+    try {
+        const { filename, data } = req.body;
+        if (!filename || !data) return res.status(400).json({ success: false, message: 'Missing filename or data' });
+        const safe = path.basename(filename).replace(/[^a-zA-Z0-9._-]/g, '_');
+        if (!safe || safe.length > 120) return res.status(400).json({ success: false, message: 'Invalid filename' });
+        const ext = safe.split('.').pop().toLowerCase();
+        if (!['png','jpg','jpeg','webp','svg','gif'].includes(ext)) {
+            return res.status(400).json({ success: false, message: 'Only image files allowed' });
+        }
+        const base64 = data.replace(/^data:[^;]+;base64,/, '');
+        const buf = Buffer.from(base64, 'base64');
+        if (buf.length > 5 * 1024 * 1024) return res.status(400).json({ success: false, message: 'File too large (max 5MB)' });
+        const dest = path.join(__dirname, 'images', 'projects', safe);
+        await fs.ensureDir(path.join(__dirname, 'images', 'projects'));
+        await fs.writeFile(dest, buf);
+        res.json({ success: true, path: '/images/projects/' + safe });
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
 // ===== ADMIN PANEL ROUTE =====
 app.get('/admin', checkAuth, (req, res) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate');

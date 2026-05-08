@@ -141,7 +141,7 @@
         <div class="container header-container">
             <a href="index" class="logo">
                 <img src="images/logo.webp" alt="Ashtam Global Logistics" class="site-logo">
-                <span class="logo-text">Ashtam Global Logistics</span>
+                <span class="logo-text">Ashtam Global Logistics Pvt. Ltd</span>
             </a>
             
             <nav class="main-nav">
@@ -288,7 +288,7 @@
             <!-- Map Container -->
             <div style="position:relative;">
                 <div id="map" class="map-container" style="padding: 0;"></div>
-                <a href="https://www.google.com/maps?q=28.4686,77.0135" target="_blank" rel="noopener"
+                <a href="https://www.google.com/maps?q=28.4804,77.0068" target="_blank" rel="noopener"
                    style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;background:var(--primary-color);color:#fff;padding:10px 22px;border-radius:8px;font-size:0.88rem;font-weight:600;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,0.25);z-index:10;white-space:nowrap;">
                     <i class="fas fa-map-marker-alt" style="color:var(--secondary-color);"></i> Open in Google Maps
                 </a>
@@ -389,16 +389,16 @@
         const map = new mapboxgl.Map({
             container: 'map', // container ID
             style: 'mapbox://styles/mapbox/light-v11', // style URL (light theme to match website)
-            center: [77.0135, 28.4686], // starting position [lng, lat] for Gurugram
+            center: [77.0068, 28.4804], // starting position [lng, lat]
             zoom: 13 // starting zoom
         });
 
         // Google Maps URL for the office location
-        const googleMapsUrl = 'https://www.google.com/maps?q=28.4686,77.0135';
+        const googleMapsUrl = 'https://www.google.com/maps?q=28.4804,77.0068';
 
         // Add a marker for Corporate Office
         const marker = new mapboxgl.Marker({ color: '#1e56d3' })
-            .setLngLat([77.0135, 28.4686])
+            .setLngLat([77.0068, 28.4804])
             .setPopup(new mapboxgl.Popup({ offset: 25 })
                 .setHTML('<h4 style="margin:0;color:#0B1F3A;font-weight:700;">Ashtam Global Logistics</h4><p style="margin:5px 0 0;font-size:0.9rem;color:#64748b;">699/210 Laxman Vihar-II, Gurugram</p><a href="' + googleMapsUrl + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:#0B1F3A;color:#fff;padding:7px 14px;border-radius:6px;font-size:0.8rem;font-weight:600;text-decoration:none;">&#x1F4CD; Open in Google Maps</a>'))
             .addTo(map);

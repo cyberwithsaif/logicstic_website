@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -67,7 +67,7 @@
         <div class="container header-container">
             <a href="index" class="logo">
                 <img src="images/logo.webp" alt="Ashtam Global Logistics" class="site-logo">
-                <span class="logo-text">Ashtam Global Logistics</span>
+                <span class="logo-text">Ashtam Global Logistics Pvt. Ltd</span>
             </a>
             
             <nav class="main-nav">
@@ -103,7 +103,7 @@
                     <li><a href="industries" class="nav-link">Industries</a></li>
                     
                     
-                    <li><a href="contact" class="nav-link">Contact</a></li>
+                    <li><a href="projects" class="nav-link">Projects</a></li><li><a href="contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
             
@@ -142,6 +142,15 @@
         </div>
     </section>
 
+    <!-- Filter Bar -->
+    <section style="background:#f8f9fa;border-top:1px solid #e8ecf0;border-bottom:1px solid #e8ecf0;padding:16px 0">
+        <div class="container">
+            <div id="project-filter-bar" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+                <!-- populated by JS -->
+            </div>
+        </div>
+    </section>
+
     <!-- Case Studies -->
     <section class="py-5 bg-light">
         <div class="container" id="dynamic-projects-container">
@@ -152,6 +161,26 @@
             </div>
         </div>
     </section>
+
+    <style>
+        .proj-filter-btn {
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1.5px solid #d1d5db;
+            background: #fff;
+            color: #475569;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .proj-filter-btn:hover { border-color: var(--secondary-color, #d9a521); color: var(--secondary-color, #d9a521); }
+        .proj-filter-btn.active { background: var(--secondary-color, #d9a521); border-color: var(--secondary-color, #d9a521); color: #fff; }
+        .proj-card-meta { display:flex; gap:18px; flex-wrap:wrap; font-size:0.85rem; color:#64748b; margin-top:14px; }
+        .proj-card-meta span { display:flex; align-items:center; gap:6px; }
+        .proj-card-meta i { color: var(--secondary-color, #d9a521); }
+    </style>
 
     <!-- Footer -->
     <footer class="footer">
