@@ -3,23 +3,436 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Industries served by Ashtam Global Logistics. We provide solutions for Defence, Power, Oil & Gas, Infrastructure, and more.">
+    <meta name="description" content="Industries served by Ashtam Global Logistics — Power, Oil & Gas, Infrastructure, Iron & Steel, Automobile, Chemicals, FMCG, Renewables and 20+ more sectors.">
     <title>Industries We Serve | Ashtam Global Logistics</title>
-    <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-
-    <!-- Google Fonts (non-blocking) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css?v=1778000020">
     <link rel="stylesheet" href="css/mobile.css?v=1778000020">
-
-    <!-- FontAwesome (deferred) -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+
+    <style>
+        /* ── Stats Banner ── */
+        .ind-stats {
+            background: var(--primary-color);
+            padding: 28px 0;
+        }
+        .ind-stats .stats-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .ind-stat {
+            text-align: center;
+            padding: 16px 44px;
+            border-right: 1px solid rgba(255,255,255,0.15);
+            flex: 1;
+            min-width: 140px;
+        }
+        .ind-stat:last-child { border-right: none; }
+        .ind-stat .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary-color);
+            line-height: 1;
+        }
+        .ind-stat .stat-label {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.75);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Intro ── */
+        .ind-intro {
+            padding: 70px 0;
+            background: #fff;
+        }
+        .ind-intro-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .ind-intro-text h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 18px;
+        }
+        .ind-intro-text p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 14px;
+        }
+        .ind-intro-text .sector-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .ind-intro-text .sector-tags span {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .ind-intro-img {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        }
+        .ind-intro-img img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ── All Industries Grid ── */
+        .ind-all {
+            padding: 70px 0;
+            background: #f8f9fa;
+        }
+        .ind-all h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .ind-all .section-sub {
+            text-align: center;
+            color: #666;
+            margin-bottom: 48px;
+            font-size: 1rem;
+        }
+        .ind-all-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+        .ind-tile {
+            background: #fff;
+            border-radius: 14px;
+            padding: 28px 16px 22px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            transition: all 0.25s;
+            border-bottom: 3px solid transparent;
+        }
+        .ind-tile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+            border-bottom-color: var(--secondary-color);
+        }
+        .ind-tile .tile-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-color), #1a4a7a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+        }
+        .ind-tile .tile-icon i {
+            color: #fff;
+            font-size: 1.4rem;
+        }
+        .ind-tile h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            line-height: 1.3;
+        }
+
+        /* ── Detailed Industry Sections ── */
+        .ind-detail-section {
+            padding: 70px 0;
+            background: #fff;
+        }
+        .ind-detail-section:nth-child(even) {
+            background: #f8f9fa;
+        }
+        .ind-detail-section h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .ind-detail-section .section-sub {
+            text-align: center;
+            color: #666;
+            margin-bottom: 48px;
+        }
+        .ind-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+        }
+        .ind-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+            transition: transform 0.25s, box-shadow 0.25s;
+            display: flex;
+            flex-direction: column;
+        }
+        .ind-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.14);
+        }
+        .ind-card-img {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        .ind-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+        .ind-card:hover .ind-card-img img {
+            transform: scale(1.05);
+        }
+        .ind-card-img .card-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .ind-card-body {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .ind-card-body .card-icon-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .ind-card-body .card-icon {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            background: linear-gradient(135deg, var(--primary-color), #1a4a7a);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ind-card-body .card-icon i {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        .ind-card-body h3 {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+        .ind-card-body p {
+            font-size: 0.875rem;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+        .ind-card-body .card-points {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 14px;
+        }
+        .ind-card-body .card-points li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.82rem;
+            color: #555;
+            margin-bottom: 7px;
+        }
+        .ind-card-body .card-points li i {
+            color: var(--secondary-color);
+            font-size: 0.75rem;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+
+        /* ── Clientele ── */
+        .ind-clientele {
+            padding: 70px 0;
+            background: var(--primary-color);
+        }
+        .ind-clientele h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .ind-clientele .section-sub {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 48px;
+        }
+        .clientele-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+        .client-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 14px;
+            padding: 28px 20px;
+            text-align: center;
+            transition: all 0.25s;
+        }
+        .client-card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-4px);
+        }
+        .client-card .client-sector {
+            font-size: 0.72rem;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .client-card .client-icon {
+            width: 54px;
+            height: 54px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+        }
+        .client-card .client-icon i {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+        .client-card h4 {
+            font-size: 1rem;
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+        .client-card p {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.5;
+        }
+        .clientele-note {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 24px 32px;
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        .clientele-note strong { color: #fff; }
+
+        /* ── CTA ── */
+        .ind-cta {
+            padding: 70px 0;
+            background: linear-gradient(135deg, #f8f9fa 0%, #eef1f7 100%);
+            text-align: center;
+        }
+        .ind-cta h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+        .ind-cta p {
+            color: #666;
+            margin-bottom: 36px;
+            font-size: 1rem;
+            max-width: 580px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .ind-cta .cta-btns {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .ind-cta .btn-primary-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.25s;
+        }
+        .ind-cta .btn-primary-cta:hover {
+            background: #1a4a7a;
+            transform: translateY(-2px);
+        }
+        .ind-cta .btn-secondary-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--secondary-color);
+            color: #fff;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.25s;
+        }
+        .ind-cta .btn-secondary-cta:hover {
+            background: #e8a000;
+            transform: translateY(-2px);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 1200px) {
+            .ind-all-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (max-width: 1024px) {
+            .ind-intro-inner { grid-template-columns: 1fr; gap: 36px; }
+            .ind-intro-img img { height: 300px; }
+            .ind-all-grid { grid-template-columns: repeat(3, 1fr); }
+            .ind-detail-grid { grid-template-columns: repeat(2, 1fr); }
+            .clientele-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .ind-stat { padding: 12px 16px; min-width: 45%; }
+            .ind-stat .stat-num { font-size: 1.4rem; }
+            .ind-all-grid { grid-template-columns: repeat(2, 1fr); }
+            .ind-detail-grid { grid-template-columns: 1fr; }
+            .clientele-grid { grid-template-columns: 1fr; }
+            .ind-intro-text h2, .ind-all h2, .ind-detail-section h2 { font-size: 1.5rem; }
+            .ind-clientele h2, .ind-cta h2 { font-size: 1.5rem; }
+        }
+    </style>
 </head>
 <body>
 
@@ -57,11 +470,6 @@
         <p class="loader-text">Loading...</p>
     </div>
 
-            <div class="loader-bar"><div class="loader-progress"></div></div>
-        </div>
-    </div>
-
-
     <!-- Header -->
     <header class="header scrolled">
         <div class="container header-container">
@@ -69,21 +477,18 @@
                 <img src="images/logo.webp" alt="Ashtam Global Logistics" class="site-logo">
                 <span class="logo-text">Ashtam Global Logistics</span>
             </a>
-            
             <nav class="main-nav">
                 <div class="nav-header">
                     <div class="nav-brand">
                         <span class="nav-brand-icon"><i class="fas fa-truck"></i></span>
                         <span class="nav-brand-text">AGL Menu</span>
                     </div>
-                    <button class="nav-close-btn" aria-label="Close menu">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <button class="nav-close-btn" aria-label="Close menu"><i class="fas fa-times"></i></button>
                 </div>
                 <ul class="nav-list">
                     <li><a href="index" class="nav-link">Home</a></li>
                     <li class="dropdown">
-                        <a href="about" class="nav-link">About Us <i class="fas fa-chevron-down" style="font-size:0.8rem; margin-left:5px;"></i></a>
+                        <a href="about" class="nav-link">About Us <i class="fas fa-chevron-down" style="font-size:0.8rem;margin-left:5px;"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="about">Our Story</a></li>
                             <li><a href="infrastructure">Infrastructure &amp; Resources</a></li>
@@ -92,7 +497,7 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="services" class="nav-link">Services <i class="fas fa-chevron-down" style="font-size:0.8rem; margin-left:5px;"></i></a>
+                        <a href="services" class="nav-link">Services <i class="fas fa-chevron-down" style="font-size:0.8rem;margin-left:5px;"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="service-transformer">Transformer Transportation</a></li>
                             <li><a href="service-contract">Contract Logistics</a></li>
@@ -106,120 +511,359 @@
                     <li><a href="contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
-            
             <div class="header-cta">
                 <a href="contact" class="cssbuttons-io-button">
                     Get a Quote
                     <div class="icon">
                         <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                                fill="currentColor"></path>
+                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
                         </svg>
                     </div>
                 </a>
-                <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </header>
     <div class="menu-overlay"></div>
 
     <!-- Page Header -->
-    <section class="page-header" style="background-image: linear-gradient(rgba(11, 31, 58, 0.8), rgba(11, 31, 58, 0.9)), url('https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+    <section class="page-header" style="background-image: linear-gradient(rgba(11,31,58,0.82), rgba(11,31,58,0.92)), url('images/our works.webp'); background-size: cover; background-position: center;">
         <div class="container">
             <h1>Industries We Serve</h1>
+            <p style="color:rgba(255,255,255,0.8);font-size:1.05rem;max-width:620px;margin-top:14px;">Specialized logistics expertise across 20+ critical sectors — from heavy engineering and power to FMCG and pharmaceuticals.</p>
+        </div>
+    </section>
 
+    <!-- Stats Banner -->
+    <section class="ind-stats">
+        <div class="container">
+            <div class="stats-row">
+                <div class="ind-stat">
+                    <div class="stat-num">20+</div>
+                    <div class="stat-label">Industry Sectors</div>
+                </div>
+                <div class="ind-stat">
+                    <div class="stat-num">Pan-India</div>
+                    <div class="stat-label">Coverage</div>
+                </div>
+                <div class="ind-stat">
+                    <div class="stat-num">ISO</div>
+                    <div class="stat-label">9001:2015 Certified</div>
+                </div>
+                <div class="ind-stat">
+                    <div class="stat-num">14+</div>
+                    <div class="stat-label">Years Expertise</div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Intro -->
-    <section class="py-5 text-center">
-        <div class="container animate-on-scroll">
-            <h2>Empowering the Backbone of Global Infrastructure</h2>
-            <p style="max-width: 800px; margin: 0 auto;">Different industries face vastly different logistical challenges. Ashtam Global Logistics brings specialized knowledge, equipment, and experience to address the unique needs of India's most critical sectors.</p>
+    <section class="ind-intro">
+        <div class="container">
+            <div class="ind-intro-inner">
+                <div class="ind-intro-text">
+                    <h2>Empowering India's Critical Sectors</h2>
+                    <p>At Ashtam Global Logistics, we specialize in end-to-end logistics solutions for the sectors that power and build India — from massive power transformers and oil & gas equipment to automotive parts and pharmaceutical supplies.</p>
+                    <p>Different industries face vastly different logistical challenges. We bring specialized equipment, deep regulatory knowledge, route expertise, and hands-on operational experience tailored to each sector's unique requirements.</p>
+                    <p>Our core strength lies in handling over-dimensional, heavy, and project cargo with precision, safety, and timely execution — serving Defence, Power, Hydro Projects, Oil & Gas, Energy, Infrastructure, Renewables, and Heavy Engineering industries.</p>
+                    <div class="sector-tags">
+                        <span>Heavy Engineering</span>
+                        <span>Power & Energy</span>
+                        <span>Oil & Gas</span>
+                        <span>Infrastructure</span>
+                        <span>Renewables</span>
+                        <span>Automotive</span>
+                        <span>Pharmaceuticals</span>
+                        <span>FMCG</span>
+                    </div>
+                </div>
+                <div class="ind-intro-img">
+                    <img loading="lazy" src="images/industry.webp" alt="Industries served by AGL">
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Industry Details -->
-    <section class="py-5 bg-light">
+    <!-- All Industries Icon Grid -->
+    <section class="ind-all">
         <div class="container">
-            <!-- Industry 1 -->
-            <div class="case-study animate-on-scroll">
-                <div class="case-img">
-                    <img loading="lazy" src="https://images.unsplash.com/photo-1508450859948-4e04fabaa4ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Defence Logistics">
+            <h2>All Industries We Serve</h2>
+            <p class="section-sub">Trusted logistics partner across every major industrial and commercial sector in India</p>
+            <div class="ind-all-grid">
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-industry"></i></div>
+                    <h4>Iron &amp; Steel</h4>
                 </div>
-                <div class="case-content">
-                    <h3 style="font-size: 1.8rem; margin-bottom: 20px;">Defence & Aerospace</h3>
-                    <p>Security, precision, and absolute confidentiality are paramount when serving the defence sector. We handle the transportation of sensitive equipment, heavy machinery, and critical supplies for military bases and aerospace manufacturing facilities across the nation.</p>
-                    <ul class="contact-info-list" style="color: var(--text-dark); margin-top: 15px;">
-                        <li><i class="fas fa-shield-alt"></i> Secure and confidential transport protocols.</li>
-                        <li><i class="fas fa-truck-monster"></i> Specialized handling of out-of-gauge military hardware.</li>
-                    </ul>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-oil-can"></i></div>
+                    <h4>Oil &amp; Gas</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-gem"></i></div>
+                    <h4>Minerals &amp; Ores</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-cogs"></i></div>
+                    <h4>Machinery</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-car"></i></div>
+                    <h4>Automobile</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-circle-notch"></i></div>
+                    <h4>Tyre &amp; Rubber</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-cubes"></i></div>
+                    <h4>Metal</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-plug"></i></div>
+                    <h4>Electric &amp; Electronics</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-couch"></i></div>
+                    <h4>Consumer Durables</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-leaf"></i></div>
+                    <h4>Natural Rubber</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-tools"></i></div>
+                    <h4>OEM</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-bolt"></i></div>
+                    <h4>Energy</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-building"></i></div>
+                    <h4>Infrastructure</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-box-open"></i></div>
+                    <h4>Paper &amp; Packaging</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-flask"></i></div>
+                    <h4>Chemicals</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-layer-group"></i></div>
+                    <h4>Materials</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-capsules"></i></div>
+                    <h4>Pharmaceutical</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-shopping-basket"></i></div>
+                    <h4>FMCG</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-seedling"></i></div>
+                    <h4>Agro Products</h4>
+                </div>
+                <div class="ind-tile">
+                    <div class="tile-icon"><i class="fas fa-tshirt"></i></div>
+                    <h4>Textiles</h4>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Industry 2 -->
-            <div class="case-study animate-on-scroll">
-                <div class="case-img">
-                    <img loading="lazy" src="https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Power Sector Logistics">
-                </div>
-                <div class="case-content">
-                    <h3 style="font-size: 1.8rem; margin-bottom: 20px;">Power & Transformers</h3>
-                    <p>The power generation and transmission sector relies on massive, heavy components. We are undisputed experts in the transportation of power transformers, generators, stators, and turbines to remote substations and power plants.</p>
-                    <ul class="contact-info-list" style="color: var(--text-dark); margin-top: 15px;">
-                        <li><i class="fas fa-bolt"></i> Route planning for extreme weight loads.</li>
-                        <li><i class="fas fa-tools"></i> Substation positioning and multi-modal logistics.</li>
-                    </ul>
-                </div>
-            </div>
+    <!-- Detailed Industry Cards - Heavy Sectors -->
+    <section class="ind-detail-section">
+        <div class="container">
+            <h2>Core Heavy Industry Expertise</h2>
+            <p class="section-sub">Deep sector knowledge and specialized equipment for India's most demanding industries</p>
+            <div class="ind-detail-grid">
 
-            <!-- Industry 3 -->
-            <div class="case-study animate-on-scroll">
-                <div class="case-img">
-                    <img loading="lazy" src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Oil and Gas Logistics">
+                <div class="ind-card">
+                    <div class="ind-card-img">
+                        <img loading="lazy" src="images/our works.webp" alt="Power & Energy Logistics">
+                        <span class="card-badge">Power &amp; Energy</span>
+                    </div>
+                    <div class="ind-card-body">
+                        <div class="card-icon-row">
+                            <div class="card-icon"><i class="fas fa-bolt"></i></div>
+                            <h3>Power &amp; Transformers</h3>
+                        </div>
+                        <p>Undisputed experts in power transformer transportation — from 1 MT to 240 MT. We move generators, stators, turbines, and transmission equipment to remote substations and power plants across India.</p>
+                        <ul class="card-points">
+                            <li><i class="fas fa-check-circle"></i> Heavy hydraulic axle trailers for transformers up to 240 MT</li>
+                            <li><i class="fas fa-check-circle"></i> Route survey, RTO permits &amp; police escort coordination</li>
+                            <li><i class="fas fa-check-circle"></i> DISCOM &amp; utility shifting for overhead clearance</li>
+                            <li><i class="fas fa-check-circle"></i> Substation positioning &amp; multi-modal logistics</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="case-content">
-                    <h3 style="font-size: 1.8rem; margin-bottom: 20px;">Oil & Gas</h3>
-                    <p>Logistics for the Oil & Gas sector involves navigating hazardous environments and handling ultra-heavy refining equipment. We provide robust transport solutions for pressure vessels, columns, rigs, and pipeline materials.</p>
-                    <ul class="contact-info-list" style="color: var(--text-dark); margin-top: 15px;">
-                        <li><i class="fas fa-fire-extinguisher"></i> Strict adherence to HSSE standards.</li>
-                        <li><i class="fas fa-route"></i> Delivery to remote and challenging terrains.</li>
-                    </ul>
-                </div>
-            </div>
 
-            <!-- Industry 4 -->
-            <div class="case-study animate-on-scroll">
-                <div class="case-img">
-                    <img loading="lazy" src="https://images.unsplash.com/photo-1541888086925-0c13e4b3e8e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Infrastructure Logistics">
+                <div class="ind-card">
+                    <div class="ind-card-img">
+                        <img loading="lazy" src="images/secind.webp" alt="Infrastructure EPC Logistics">
+                        <span class="card-badge">Infrastructure &amp; EPC</span>
+                    </div>
+                    <div class="ind-card-body">
+                        <div class="card-icon-row">
+                            <div class="card-icon"><i class="fas fa-hard-hat"></i></div>
+                            <h3>Infrastructure &amp; EPC</h3>
+                        </div>
+                        <p>Building India's highways, bridges, dams, and cities requires an uninterrupted supply chain. We partner with leading EPC firms to deliver heavy construction equipment, structural steel, and precast elements on JIT schedules.</p>
+                        <ul class="card-points">
+                            <li><i class="fas fa-check-circle"></i> JIT deliveries synchronized with EPC project milestones</li>
+                            <li><i class="fas fa-check-circle"></i> Transport of cranes, excavators &amp; earthmoving machinery</li>
+                            <li><i class="fas fa-check-circle"></i> Structural steel, precast &amp; modular components</li>
+                            <li><i class="fas fa-check-circle"></i> Clients include Ashoka Buildcon Ltd.</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="case-content">
-                    <h3 style="font-size: 1.8rem; margin-bottom: 20px;">Infrastructure & EPC</h3>
-                    <p>Building the nation's infrastructure requires an uninterrupted supply chain. We partner with leading Engineering, Procurement, and Construction (EPC) firms to deliver heavy construction equipment, structural steel, and precast concrete.</p>
-                    <ul class="contact-info-list" style="color: var(--text-dark); margin-top: 15px;">
-                        <li><i class="fas fa-building"></i> Synchronized JIT deliveries for active construction sites.</li>
-                        <li><i class="fas fa-hard-hat"></i> Transport of cranes and earthmoving machinery.</li>
-                    </ul>
-                </div>
-            </div>
 
-            <!-- Industry 5 -->
-            <div class="case-study animate-on-scroll">
-                <div class="case-img">
-                    <img loading="lazy" src="https://images.unsplash.com/photo-1466611653911-95081537e5b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Renewables Logistics">
+                <div class="ind-card">
+                    <div class="ind-card-img">
+                        <img loading="lazy" src="images/secind (1).webp" alt="Oil and Gas Logistics">
+                        <span class="card-badge">Oil &amp; Gas</span>
+                    </div>
+                    <div class="ind-card-body">
+                        <div class="card-icon-row">
+                            <div class="card-icon"><i class="fas fa-oil-can"></i></div>
+                            <h3>Oil &amp; Gas</h3>
+                        </div>
+                        <p>Logistics for oil & gas involves navigating hazardous environments and handling ultra-heavy refinery equipment. We provide robust transport for pressure vessels, columns, reactors, rigs, and pipeline materials across remote terrains.</p>
+                        <ul class="card-points">
+                            <li><i class="fas fa-check-circle"></i> Strict HSSE compliance and zero-incident execution</li>
+                            <li><i class="fas fa-check-circle"></i> Pressure vessels, columns &amp; ODC process equipment</li>
+                            <li><i class="fas fa-check-circle"></i> Delivery to remote, constrained &amp; offshore support zones</li>
+                            <li><i class="fas fa-check-circle"></i> Hazardous cargo certified handling</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="case-content">
-                    <h3 style="font-size: 1.8rem; margin-bottom: 20px;">Renewables</h3>
-                    <p>The transition to green energy involves transporting oversized wind turbine blades, nacelles, and solar farm equipment. We offer specialized logistics solutions tailored to the unique dimensions of renewable energy components.</p>
-                    <ul class="contact-info-list" style="color: var(--text-dark); margin-top: 15px;">
-                        <li><i class="fas fa-leaf"></i> Specialized trailers for ultra-long wind blades.</li>
-                        <li><i class="fas fa-sun"></i> High-volume logistics for solar project rollouts.</li>
-                    </ul>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Industry Cards - More Sectors -->
+    <section class="ind-detail-section">
+        <div class="container">
+            <h2>More Industries We Specialize In</h2>
+            <p class="section-sub">From renewable energy to automotive and consumer goods — logistics solutions for every supply chain</p>
+            <div class="ind-detail-grid">
+
+                <div class="ind-card">
+                    <div class="ind-card-img">
+                        <img loading="lazy" src="images/industry.webp" alt="Renewables Logistics">
+                        <span class="card-badge">Renewables</span>
+                    </div>
+                    <div class="ind-card-body">
+                        <div class="card-icon-row">
+                            <div class="card-icon"><i class="fas fa-wind"></i></div>
+                            <h3>Renewables &amp; Energy</h3>
+                        </div>
+                        <p>The green energy transition demands specialized logistics for oversized wind blades, nacelles, tower sections, and solar farm equipment. We offer precision solutions built around the unique dimensions and fragility of renewable energy components.</p>
+                        <ul class="card-points">
+                            <li><i class="fas fa-check-circle"></i> Extendable trailers for ultra-long wind turbine blades</li>
+                            <li><i class="fas fa-check-circle"></i> Nacelle, tower &amp; hub transport to remote wind sites</li>
+                            <li><i class="fas fa-check-circle"></i> High-volume solar panel logistics for project rollouts</li>
+                            <li><i class="fas fa-check-circle"></i> Clients include Suzlon Group</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="ind-card">
+                    <div class="ind-card-img">
+                        <img loading="lazy" src="images/our works.webp" alt="Iron Steel and Heavy Engineering">
+                        <span class="card-badge">Iron, Steel &amp; Engineering</span>
+                    </div>
+                    <div class="ind-card-body">
+                        <div class="card-icon-row">
+                            <div class="card-icon"><i class="fas fa-industry"></i></div>
+                            <h3>Iron, Steel &amp; Heavy Engineering</h3>
+                        </div>
+                        <p>Steel plants, foundries, and heavy engineering manufacturers rely on consistent inbound raw materials and outbound finished goods logistics. We handle hot-rolled coils, structural sections, heavy castings, forgings, and fabricated equipment.</p>
+                        <ul class="card-points">
+                            <li><i class="fas fa-check-circle"></i> Steel coils, plates &amp; structural sections transport</li>
+                            <li><i class="fas fa-check-circle"></i> Heavy castings, forgings &amp; press equipment</li>
+                            <li><i class="fas fa-check-circle"></i> Plant-to-plant and mill-to-site deliveries</li>
+                            <li><i class="fas fa-check-circle"></i> Clients include Sareen Steels &amp; Triumph</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="ind-card">
+                    <div class="ind-card-img">
+                        <img loading="lazy" src="images/secind.webp" alt="Automobile and FMCG Logistics">
+                        <span class="card-badge">Auto, FMCG &amp; Consumer</span>
+                    </div>
+                    <div class="ind-card-body">
+                        <div class="card-icon-row">
+                            <div class="card-icon"><i class="fas fa-car"></i></div>
+                            <h3>Automobile, FMCG &amp; Consumer</h3>
+                        </div>
+                        <p>From automotive OEM supply chains to FMCG distribution networks, we provide reliable, time-bound freight solutions. Our flexible FTL and PTL options scale with production volumes and seasonal demand fluctuations.</p>
+                        <ul class="card-points">
+                            <li><i class="fas fa-check-circle"></i> OEM &amp; Tier-1 supplier inbound/outbound logistics</li>
+                            <li><i class="fas fa-check-circle"></i> Tyre, rubber &amp; auto-component transport</li>
+                            <li><i class="fas fa-check-circle"></i> FMCG, pharma &amp; consumer goods distribution</li>
+                            <li><i class="fas fa-check-circle"></i> Clients include Riddhi Mattresses</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Clientele -->
+    <section class="ind-clientele">
+        <div class="container">
+            <h2>Our Clientele</h2>
+            <p class="section-sub">Trusted by industry leaders across infrastructure, renewable energy, engineering, and manufacturing sectors</p>
+            <div class="clientele-grid">
+                <div class="client-card">
+                    <div class="client-sector">Infrastructure &amp; EPC</div>
+                    <div class="client-icon"><i class="fas fa-building"></i></div>
+                    <h4>Ashoka Buildcon Ltd.</h4>
+                    <p>Leading infrastructure &amp; EPC organization — highways, bridges, and large-scale construction projects across India.</p>
+                </div>
+                <div class="client-card">
+                    <div class="client-sector">Renewable Energy</div>
+                    <div class="client-icon"><i class="fas fa-wind"></i></div>
+                    <h4>Suzlon Group</h4>
+                    <p>Renowned renewable energy company — wind turbine components, blades &amp; tower section logistics across India.</p>
+                </div>
+                <div class="client-card">
+                    <div class="client-sector">Engineering &amp; Manufacturing</div>
+                    <div class="client-icon"><i class="fas fa-industry"></i></div>
+                    <h4>Triumph / Sareen Steels</h4>
+                    <p>Established steel &amp; manufacturing units — inbound raw materials and outbound finished goods supply chain support.</p>
+                </div>
+                <div class="client-card">
+                    <div class="client-sector">Consumer Products</div>
+                    <div class="client-icon"><i class="fas fa-couch"></i></div>
+                    <h4>Riddhi Mattresses</h4>
+                    <p>Growing consumer &amp; industrial product brand — reliable FTL/PTL logistics for product distribution across markets.</p>
                 </div>
             </div>
-            
+            <div class="clientele-note">
+                <strong>Client Confidentiality:</strong> While respecting client confidentiality and branding policies, our experience includes working with established industry leaders and fast-growing enterprises across infrastructure, renewable energy, engineering, and manufacturing sectors. Our client engagements reflect our commitment to reliability, precision execution, and long-term partnerships.
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="ind-cta">
+        <div class="container">
+            <h2>Your Industry, Our Expertise</h2>
+            <p>Tell us your sector and cargo requirements — we'll design a logistics solution built specifically for your supply chain.</p>
+            <div class="cta-btns">
+                <a href="contact" class="btn-primary-cta"><i class="fas fa-file-alt"></i> Get a Custom Quote</a>
+                <a href="services" class="btn-secondary-cta"><i class="fas fa-truck"></i> Explore Our Services</a>
+            </div>
         </div>
     </section>
 
@@ -274,10 +918,8 @@
         </div>
     </footer>
 
-    <!-- JS -->
     <script src="js/script.js?v=1778000020" defer></script>
     <script src="js/dynamic-content.js?v=1778000020" defer></script>
-
     <script>
         window.addEventListener('load', () => {
             const loader = document.getElementById('page-loader');
@@ -288,9 +930,8 @@
             if (loader) { loader.classList.add('loader-hidden'); setTimeout(() => loader.remove(), 600); }
         }, 2500);
     </script>
-<!-- WhatsApp Floating Button -->
-<a href="https://wa.me/919310445354" id="whatsapp-btn" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-</a>
+    <a href="https://wa.me/919310445354" id="whatsapp-btn" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 </body>
 </html>
