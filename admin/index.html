@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGL Admin Panel | Ashtam Global Logistics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/admin-style.css?v=1778100001">
+    <link rel="stylesheet" href="css/admin-style.css?v=1778100002">
 </head>
 <body>
 <div class="admin-wrapper">
@@ -54,69 +54,140 @@
 
         <!-- ===== DASHBOARD TAB ===== -->
         <div class="tab-content active" id="tab-dashboard">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-inbox"></i></div>
-                    <div class="stat-info">
-                        <h4>Unread Quotes</h4>
-                        <span class="value" id="stat-unread">0</span>
+
+            <!-- Welcome Banner -->
+            <div class="dash-welcome">
+                <div class="dash-welcome-inner">
+                    <div class="dash-greeting-block">
+                        <span class="dash-greeting-line" id="dash-greeting">Good morning</span>
+                        <h2 class="dash-name">Naveen <span style="font-weight:400;opacity:0.7">— Ashtam Global</span></h2>
+                        <span class="dash-datetime" id="dash-datetime"></span>
+                    </div>
+                    <div class="dash-welcome-actions">
+                        <a href="/" target="_blank" class="dash-action-btn">
+                            <i class="fas fa-globe"></i> Live Site
+                        </a>
+                        <button class="dash-action-btn secondary" onclick="switchTab('settings')">
+                            <i class="fas fa-sliders-h"></i> Settings
+                        </button>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(217,165,33,0.1);color:var(--secondary)">
-                        <i class="fas fa-file-alt"></i>
+                <div class="dash-welcome-orb"></div>
+            </div>
+
+            <!-- Quote Stats Row -->
+            <div class="dash-stats-row">
+                <div class="dash-stat-big unread" id="dash-unread-card" onclick="switchTab('quotes')" style="cursor:pointer">
+                    <div class="dsb-icon"><i class="fas fa-inbox"></i></div>
+                    <div class="dsb-body">
+                        <div class="dsb-num" id="stat-unread">0</div>
+                        <div class="dsb-label">Unread Quote Requests</div>
+                        <div class="dsb-hint">Click to view →</div>
                     </div>
-                    <div class="stat-info">
-                        <h4>Total Quotes</h4>
-                        <span class="value" id="stat-total">0</span>
+                    <div class="dsb-glow unread-glow"></div>
+                </div>
+                <div class="dash-stat-big total">
+                    <div class="dsb-icon"><i class="fas fa-file-invoice"></i></div>
+                    <div class="dsb-body">
+                        <div class="dsb-num" id="stat-total">0</div>
+                        <div class="dsb-label">Total Quote Requests</div>
+                        <div class="dsb-hint">All time received</div>
                     </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(37,211,102,0.1);color:#25d366">
-                        <i class="fab fa-whatsapp"></i>
+                <div class="dash-stat-big system">
+                    <div class="dsb-icon"><i class="fas fa-server"></i></div>
+                    <div class="dsb-body">
+                        <div class="dsb-num" style="color:var(--success);font-size:1.4rem">Online</div>
+                        <div class="dsb-label">Server Status</div>
+                        <div class="dsb-hint" id="last-save">Never saved</div>
                     </div>
-                    <div class="stat-info">
-                        <h4>WhatsApp</h4>
-                        <span class="value" id="stat-wa" style="font-size:1rem">—</span>
-                    </div>
+                    <span class="dsb-pulse"></span>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon" style="background:rgba(46,213,115,0.1);color:var(--success)">
-                        <i class="fas fa-check-circle"></i>
+            </div>
+
+            <!-- Live Settings Overview -->
+            <div class="dash-section-title"><i class="fas fa-sliders-h"></i> Live Configuration</div>
+            <div class="dash-config-grid">
+
+                <!-- WhatsApp -->
+                <div class="dash-config-card wa-card">
+                    <div class="dcc-header">
+                        <div class="dcc-icon-wrap" style="background:rgba(37,211,102,0.12);color:#25d366">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="dcc-title-block">
+                            <div class="dcc-title">WhatsApp Button</div>
+                            <div class="dcc-sub" id="dash-wa-status">Loading...</div>
+                        </div>
+                        <label class="toggle-switch" title="Toggle WhatsApp button on/off">
+                            <input type="checkbox" id="dash-wa-toggle" onchange="quickToggleWA(this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
-                    <div class="stat-info">
-                        <h4>System</h4>
-                        <span class="value" style="color:var(--success)">Online</span>
+                    <div class="dcc-value" id="dash-wa-number">—</div>
+                    <button class="dcc-edit-btn" onclick="switchTab('settings')"><i class="fas fa-pen"></i> Edit</button>
+                </div>
+
+                <!-- Chat Widget -->
+                <div class="dash-config-card chat-card">
+                    <div class="dcc-header">
+                        <div class="dcc-icon-wrap" style="background:rgba(30,86,211,0.12);color:var(--accent)">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="dcc-title-block">
+                            <div class="dcc-title">Chat Widget</div>
+                            <div class="dcc-sub" id="dash-chat-status">Loading...</div>
+                        </div>
+                        <label class="toggle-switch" title="Toggle chat widget on/off">
+                            <input type="checkbox" id="dash-chat-toggle" onchange="quickToggleChat(this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="dcc-value" id="dash-chat-info">No embed code set</div>
+                    <button class="dcc-edit-btn" onclick="switchTab('settings')"><i class="fas fa-pen"></i> Edit</button>
+                </div>
+
+                <!-- Social Links -->
+                <div class="dash-config-card social-card">
+                    <div class="dcc-header">
+                        <div class="dcc-icon-wrap" style="background:rgba(217,165,33,0.12);color:var(--secondary)">
+                            <i class="fas fa-share-alt"></i>
+                        </div>
+                        <div class="dcc-title-block">
+                            <div class="dcc-title">Social Links</div>
+                            <div class="dcc-sub" id="dash-social-count">Loading...</div>
+                        </div>
+                        <button class="dcc-edit-btn-sm" onclick="switchTab('settings')"><i class="fas fa-pen"></i></button>
+                    </div>
+                    <div class="dcc-social-icons" id="dash-social-icons">—</div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="dash-config-card contact-card">
+                    <div class="dcc-header">
+                        <div class="dcc-icon-wrap" style="background:rgba(255,165,2,0.12);color:var(--warning)">
+                            <i class="fas fa-address-card"></i>
+                        </div>
+                        <div class="dcc-title-block">
+                            <div class="dcc-title">Contact Info</div>
+                            <div class="dcc-sub">Website footer & contact page</div>
+                        </div>
+                        <button class="dcc-edit-btn-sm" onclick="switchTab('settings')"><i class="fas fa-pen"></i></button>
+                    </div>
+                    <div class="dcc-contact-lines" id="dash-contact-info">
+                        <div class="dcc-contact-row"><i class="fas fa-phone"></i> <span id="dash-c-phone">—</span></div>
+                        <div class="dcc-contact-row"><i class="fas fa-envelope"></i> <span id="dash-c-email">—</span></div>
+                        <div class="dcc-contact-row"><i class="fas fa-map-marker-alt"></i> <span id="dash-c-addr">—</span></div>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
-                </div>
-                <div style="display:flex;gap:12px;flex-wrap:wrap">
-                    <button class="btn btn-add" onclick="switchTab('quotes')">
-                        <i class="fas fa-envelope-open-text"></i> View Quote Requests
-                    </button>
-                    <button class="btn btn-outline" onclick="switchTab('settings')">
-                        <i class="fas fa-cog"></i> Open Settings
-                    </button>
-                    <a href="/" target="_blank" class="btn btn-outline">
-                        <i class="fas fa-external-link-alt"></i> View Live Website
-                    </a>
-                </div>
+            <!-- Recent Quotes -->
+            <div class="dash-section-title" style="margin-top:10px"><i class="fas fa-clock"></i> Recent Quote Requests</div>
+            <div class="card" style="padding:0;overflow:hidden">
+                <div id="dash-recent-quotes" style="padding:0"></div>
             </div>
 
-            <div class="card">
-                <div class="card-header"><h3><i class="fas fa-info-circle"></i> System Info</h3></div>
-                <div style="display:flex;gap:30px;flex-wrap:wrap">
-                    <div><span style="color:var(--text-muted);font-size:0.8rem">Backend</span><br><span style="color:var(--success);font-weight:700">Online</span></div>
-                    <div><span style="color:var(--text-muted);font-size:0.8rem">Data Store</span><br><span style="font-weight:700">content.json</span></div>
-                    <div><span style="color:var(--text-muted);font-size:0.8rem">Last Save</span><br><span style="font-weight:700" id="last-save">Not yet</span></div>
-                    <div><span style="color:var(--text-muted);font-size:0.8rem">Chat Widget</span><br><span style="font-weight:700" id="dash-chat-status">—</span></div>
-                </div>
-            </div>
         </div>
 
         <!-- ===== QUOTE REQUESTS TAB ===== -->
@@ -247,6 +318,6 @@
     </main>
 </div>
 
-<script src="js/admin-app.js?v=1778100001"></script>
+<script src="js/admin-app.js?v=1778100002"></script>
 </body>
 </html>
