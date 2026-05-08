@@ -3,23 +3,365 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="General Logistics Services by Ashtam Global Logistics.">
+    <meta name="description" content="General Logistics Services by Ashtam Global Logistics — FTL/PTL, JIT deliveries, spot transport, and pan-India coverage for all cargo types.">
     <title>General Logistics | Ashtam Global Logistics</title>
-    <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-
-    <!-- Google Fonts (non-blocking) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
     <link rel="stylesheet" href="css/style.css?v=1778000020">
     <link rel="stylesheet" href="css/mobile.css?v=1778000020">
-
-    <!-- FontAwesome (deferred) -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+
+    <style>
+        /* ── Hero Stats ── */
+        .svc-hero-stats {
+            background: var(--primary-color);
+            padding: 28px 0;
+        }
+        .svc-hero-stats .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            flex-wrap: wrap;
+        }
+        .svc-hero-stat {
+            text-align: center;
+            padding: 16px 40px;
+            border-right: 1px solid rgba(255,255,255,0.15);
+            flex: 1;
+            min-width: 150px;
+        }
+        .svc-hero-stat:last-child { border-right: none; }
+        .svc-hero-stat .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary-color);
+            line-height: 1;
+        }
+        .svc-hero-stat .stat-label {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.75);
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Overview ── */
+        .svc-overview {
+            padding: 70px 0;
+            background: #fff;
+        }
+        .svc-overview-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .svc-overview-img {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        }
+        .svc-overview-img img {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            display: block;
+        }
+        .svc-overview-text h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 18px;
+        }
+        .svc-overview-text p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 14px;
+        }
+        .svc-overview-text .highlight-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .svc-overview-text .highlight-tags span {
+            background: #f0f4ff;
+            color: var(--primary-color);
+            border: 1px solid #d0d9f0;
+            border-radius: 20px;
+            padding: 5px 16px;
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+
+        /* ── Scope Grid ── */
+        .svc-scope {
+            padding: 70px 0;
+            background: #f8f9fa;
+        }
+        .svc-scope h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        .svc-scope .section-sub {
+            text-align: center;
+            color: #666;
+            margin-bottom: 44px;
+            font-size: 1rem;
+        }
+        .scope-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .scope-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 28px 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            border-top: 4px solid var(--secondary-color);
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .scope-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.12);
+        }
+        .scope-card .sc-icon {
+            width: 52px;
+            height: 52px;
+            background: linear-gradient(135deg, var(--primary-color), #1a4a7a);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .scope-card .sc-icon i {
+            color: #fff;
+            font-size: 1.3rem;
+        }
+        .scope-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        .scope-card p {
+            font-size: 0.875rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* ── Industries ── */
+        .svc-industries {
+            padding: 60px 0;
+            background: #fff;
+        }
+        .svc-industries h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 32px;
+        }
+        .ind-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+        }
+        .ind-tag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.88rem;
+            font-weight: 500;
+        }
+        .ind-tag i { color: var(--secondary-color); }
+
+        /* ── Differentiators ── */
+        .svc-diff {
+            padding: 70px 0;
+            background: #f8f9fa;
+        }
+        .svc-diff h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 44px;
+        }
+        .diff-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 28px;
+        }
+        .diff-card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 32px 28px;
+            display: flex;
+            gap: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+            align-items: flex-start;
+        }
+        .diff-card .dc-icon {
+            width: 56px;
+            height: 56px;
+            min-width: 56px;
+            background: linear-gradient(135deg, var(--secondary-color), #e8a000);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .diff-card .dc-icon i {
+            color: #fff;
+            font-size: 1.4rem;
+        }
+        .diff-card h4 {
+            font-size: 1.05rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        .diff-card p {
+            font-size: 0.875rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* ── Other Services ── */
+        .other-services {
+            padding: 60px 0;
+            background: #fff;
+        }
+        .other-services h2 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 32px;
+        }
+        .other-svc-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .other-svc-card {
+            border: 2px solid #e8edf5;
+            border-radius: 12px;
+            padding: 28px 22px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.25s;
+            display: block;
+        }
+        .other-svc-card:hover {
+            border-color: var(--secondary-color);
+            background: #fffbf0;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+        }
+        .other-svc-card i {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 14px;
+            display: block;
+        }
+        .other-svc-card h4 {
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        .other-svc-card p {
+            font-size: 0.82rem;
+            color: #777;
+            line-height: 1.5;
+        }
+        .other-svc-card .arrow-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        /* ── CTA Options ── */
+        .svc-cta {
+            padding: 70px 0;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1a4a7a 100%);
+            text-align: center;
+        }
+        .svc-cta h2 {
+            font-size: 2rem;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .svc-cta p {
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 36px;
+            font-size: 1rem;
+        }
+        .cta-options {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .cta-opt {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.25s;
+        }
+        .cta-opt.primary {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+        .cta-opt.primary:hover { background: #e8a000; transform: translateY(-2px); }
+        .cta-opt.whatsapp {
+            background: #25D366;
+            color: #fff;
+        }
+        .cta-opt.whatsapp:hover { background: #1da854; transform: translateY(-2px); }
+        .cta-opt.call {
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        .cta-opt.call:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .svc-overview-inner { grid-template-columns: 1fr; gap: 36px; }
+            .svc-overview-img img { height: 300px; }
+            .scope-grid { grid-template-columns: repeat(2, 1fr); }
+            .diff-grid { grid-template-columns: repeat(2, 1fr); }
+            .other-svc-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .svc-hero-stat { padding: 12px 16px; min-width: 45%; }
+            .svc-hero-stat .stat-num { font-size: 1.4rem; }
+            .scope-grid { grid-template-columns: 1fr; }
+            .diff-grid { grid-template-columns: 1fr; }
+            .other-svc-grid { grid-template-columns: 1fr; }
+            .svc-overview-text h2 { font-size: 1.5rem; }
+            .svc-scope h2, .svc-diff h2 { font-size: 1.5rem; }
+            .svc-cta h2 { font-size: 1.5rem; }
+        }
+    </style>
 </head>
 <body>
 
@@ -57,11 +399,6 @@
         <p class="loader-text">Loading...</p>
     </div>
 
-            <div class="loader-bar"><div class="loader-progress"></div></div>
-        </div>
-    </div>
-
-
     <!-- Header -->
     <header class="header scrolled">
         <div class="container header-container">
@@ -69,21 +406,18 @@
                 <img src="images/logo.webp" alt="Ashtam Global Logistics" class="site-logo">
                 <span class="logo-text">Ashtam Global Logistics</span>
             </a>
-            
             <nav class="main-nav">
                 <div class="nav-header">
                     <div class="nav-brand">
                         <span class="nav-brand-icon"><i class="fas fa-truck"></i></span>
                         <span class="nav-brand-text">AGL Menu</span>
                     </div>
-                    <button class="nav-close-btn" aria-label="Close menu">
-                        <i class="fas fa-times"></i>
-                    </button>
+                    <button class="nav-close-btn" aria-label="Close menu"><i class="fas fa-times"></i></button>
                 </div>
                 <ul class="nav-list">
                     <li><a href="index" class="nav-link">Home</a></li>
                     <li class="dropdown">
-                        <a href="about" class="nav-link">About Us <i class="fas fa-chevron-down" style="font-size:0.8rem; margin-left:5px;"></i></a>
+                        <a href="about" class="nav-link">About Us <i class="fas fa-chevron-down" style="font-size:0.8rem;margin-left:5px;"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="about">Our Story</a></li>
                             <li><a href="infrastructure">Infrastructure &amp; Resources</a></li>
@@ -92,11 +426,11 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="services" class="nav-link active">Services <i class="fas fa-chevron-down" style="font-size:0.8rem; margin-left:5px;"></i></a>
+                        <a href="services" class="nav-link active">Services <i class="fas fa-chevron-down" style="font-size:0.8rem;margin-left:5px;"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="service-transformer">Transformer Transportation</a></li>
                             <li><a href="service-contract">Contract Logistics</a></li>
-                            <li><a href="service-general" class="active" style="color: var(--secondary-color);">General Logistics</a></li>
+                            <li><a href="service-general" class="active" style="color:var(--secondary-color);">General Logistics</a></li>
                             <li><a href="service-international">International Logistics</a></li>
                         </ul>
                     </li>
@@ -106,67 +440,228 @@
                     <li><a href="contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
-            
             <div class="header-cta">
                 <a href="contact" class="cssbuttons-io-button">
                     Get a Quote
                     <div class="icon">
                         <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                                fill="currentColor"></path>
+                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
                         </svg>
                     </div>
                 </a>
-                <button class="mobile-menu-toggle" aria-label="Toggle menu">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </header>
     <div class="menu-overlay"></div>
 
     <!-- Page Header -->
-    <section class="page-header" style="background-image: linear-gradient(rgba(11, 31, 58, 0.8), rgba(11, 31, 58, 0.9)), url('https://images.unsplash.com/photo-1519003722824-194d4455a60c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+    <section class="page-header" style="background-image: linear-gradient(rgba(11,31,58,0.82), rgba(11,31,58,0.92)), url('images/secind (1).webp'); background-size: cover; background-position: center;">
         <div class="container">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                <a href="services" style="color:rgba(255,255,255,0.65);font-size:0.85rem;text-decoration:none;">Services</a>
+                <i class="fas fa-chevron-right" style="color:rgba(255,255,255,0.4);font-size:0.7rem;"></i>
+                <span style="color:var(--secondary-color);font-size:0.85rem;">General Logistics</span>
+            </div>
             <h1>General Logistics</h1>
-
+            <p style="color:rgba(255,255,255,0.8);font-size:1.05rem;max-width:600px;margin-top:14px;">Agile, on-demand freight solutions — FTL, PTL, and JIT deliveries across pan-India for urgent and critical cargo.</p>
         </div>
     </section>
 
-    <!-- Service Details Section -->
-    <section class="py-5">
+    <!-- Hero Stats -->
+    <section class="svc-hero-stats">
         <div class="container">
-            <div class="about-preview animate-on-scroll">
-                <div class="about-text" style="flex: 2;">
-                    <h2>General Logistics Services</h2>
-                    <p>At Ashtam Global Logistics Pvt. Ltd., our General Logistics services are designed to efficiently manage urgent, short-notice, and just-in-time (JIT) cargo movements that fall outside long-term or contract-based logistics agreements.</p>
-                    
-                    <h3 style="margin-top: 30px;">We specialize in handling:</h3>
-                    <ul class="contact-info-list" style="color: var(--text-dark);">
-                        <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="font-size: 1.2rem; color: var(--secondary-color);"></i> <div>Spot and urgent transportation requirements</div></li>
-                        <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="font-size: 1.2rem; color: var(--secondary-color);"></i> <div>Just-in-time (JIT) deliveries to plants, warehouses, and project sites</div></li>
-                        <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="font-size: 1.2rem; color: var(--secondary-color);"></i> <div>Inbound and outbound movements for industrial and commercial cargo</div></li>
-                        <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="font-size: 1.2rem; color: var(--secondary-color);"></i> <div>Full Truck Load (FTL) and Part Load (PTL) shipments</div></li>
-                        <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="font-size: 1.2rem; color: var(--secondary-color);"></i> <div>Time-critical and high-priority consignments</div></li>
-                        <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="font-size: 1.2rem; color: var(--secondary-color);"></i> <div>Movements across pan-India locations, including remote and constrained areas</div></li>
-                    </ul>
-
-                    <p style="margin-top: 20px;">Supported by a reliable fleet network and experienced operations team, we ensure quick mobilization, route optimization, real-time coordination, and safe delivery while maintaining compliance with statutory and safety standards.</p>
-                    <p>Our flexible operating model enables clients to respond swiftly to dynamic supply chain demands without compromising on reliability or service quality.</p>
+            <div class="stats-row">
+                <div class="svc-hero-stat">
+                    <div class="stat-num">Pan-India</div>
+                    <div class="stat-label">Coverage Network</div>
                 </div>
-                <div class="about-img" style="flex: 1;">
-                    <img loading="lazy" src="https://images.unsplash.com/photo-1586528116311-ad8ed7c663e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="General Logistics">
+                <div class="svc-hero-stat">
+                    <div class="stat-num">24/7</div>
+                    <div class="stat-label">Operations Support</div>
+                </div>
+                <div class="svc-hero-stat">
+                    <div class="stat-num">FTL / PTL</div>
+                    <div class="stat-label">Flexible Load Options</div>
+                </div>
+                <div class="svc-hero-stat">
+                    <div class="stat-num">JIT</div>
+                    <div class="stat-label">Just-in-Time Delivery</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section animate-on-scroll">
+    <!-- Overview -->
+    <section class="svc-overview">
         <div class="container">
-            <h2>Need Fast & Reliable Transport?</h2>
-            <a href="contact" class="btn btn-primary" style="background-color: var(--primary-color); color: var(--bg-white);">Get a Quote</a>
+            <div class="svc-overview-inner">
+                <div class="svc-overview-img">
+                    <img loading="lazy" src="images/secind (1).webp" alt="General Logistics Operations">
+                </div>
+                <div class="svc-overview-text">
+                    <h2>Flexible, On-Demand Freight Solutions</h2>
+                    <p>At Ashtam Global Logistics, our General Logistics service is built for speed and adaptability. We handle urgent, short-notice, and just-in-time cargo movements that require rapid mobilization, reliable execution, and pan-India reach — from industrial plants to remote project sites.</p>
+                    <p>Whether it's a one-time spot movement or a recurring requirement outside your contract agreement, our experienced operations team ensures quick allocation, optimal routing, and safe, on-time delivery.</p>
+                    <p>Backed by a wide fleet network and real-time coordination capabilities, we are the trusted logistics partner for companies that can't afford delays.</p>
+                    <div class="highlight-tags">
+                        <span><i class="fas fa-bolt" style="color:var(--secondary-color);margin-right:5px;"></i>Rapid Mobilization</span>
+                        <span><i class="fas fa-route" style="color:var(--secondary-color);margin-right:5px;"></i>Route Optimization</span>
+                        <span><i class="fas fa-shield-alt" style="color:var(--secondary-color);margin-right:5px;"></i>Safe Delivery</span>
+                        <span><i class="fas fa-clock" style="color:var(--secondary-color);margin-right:5px;"></i>On-Time Guarantee</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scope of Services -->
+    <section class="svc-scope">
+        <div class="container">
+            <h2>What We Handle</h2>
+            <p class="section-sub">Comprehensive general logistics solutions for every cargo requirement</p>
+            <div class="scope-grid">
+                <div class="scope-card">
+                    <div class="sc-icon"><i class="fas fa-bolt"></i></div>
+                    <h4>Spot & Urgent Transport</h4>
+                    <p>Same-day and emergency freight allocation for time-critical shipments with no advance notice required.</p>
+                </div>
+                <div class="scope-card">
+                    <div class="sc-icon"><i class="fas fa-clock"></i></div>
+                    <h4>Just-in-Time Deliveries</h4>
+                    <p>Precision-timed deliveries to manufacturing plants, warehouses, and project sites — zero buffer, zero disruption.</p>
+                </div>
+                <div class="scope-card">
+                    <div class="sc-icon"><i class="fas fa-exchange-alt"></i></div>
+                    <h4>Inbound & Outbound Movements</h4>
+                    <p>End-to-end freight management for industrial and commercial cargo — both incoming raw materials and outgoing products.</p>
+                </div>
+                <div class="scope-card">
+                    <div class="sc-icon"><i class="fas fa-truck-moving"></i></div>
+                    <h4>Full Truck Load (FTL)</h4>
+                    <p>Dedicated trucks for large volume shipments with direct origin-to-destination routing for maximum speed.</p>
+                </div>
+                <div class="scope-card">
+                    <div class="sc-icon"><i class="fas fa-boxes"></i></div>
+                    <h4>Part Load (PTL)</h4>
+                    <p>Cost-efficient part-load shipments for smaller consignments consolidated with other compatible cargo.</p>
+                </div>
+                <div class="scope-card">
+                    <div class="sc-icon"><i class="fas fa-star"></i></div>
+                    <h4>High-Priority Consignments</h4>
+                    <p>Expedited handling for critical, high-value, or time-sensitive cargo with dedicated operations support.</p>
+                </div>
+                <div class="scope-card">
+                    <div class="sc-icon"><i class="fas fa-map-marked-alt"></i></div>
+                    <h4>Remote Area Coverage</h4>
+                    <p>Pan-India reach including constrained locations, remote sites, and areas with limited infrastructure access.</p>
+                </div>
+                <div class="scope-card">
+                    <div class="sc-icon"><i class="fas fa-satellite-dish"></i></div>
+                    <h4>Real-Time Coordination</h4>
+                    <p>Live tracking, driver communication, and operations desk support throughout every movement.</p>
+                </div>
+                <div class="scope-card">
+                    <div class="sc-icon"><i class="fas fa-certificate"></i></div>
+                    <h4>Statutory Compliance</h4>
+                    <p>All movements executed in full compliance with road transport regulations, permits, and safety standards.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industries Served -->
+    <section class="svc-industries">
+        <div class="container">
+            <h2>Industries We Serve</h2>
+            <div class="ind-tags">
+                <span class="ind-tag"><i class="fas fa-industry"></i> Manufacturing</span>
+                <span class="ind-tag"><i class="fas fa-capsules"></i> Pharmaceuticals</span>
+                <span class="ind-tag"><i class="fas fa-shopping-cart"></i> FMCG & Retail</span>
+                <span class="ind-tag"><i class="fas fa-box-open"></i> E-Commerce</span>
+                <span class="ind-tag"><i class="fas fa-flask"></i> Chemicals</span>
+                <span class="ind-tag"><i class="fas fa-car"></i> Automotive</span>
+                <span class="ind-tag"><i class="fas fa-hard-hat"></i> Construction</span>
+                <span class="ind-tag"><i class="fas fa-bolt"></i> Power & Energy</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why AGL -->
+    <section class="svc-diff">
+        <div class="container">
+            <h2>Why Choose AGL for General Logistics?</h2>
+            <div class="diff-grid">
+                <div class="diff-card">
+                    <div class="dc-icon"><i class="fas fa-rocket"></i></div>
+                    <div>
+                        <h4>Quick Mobilization</h4>
+                        <p>Fleet ready to deploy within hours. Our vehicle network and driver pool enable rapid response for urgent requirements — no waiting, no delays.</p>
+                    </div>
+                </div>
+                <div class="diff-card">
+                    <div class="dc-icon"><i class="fas fa-route"></i></div>
+                    <div>
+                        <h4>Smart Route Optimization</h4>
+                        <p>Data-driven routing to ensure fastest transit times, minimum fuel costs, and avoidance of restricted zones or weight-limited roads.</p>
+                    </div>
+                </div>
+                <div class="diff-card">
+                    <div class="dc-icon"><i class="fas fa-network-wired"></i></div>
+                    <div>
+                        <h4>Wide Fleet Network</h4>
+                        <p>Access to owned and partner vehicles across vehicle types — open flatbeds, closed containers, multi-axle, and light commercial vehicles.</p>
+                    </div>
+                </div>
+                <div class="diff-card">
+                    <div class="dc-icon"><i class="fas fa-hand-holding-usd"></i></div>
+                    <div>
+                        <h4>Flexible & Cost-Efficient</h4>
+                        <p>Pay only for what you need. FTL and PTL options give you the flexibility to match capacity to actual shipment volumes.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Other Services -->
+    <section class="other-services">
+        <div class="container">
+            <h2>Explore Our Other Services</h2>
+            <div class="other-svc-grid">
+                <a href="service-transformer" class="other-svc-card">
+                    <i class="fas fa-bolt"></i>
+                    <h4>Transformer Transportation</h4>
+                    <p>Specialized ODC transport for power transformers and heavy electrical equipment up to 240 MT.</p>
+                    <span class="arrow-link">Learn More <i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="service-contract" class="other-svc-card">
+                    <i class="fas fa-file-contract"></i>
+                    <h4>Contract Logistics</h4>
+                    <p>Long-term dedicated fleet and SLA-backed logistics for predictable, high-volume supply chains.</p>
+                    <span class="arrow-link">Learn More <i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="service-international" class="other-svc-card">
+                    <i class="fas fa-globe-asia"></i>
+                    <h4>International Logistics</h4>
+                    <p>Ocean freight, air freight, customs clearance, and global supply chain management worldwide.</p>
+                    <span class="arrow-link">Learn More <i class="fas fa-arrow-right"></i></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="svc-cta">
+        <div class="container">
+            <h2>Need Fast, Reliable Transport?</h2>
+            <p>Tell us your requirement — we'll mobilize within hours. Available 24/7 across India.</p>
+            <div class="cta-options">
+                <a href="contact" class="cta-opt primary"><i class="fas fa-file-alt"></i> Get a Quote</a>
+                <a href="https://wa.me/919310445354?text=Hi%2C%20I%20need%20General%20Logistics%20services" target="_blank" rel="noopener" class="cta-opt whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp Us</a>
+                <a href="tel:+919310445354" class="cta-opt call"><i class="fas fa-phone"></i> Call Now: +91 93104 45354</a>
+            </div>
         </div>
     </section>
 
@@ -221,10 +716,8 @@
         </div>
     </footer>
 
-    <!-- JS -->
     <script src="js/script.js?v=1778000020" defer></script>
     <script src="js/dynamic-content.js?v=1778000020" defer></script>
-
     <script>
         window.addEventListener('load', () => {
             const loader = document.getElementById('page-loader');
@@ -235,9 +728,8 @@
             if (loader) { loader.classList.add('loader-hidden'); setTimeout(() => loader.remove(), 600); }
         }, 2500);
     </script>
-<!-- WhatsApp Floating Button -->
-<a href="https://wa.me/919310445354" id="whatsapp-btn" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-</a>
+    <a href="https://wa.me/919310445354" id="whatsapp-btn" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 </body>
 </html>
