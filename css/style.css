@@ -2463,47 +2463,39 @@ textarea.form-control {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.09);
+    background: #ffffff;
+    border: 1px solid #e8eef8;
     border-radius: 16px;
     padding: 18px 24px 14px;
     width: 160px;
     flex-shrink: 0;
     cursor: default;
-    transition: background 0.25s, border-color 0.25s, transform 0.2s;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
 }
 .client-card:hover {
-    background: rgba(217,165,33,0.08);
-    border-color: rgba(217,165,33,0.35);
+    border-color: #d9a521;
+    box-shadow: 0 4px 20px rgba(217,165,33,0.25);
     transform: translateY(-3px);
 }
 .client-logo-wrap {
     height: 60px;
     width: 100%;
-    background: #fff;
-    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 10px;
+    padding: 4px 6px;
     box-sizing: border-box;
-    transition: box-shadow 0.25s;
-}
-.client-card:hover .client-logo-wrap {
-    box-shadow: 0 0 0 2px rgba(217,165,33,0.5);
 }
 .client-logo-img {
-    max-height: 44px;
+    max-height: 48px;
     max-width: 120px;
     width: auto;
     object-fit: contain;
-    filter: none;
-    opacity: 1;
     transition: transform 0.25s;
 }
 .client-card:hover .client-logo-img {
-    transform: scale(1.05);
-    filter: none;
+    transform: scale(1.06);
 }
 .client-initials {
     width: 52px;
@@ -2521,10 +2513,10 @@ textarea.form-control {
 .client-card-name {
     font-size: 0.72rem;
     font-weight: 600;
-    color: #8fa8c8;
+    color: #4a6080;
     text-align: center;
     letter-spacing: 0.2px;
     line-height: 1.35;
     transition: color 0.25s;
 }
-.client-card:hover .client-card-name { color: #d9a521; }
+.client-card:hover .client-card-name { color: #b8860b; }
