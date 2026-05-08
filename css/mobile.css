@@ -418,9 +418,9 @@
 @media (max-width: 600px) {
   .team-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
   .team-card { flex-direction: column !important; }
-  .team-photo-wrapper { width: 100% !important; height: 320px !important; border-radius: 12px 12px 0 0 !important; }
-  .team-photo { width: 100% !important; height: 320px !important; object-fit: cover !important; object-position: 50% 20% !important; }
-  .team-photo-placeholder { width: 100% !important; height: 320px !important; border-radius: 12px 12px 0 0 !important; font-size: 2.5rem !important; }
+  .team-photo-wrapper { width: 100% !important; height: 260px !important; border-radius: 12px 12px 0 0 !important; }
+  .team-photo { width: 100% !important; height: 260px !important; object-fit: contain !important; object-position: center !important; background: #f8f8f8; }
+  .team-photo-placeholder { width: 100% !important; height: 260px !important; border-radius: 12px 12px 0 0 !important; font-size: 2.5rem !important; }
   .team-info { padding: 18px 16px !important; }
   .team-info h3 { font-size: 1.1rem !important; }
   .team-role { font-size: 0.8rem !important; }
