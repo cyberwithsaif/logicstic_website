@@ -606,6 +606,33 @@
   .safety-card h4 { font-size: 1rem !important; }
 }
 
+/* ==========================================================
+   20. SERVICES PAGE (enhanced)
+========================================================== */
+@media (max-width: 1024px) {
+  .service-detail-block { grid-template-columns: 1fr !important; gap: 30px !important; padding: 50px 0 !important; direction: ltr !important; }
+  .service-detail-block.reverse { direction: ltr !important; }
+  .service-detail-img img { height: 280px !important; }
+  .why-agl-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+  .services-stats-banner .stats-row { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+  .process-steps { flex-direction: column !important; gap: 24px !important; }
+  .process-steps::before { display: none !important; }
+  .process-step { text-align: left !important; display: flex !important; align-items: flex-start !important; gap: 16px !important; }
+  .process-step .step-circle { width: 50px !important; height: 50px !important; flex-shrink: 0 !important; margin: 0 !important; font-size: 1.1rem !important; }
+}
+@media (max-width: 600px) {
+  .service-detail-block { padding: 36px 0 !important; gap: 24px !important; }
+  .service-detail-img img { height: 220px !important; }
+  .service-detail-content h2 { font-size: 1.4rem !important; }
+  .service-detail-content .service-number { font-size: 2.8rem !important; }
+  .service-features-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .why-agl-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .why-agl-card { padding: 22px 18px !important; }
+  .services-stats-banner .stats-row { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; }
+  .services-stats-banner .stat-item .stat-num { font-size: 1.8rem !important; }
+  .service-badge { font-size: 0.75rem !important; padding: 6px 14px !important; }
+}
+
 
 /* ==========================================================
    20. CONTACT PAGE

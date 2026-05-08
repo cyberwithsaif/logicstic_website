@@ -3,23 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Our Services - Ashtam Global Logistics. Specializing in Transformer Transportation, Contract, General, and International Logistics.">
+    <meta name="description" content="Our Services - Ashtam Global Logistics. Specializing in Transformer Transportation, Contract Logistics, General Logistics, and International Logistics across India and globally.">
     <title>Our Services | Ashtam Global Logistics</title>
-    <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-
-    <!-- Google Fonts (non-blocking) -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
     <link rel="stylesheet" href="css/style.css?v=1778000019">
     <link rel="stylesheet" href="css/mobile.css?v=1778000019">
-
-    <!-- FontAwesome (deferred) -->
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <style>
+        /* ── Service Detail Blocks ── */
+        .service-detail-block {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            padding: 70px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        .service-detail-block.reverse { direction: rtl; }
+        .service-detail-block.reverse > * { direction: ltr; }
+        .service-detail-block:last-child { border-bottom: none; }
+
+        .service-detail-img {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+        }
+        .service-detail-img img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+        .service-detail-img .service-badge {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--secondary-color);
+            color: #0B1F3A;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 8px 18px;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+        }
+
+        .service-detail-content .service-number {
+            font-size: 4rem;
+            font-weight: 800;
+            color: rgba(201,161,74,0.15);
+            line-height: 1;
+            margin-bottom: -10px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .service-detail-content h2 {
+            font-size: 1.9rem;
+            color: var(--primary-color);
+            margin-bottom: 14px;
+            line-height: 1.3;
+        }
+        .service-detail-content > p {
+            color: #4a5568;
+            line-height: 1.8;
+            margin-bottom: 24px;
+            font-size: 0.97rem;
+        }
+
+        .service-features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+        .service-feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+        .service-feature-item i {
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+        .service-feature-item span {
+            font-size: 0.84rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            line-height: 1.4;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+        .service-tag {
+            background: rgba(11,31,58,0.06);
+            color: var(--primary-color);
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid rgba(11,31,58,0.12);
+        }
+
+        /* ── Stats Banner ── */
+        .services-stats-banner {
+            background: var(--primary-color);
+            padding: 55px 0;
+        }
+        .services-stats-banner .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            text-align: center;
+        }
+        .services-stats-banner .stat-item .stat-num {
+            font-size: 2.6rem;
+            font-weight: 800;
+            color: var(--secondary-color);
+            line-height: 1;
+        }
+        .services-stats-banner .stat-item .stat-label {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.75);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        /* ── Why AGL for Services ── */
+        .why-agl-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 44px;
+        }
+        .why-agl-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px 26px;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 6px 30px rgba(0,0,0,0.05);
+            transition: all 0.35s ease;
+        }
+        .why-agl-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 50px rgba(0,0,0,0.1);
+            border-color: var(--secondary-color);
+        }
+        .why-agl-card .icon-wrap {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 18px;
+        }
+        .why-agl-card h4 {
+            font-size: 1rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        .why-agl-card p {
+            font-size: 0.86rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ── Process Steps ── */
+        .process-steps {
+            display: flex;
+            gap: 0;
+            margin-top: 50px;
+            position: relative;
+        }
+        .process-steps::before {
+            content: '';
+            position: absolute;
+            top: 32px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--secondary-color), rgba(201,161,74,0.2));
+            z-index: 0;
+        }
+        .process-step {
+            flex: 1;
+            text-align: center;
+            padding: 0 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .process-step .step-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 18px;
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+        }
+        .process-step h4 {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 6px;
+        }
+        .process-step p {
+            font-size: 0.8rem;
+            color: #64748b;
+            line-height: 1.5;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
 
@@ -29,7 +244,7 @@
             <div class="truckWrapper">
                 <div class="truckBody">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 198 93" class="trucksvg">
-                        <path stroke-width="3" stroke="#282828" fill="#C9A14A" d="M135 22.5H177.264C178.295 22.5 179.22 23.133 179.594 24.0939L192.33 56.8443C192.442 57.1332 192.5 57.4404 192.5 57.7504V89C192.5 90.3807 191.381 91.5 190 91.5H135C133.619 91.5 132.5 90.3807 132.5 89V25C132.5 23.6193 133.619 22.5 135 22.5Z"></path>
+                        <path stroke-width="3" stroke="#282828" fill="#C9A14A" d="M135 22.5H177.264C178.295 22.5 179.22 23.133 179.594 24.0939L192.33 56.8443C192.442 57.1332 192.5 57.7504V89C192.5 90.3807 191.381 91.5 190 91.5H135C133.619 91.5 132.5 90.3807 132.5 89V25C132.5 23.6193 133.619 22.5 135 22.5Z"></path>
                         <path stroke-width="3" stroke="#282828" fill="#7D7C7C" d="M146 33.5H181.741C182.779 33.5 183.709 34.1415 184.078 35.112L190.538 52.112C191.16 53.748 189.951 55.5 188.201 55.5H146C144.619 55.5 143.5 54.3807 143.5 53V36C143.5 34.6193 144.619 33.5 146 33.5Z"></path>
                         <path stroke-width="2" stroke="#282828" fill="#282828" d="M150 65C150 65.39 149.763 65.8656 149.127 66.2893C148.499 66.7083 147.573 67 146.5 67C145.427 67 144.501 66.7083 143.873 66.2893C143.237 65.8656 143 65.39 143 65C143 64.61 143.237 64.1344 143.873 63.7107C144.501 63.2917 145.427 63 146.5 63C147.573 63 148.499 63.2917 149.127 63.7107C149.763 64.1344 150 64.61 150 65Z"></path>
                         <rect stroke-width="2" stroke="#282828" fill="#FFFCAB" rx="1" height="7" width="5" y="63" x="187"></rect>
@@ -50,26 +265,21 @@
                 </div>
                 <div class="road"></div>
                 <svg xml:space="preserve" viewBox="0 0 453.459 453.459" xmlns="http://www.w3.org/2000/svg" fill="#000000" class="lampPost">
-                    <path d="M252.882,0c-37.781,0-68.686,29.953-70.245,67.358h-6.917v8.954c-26.109,2.163-45.463,10.011-45.463,19.366h9.993c-1.65,5.146-2.507,10.54-2.507,16.017c0,28.956,23.558,52.514,52.514,52.514c28.956,0,52.514-23.558,52.514-52.514c0-5.478-0.856-10.872-2.506-16.017h9.992c0-9.354-19.352-17.204-45.463-19.366v-8.954h-6.149C200.189,38.779,223.924,16,252.882,16c29.952,0,54.32,24.368,54.32,54.32c0,28.774-11.078,37.009-25.105,47.437c-17.444,12.968-37.216,27.667-37.216,78.884v113.914h-0.797c-5.068,0-9.174,4.108-9.174,9.177c0,2.844,1.293,5.383,3.321,7.066c-3.432,27.933-26.851,95.744-8.226,115.459v11.202h45.75v-11.202c18.625-19.715-4.794-87.527-8.227-115.459c2.029-1.683,3.322-4.223,3.322-7.066c0-5.068-4.107-9.177-9.176-9.177h-0.795V196.641c0-43.174,14.942-54.283,30.762-66.043c14.793-10.997,31.559-23.461,31.559-60.277C323.202,31.545,291.656,0,252.882,0zM232.77,111.694c0,23.442-19.071,42.514-42.514,42.514c-23.442,0-42.514-19.072-42.514-42.514c0-5.531,1.078-10.957,3.141-16.017h78.747C231.693,100.736,232.77,106.162,232.77,111.694z"></path>
+                    <path d="M252.882,0c-37.781,0-68.686,29.953-70.245,67.358h-6.917v8.954c-26.109,2.163-45.463,10.011-45.463,19.366h9.993c-1.65,5.146-2.507,10.54-2.507,16.017c0,28.956,23.558,52.514,52.514,52.514c28.956,0,52.514-23.558,52.514-52.514c0-5.478-0.856-10.872-2.506-16.017h9.992c0-9.354-19.352-17.204-45.463-19.366v-8.954h-6.149C200.189,38.779,223.924,16,252.882,16c29.952,0,54.32,24.368,54.32,54.32c0,28.774-11.078,37.009-25.105,47.437c-17.444,12.968-37.216,27.667-37.216,78.884v113.914h-0.797c-5.068,0-9.174,4.108-9.174,9.177c0,2.844,1.293,5.383,3.321,7.066c-3.432,27.933-26.851,95.744-8.226,115.459v11.202h45.75v-11.202c18.625-19.715-4.794-87.527-8.227-115.459c2.029-1.683,3.322-4.223,3.322-7.066c0-5.068-4.107-9.177-9.176-9.177h-0.795V196.641c0-43.174,14.942-54.283,30.762-66.043c14.793-10.997,31.559-23.461,31.559-60.277C323.202,31.545,291.656,0,252.882,0z"></path>
                 </svg>
             </div>
         </div>
         <p class="loader-text">Loading...</p>
     </div>
-
-            <div class="loader-bar"><div class="loader-progress"></div></div>
-        </div>
-    </div>
-
+    <script>(function(){var t=document.getElementById('page-loader');if(t)setTimeout(function(){t.classList.add('loader-hidden')},300)})();</script>
 
     <!-- Header -->
     <header class="header scrolled">
         <div class="container header-container">
             <a href="index" class="logo">
-                <img src="images/logo.webp" alt="Ashtam Global Logistics" class="site-logo">
+                <img src="images/logo.webp" alt="Ashtam Global Logistics" class="site-logo" decoding="async">
                 <span class="logo-text">Ashtam Global Logistics</span>
             </a>
-            
             <nav class="main-nav">
                 <div class="nav-header">
                     <div class="nav-brand">
@@ -106,15 +316,13 @@
                     <li><a href="contact" class="nav-link">Contact</a></li>
                 </ul>
             </nav>
-            
             <div class="header-cta">
                 <a href="contact" class="cssbuttons-io-button">
                     Get a Quote
                     <div class="icon">
                         <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 0h24v24H0z" fill="none"></path>
-                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                                fill="currentColor"></path>
+                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z" fill="currentColor"></path>
                         </svg>
                     </div>
                 </a>
@@ -130,50 +338,416 @@
     <section class="page-header">
         <div class="container">
             <h1>Our Services</h1>
+            <p style="color:rgba(255,255,255,0.85); font-size:1.1rem; margin-top:10px; margin-bottom:0;">End-to-end logistics solutions crafted for India's most demanding industries</p>
+            <div class="breadcrumb" style="margin-top:15px; font-size:0.9rem;">
+                <a href="index">Home</a>
+                <span style="color:rgba(255,255,255,0.5);">/</span>
+                <span style="color:rgba(255,255,255,0.85);">Services</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Nav Cards -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center animate-on-scroll">
+                <div class="section-label" style="justify-content:center;">
+                    <span class="line"></span>
+                    <span class="text">What We Do</span>
+                    <span class="line"></span>
+                </div>
+                <h2 style="margin-top:8px;">Comprehensive Logistics Solutions</h2>
+                <p style="max-width:640px; margin:0 auto;">From heavyweight transformer movements to global ocean freight — we deliver precision, reliability, and safety across every kind of cargo and corridor.</p>
+            </div>
+
+            <div class="services-grid animate-on-scroll" style="margin-top:44px;">
+                <div class="service-card" style="cursor:pointer;" onclick="location.href='service-transformer'">
+                    <div class="service-icon-circle" style="background:rgba(11,31,58,0.08); color:#0B1F3A;">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <h3>Transformer Transportation</h3>
+                    <p>ODC & heavy power transformer movement with multi-axle hydraulic trailers, route surveys, and police escorts up to 240 MT.</p>
+                    <a href="service-transformer" class="btn btn-outline" style="margin-top:16px; border-color:var(--primary-color); color:var(--primary-color); font-size:0.85rem;">Explore &rarr;</a>
+                </div>
+                <div class="service-card" style="cursor:pointer;" onclick="location.href='service-contract'">
+                    <div class="service-icon-circle" style="background:rgba(201,161,74,0.12); color:#a07a30;">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <h3>Contract Integrated Logistics</h3>
+                    <p>Long-term dedicated fleet, warehouse management, JIT delivery and real-time reporting for multinational and EPC clients.</p>
+                    <a href="service-contract" class="btn btn-outline" style="margin-top:16px; border-color:var(--primary-color); color:var(--primary-color); font-size:0.85rem;">Explore &rarr;</a>
+                </div>
+                <div class="service-card" style="cursor:pointer;" onclick="location.href='service-general'">
+                    <div class="service-icon-circle" style="background:rgba(30,86,211,0.08); color:#1e56d3;">
+                        <i class="fas fa-truck-fast"></i>
+                    </div>
+                    <h3>General Logistics Services</h3>
+                    <p>FTL / PTL, express, and just-in-time cargo movements for urgent, short-notice, and on-demand freight across India.</p>
+                    <a href="service-general" class="btn btn-outline" style="margin-top:16px; border-color:var(--primary-color); color:var(--primary-color); font-size:0.85rem;">Explore &rarr;</a>
+                </div>
+                <div class="service-card" style="cursor:pointer;" onclick="location.href='service-international'">
+                    <div class="service-icon-circle" style="background:rgba(16,185,129,0.08); color:#059669;">
+                        <i class="fas fa-ship"></i>
+                    </div>
+                    <h3>International Logistics</h3>
+                    <p>Ocean freight (FCL/LCL), air freight, customs clearance, and ODC road movement — seamless global supply chains.</p>
+                    <a href="service-international" class="btn btn-outline" style="margin-top:16px; border-color:var(--primary-color); color:var(--primary-color); font-size:0.85rem;">Explore &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Banner -->
+    <section class="services-stats-banner">
+        <div class="container">
+            <div class="stats-row">
+                <div class="stat-item">
+                    <div class="stat-num">240 MT</div>
+                    <div class="stat-label">Max Cargo Capacity</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">Pan-India</div>
+                    <div class="stat-label">Operational Reach</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">24/7</div>
+                    <div class="stat-label">Operations Support</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num">20+</div>
+                    <div class="stat-label">Industries Served</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Detail Blocks -->
+    <section class="py-5">
+        <div class="container">
+
+            <!-- 01 Transformer Transportation -->
+            <div class="service-detail-block animate-on-scroll">
+                <div class="service-detail-img">
+                    <img loading="lazy" src="images/our works.webp" alt="Transformer Transportation">
+                    <span class="service-badge"><i class="fas fa-bolt" style="margin-right:6px;"></i>Transformer Transport</span>
+                </div>
+                <div class="service-detail-content">
+                    <div class="service-number">01</div>
+                    <h2>Transformer Transportation Services</h2>
+                    <p>We provide end-to-end logistics for oversized and heavy power transformers for EPC contractors, OEMs, utilities (PGCIL, NTPC, MNRE), and state electricity boards. Every movement is backed by route surveys, statutory permits, and precision execution.</p>
+                    <div class="service-features-grid">
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>ODC & Heavy Load Movement</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Multi-Axle Hydraulic Trailers</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Route Survey & Permits</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Police Escort Coordination</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Crane & Rigging Services</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Up to 240 MT Capacity</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Night Movement Planning</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Real-Time GPS Tracking</span>
+                        </div>
+                    </div>
+                    <div class="service-tags">
+                        <span class="service-tag">PGCIL</span>
+                        <span class="service-tag">NTPC</span>
+                        <span class="service-tag">BHEL</span>
+                        <span class="service-tag">State EBs</span>
+                        <span class="service-tag">EPC Contractors</span>
+                        <span class="service-tag">OEM Manufacturers</span>
+                    </div>
+                    <a href="service-transformer" class="btn btn-primary" style="background:var(--primary-color); color:#fff;">View Full Details <i class="fas fa-arrow-right" style="margin-left:8px;"></i></a>
+                </div>
+            </div>
+
+            <!-- 02 Contract Logistics -->
+            <div class="service-detail-block reverse animate-on-scroll">
+                <div class="service-detail-img">
+                    <img loading="lazy" src="images/secind.webp" alt="Contract Integrated Logistics">
+                    <span class="service-badge"><i class="fas fa-file-contract" style="margin-right:6px;"></i>Contract Logistics</span>
+                </div>
+                <div class="service-detail-content">
+                    <div class="service-number">02</div>
+                    <h2>Contract Integrated Logistics</h2>
+                    <p>We partner with multinational companies, EPC contractors, and large industrial clients on long-term logistics agreements — delivering dedicated fleet management, warehousing, cost optimization, and real-time visibility across complex multi-site operations.</p>
+                    <div class="service-features-grid">
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Dedicated Fleet Management</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Warehouse & Inventory Control</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>JIT (Just-in-Time) Delivery</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Multi-Site Coordination</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Cost Optimization Programs</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>MIS Reporting & Analytics</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Dedicated Account Manager</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>SLA-Driven Performance</span>
+                        </div>
+                    </div>
+                    <div class="service-tags">
+                        <span class="service-tag">MNC Clients</span>
+                        <span class="service-tag">EPC Projects</span>
+                        <span class="service-tag">Industrial Plants</span>
+                        <span class="service-tag">Long-Term Contracts</span>
+                        <span class="service-tag">Pan-India</span>
+                    </div>
+                    <a href="service-contract" class="btn btn-primary" style="background:var(--primary-color); color:#fff;">View Full Details <i class="fas fa-arrow-right" style="margin-left:8px;"></i></a>
+                </div>
+            </div>
+
+            <!-- 03 General Logistics -->
+            <div class="service-detail-block animate-on-scroll">
+                <div class="service-detail-img">
+                    <img loading="lazy" src="images/secind (1).webp" alt="General Logistics Services">
+                    <span class="service-badge"><i class="fas fa-truck-fast" style="margin-right:6px;"></i>General Logistics</span>
+                </div>
+                <div class="service-detail-content">
+                    <div class="service-number">03</div>
+                    <h2>General Logistics Services</h2>
+                    <p>Efficiently managing urgent, short-notice, and just-in-time cargo movements across India. From full truckloads to part loads, fragile goods to bulk industrial material — we handle it all with speed, care, and zero compromise on delivery timelines.</p>
+                    <div class="service-features-grid">
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>FTL / PTL Transportation</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Express & Urgent Deliveries</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Fragile & Sensitive Cargo</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Multi-Modal Transportation</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Last-Mile Delivery</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Cold Chain Logistics</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Industrial & Commercial Cargo</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>24/7 Movement Support</span>
+                        </div>
+                    </div>
+                    <div class="service-tags">
+                        <span class="service-tag">FTL</span>
+                        <span class="service-tag">PTL</span>
+                        <span class="service-tag">Express</span>
+                        <span class="service-tag">JIT</span>
+                        <span class="service-tag">Bulk Cargo</span>
+                        <span class="service-tag">Last-Mile</span>
+                    </div>
+                    <a href="service-general" class="btn btn-primary" style="background:var(--primary-color); color:#fff;">View Full Details <i class="fas fa-arrow-right" style="margin-left:8px;"></i></a>
+                </div>
+            </div>
+
+            <!-- 04 International Logistics -->
+            <div class="service-detail-block reverse animate-on-scroll">
+                <div class="service-detail-img">
+                    <img loading="lazy" src="images/industry.webp" alt="International Logistics Services">
+                    <span class="service-badge"><i class="fas fa-globe" style="margin-right:6px;"></i>International Logistics</span>
+                </div>
+                <div class="service-detail-content">
+                    <div class="service-number">04</div>
+                    <h2>International Logistics Services</h2>
+                    <p>Seamless end-to-end global supply chain solutions — from ocean and air freight to customs clearance and international ODC road movements. We open your cargo to the world with expert documentation, compliance, and last-mile coordination across borders.</p>
+                    <div class="service-features-grid">
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Ocean Freight (FCL / LCL)</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Air Freight Services</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Customs Clearance</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>International ODC Movement</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Import / Export Documentation</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Door-to-Door Delivery</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Freight Insurance</span>
+                        </div>
+                        <div class="service-feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Global Partner Network</span>
+                        </div>
+                    </div>
+                    <div class="service-tags">
+                        <span class="service-tag">Ocean Freight</span>
+                        <span class="service-tag">Air Freight</span>
+                        <span class="service-tag">Customs</span>
+                        <span class="service-tag">FCL / LCL</span>
+                        <span class="service-tag">Global</span>
+                        <span class="service-tag">Import/Export</span>
+                    </div>
+                    <a href="service-international" class="btn btn-primary" style="background:var(--primary-color); color:#fff;">View Full Details <i class="fas fa-arrow-right" style="margin-left:8px;"></i></a>
+                </div>
+            </div>
 
         </div>
     </section>
 
-    <!-- Services Section -->
+    <!-- Our Process -->
     <section class="py-5 bg-light">
         <div class="container">
             <div class="text-center animate-on-scroll">
-                <h2>Comprehensive Logistics Solutions</h2>
-                <p>We provide a full spectrum of logistics services designed to meet the complex demands of modern industries.</p>
+                <div class="section-label" style="justify-content:center;">
+                    <span class="line"></span>
+                    <span class="text">How We Work</span>
+                    <span class="line"></span>
+                </div>
+                <h2 style="margin-top:8px;">Our Service Delivery Process</h2>
+                <p style="max-width:580px; margin:0 auto;">A proven 5-step process that ensures every cargo reaches its destination safely, on time, and within compliance.</p>
             </div>
-            
-            <div class="services-grid animate-on-scroll">
-                <!-- Service 1 -->
-                <div class="service-card">
-                    <i class="fas fa-bolt service-icon"></i>
-                    <h3>Transformer Transportation Services</h3>
-                    <p>End-to-end logistics solutions for oversized and heavy power transformers, supporting EPC contractors, OEMs, and utilities with precision-driven execution.</p>
-                    <a href="service-transformer" class="btn btn-outline" style="margin-top: 15px; border-color: var(--primary-color); color: var(--primary-color);">View Details</a>
+            <div class="process-steps animate-on-scroll">
+                <div class="process-step">
+                    <div class="step-circle"><i class="fas fa-comments"></i></div>
+                    <h4>Requirement Study</h4>
+                    <p>Understand cargo specs, origin-destination, timeline & compliance needs</p>
                 </div>
-                
-                <!-- Service 2 -->
-                <div class="service-card">
-                    <i class="fas fa-file-signature service-icon"></i>
-                    <h3>Contract Integrated Logistics</h3>
-                    <p>Comprehensive contract-based, end-to-end integrated logistics solutions to multinational companies, EPC contractors, and large industrial clients.</p>
-                    <a href="service-contract" class="btn btn-outline" style="margin-top: 15px; border-color: var(--primary-color); color: var(--primary-color);">View Details</a>
+                <div class="process-step">
+                    <div class="step-circle"><i class="fas fa-map-marked-alt"></i></div>
+                    <h4>Route Survey</h4>
+                    <p>Identify optimal routes, clearances, bridge ratings & obstacle points</p>
                 </div>
-                
-                <!-- Service 3 -->
-                <div class="service-card">
-                    <i class="fas fa-truck-fast service-icon"></i>
-                    <h3>General Logistics Services</h3>
-                    <p>Efficiently manage urgent, short-notice, and just-in-time (JIT) cargo movements that fall outside long-term or contract-based logistics agreements.</p>
-                    <a href="service-general" class="btn btn-outline" style="margin-top: 15px; border-color: var(--primary-color); color: var(--primary-color);">View Details</a>
+                <div class="process-step">
+                    <div class="step-circle"><i class="fas fa-file-alt"></i></div>
+                    <h4>Permitting</h4>
+                    <p>Obtain all statutory permits, RTO approvals & police escort coordination</p>
                 </div>
-                
-                <!-- Service 4 -->
-                <div class="service-card">
-                    <i class="fas fa-ship service-icon"></i>
-                    <h3>International Logistics Services</h3>
-                    <p>Seamless end-to-end global supply chain and international freight solutions across international markets, including Ocean and Air freight.</p>
-                    <a href="service-international" class="btn btn-outline" style="margin-top: 15px; border-color: var(--primary-color); color: var(--primary-color);">View Details</a>
+                <div class="process-step">
+                    <div class="step-circle"><i class="fas fa-truck-moving"></i></div>
+                    <h4>Execution</h4>
+                    <p>Precision movement with real-time tracking, dedicated supervisors on-site</p>
                 </div>
+                <div class="process-step">
+                    <div class="step-circle"><i class="fas fa-clipboard-check"></i></div>
+                    <h4>Delivery & Report</h4>
+                    <p>Safe handover, full documentation, post-delivery MIS report to client</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose AGL -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center animate-on-scroll">
+                <div class="section-label" style="justify-content:center;">
+                    <span class="line"></span>
+                    <span class="text">Our Edge</span>
+                    <span class="line"></span>
+                </div>
+                <h2 style="margin-top:8px;">Why Choose Ashtam Global Logistics?</h2>
+                <p style="max-width:580px; margin:0 auto;">What sets us apart is not just what we move — it's how we move it. Experience, compliance, and care built into every operation.</p>
+            </div>
+            <div class="why-agl-grid animate-on-scroll">
+                <div class="why-agl-card">
+                    <div class="icon-wrap" style="background:rgba(11,31,58,0.08); color:#0B1F3A;"><i class="fas fa-shield-alt"></i></div>
+                    <h4>Zero-Compromise Safety</h4>
+                    <p>Every movement is executed under strict HSSE protocols, MoRTH regulations, and IRC norms with documented risk assessments.</p>
+                </div>
+                <div class="why-agl-card">
+                    <div class="icon-wrap" style="background:rgba(201,161,74,0.12); color:#a07a30;"><i class="fas fa-clock"></i></div>
+                    <h4>On-Time Delivery</h4>
+                    <p>Deadline-focused execution backed by real-time tracking, proactive escalation, and contingency planning at every stage.</p>
+                </div>
+                <div class="why-agl-card">
+                    <div class="icon-wrap" style="background:rgba(30,86,211,0.08); color:#1e56d3;"><i class="fas fa-certificate"></i></div>
+                    <h4>ISO 9001:2015 Certified</h4>
+                    <p>Quality management system certified to international standards — consistent processes, auditable records, and measurable outcomes.</p>
+                </div>
+                <div class="why-agl-card">
+                    <div class="icon-wrap" style="background:rgba(16,185,129,0.08); color:#059669;"><i class="fas fa-users-cog"></i></div>
+                    <h4>Expert Team — 14+ Years</h4>
+                    <p>Our leadership and operations team brings over 14 years of hands-on project logistics experience across India's core sectors.</p>
+                </div>
+                <div class="why-agl-card">
+                    <div class="icon-wrap" style="background:rgba(239,68,68,0.08); color:#dc2626;"><i class="fas fa-map-marker-alt"></i></div>
+                    <h4>Pan-India Network</h4>
+                    <p>Established operational reach across all major industrial corridors — from Rajasthan wind farms to eastern hydro project sites.</p>
+                </div>
+                <div class="why-agl-card">
+                    <div class="icon-wrap" style="background:rgba(139,92,246,0.08); color:#7c3aed;"><i class="fas fa-hand-holding-usd"></i></div>
+                    <h4>Cost-Optimized Solutions</h4>
+                    <p>Transparent pricing, optimized routing, and lean operations mean you get maximum logistics value without hidden costs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section animate-on-scroll">
+        <div class="container">
+            <h2>Ready to Move Your Cargo?</h2>
+            <p style="color:var(--text-dark); margin-bottom:30px; font-size:1.1rem;">Tell us what you need to move and we'll design a logistics solution that's safe, efficient, and deadline-driven.</p>
+            <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+                <a href="contact" class="btn btn-primary" style="background-color:var(--primary-color); color:var(--bg-white);">Get a Free Quote</a>
+                <a href="about" class="btn btn-outline">Learn About Us</a>
             </div>
         </div>
     </section>
@@ -183,13 +757,13 @@
         <div class="container footer-grid">
             <div class="footer-col">
                 <a href="index" class="footer-logo">
-                    <img src="images/logo.webp" alt="Ashtam Global Logistics" class="footer-site-logo">
+                    <img src="images/logo.webp" alt="Ashtam Global Logistics" class="footer-site-logo" loading="lazy" decoding="async">
                 </a>
                 <p class="footer-desc">End-to-end logistics solutions for heavy, over-dimensional, and high-value cargo across India and globally.</p>
                 <div class="social-links">
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
             <div class="footer-col">
@@ -204,48 +778,38 @@
                 </ul>
             </div>
             <div class="footer-col">
-                <h4>Company</h4>
+                <h4>Our Services</h4>
                 <ul>
+                    <li><a href="service-transformer">Transformer Transportation</a></li>
+                    <li><a href="service-contract">Contract Logistics</a></li>
+                    <li><a href="service-general">General Logistics</a></li>
+                    <li><a href="service-international">International Logistics</a></li>
                     <li><a href="infrastructure">Infrastructure &amp; Resources</a></li>
                     <li><a href="safety">Safety &amp; Compliance</a></li>
-                    <li><a href="careers">Careers</a></li>
-                    <li><a href="service-transformer">Transformer Transport</a></li>
-                    <li><a href="service-contract">Contract Logistics</a></li>
-                    <li><a href="service-international">International Logistics</a></li>
                 </ul>
             </div>
             <div class="footer-col">
                 <h4>Contact Info</h4>
                 <ul class="contact-info-list">
                     <li><i class="fas fa-map-marker-alt"></i> 692/210 Laxman Vihar - II, G.NO-1, Gurugram, Haryana 122001</li>
-                    <li><i class="fas fa-phone"></i> +91 9310445354</li>
-                    <li><i class="fas fa-envelope"></i> info@aglbharat.com</li>
+                    <li><i class="fas fa-phone"></i> <a href="tel:+919310445354" style="color:#aaa;">+91 9310445354</a></li>
+                    <li><i class="fas fa-envelope"></i> <a href="mailto:info@aglbharat.com" style="color:#aaa;">info@aglbharat.com</a></li>
                     <li><i class="fas fa-globe"></i> www.aglbharat.com</li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom container">
-            <p>&copy; 2026 Ashtam Global Logistics Pvt. Ltd. All Rights Reserved. | CIN: U74999HR2022PTC106753</p>
+            <p>&copy; 2026 Ashtam Global Logistics Pvt. Ltd. All Rights Reserved. | CIN: U52241HR2026PTC140056</p>
         </div>
     </footer>
 
-    <!-- JS -->
     <script src="js/script.js?v=1778000019" defer></script>
     <script src="js/dynamic-content.js?v=1778000019" defer></script>
 
-    <script>
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('page-loader');
-            if (loader) { loader.classList.add('loader-hidden'); setTimeout(() => loader.remove(), 600); }
-        });
-        setTimeout(() => {
-            const loader = document.getElementById('page-loader');
-            if (loader) { loader.classList.add('loader-hidden'); setTimeout(() => loader.remove(), 600); }
-        }, 2500);
-    </script>
-<!-- WhatsApp Floating Button -->
-<a href="https://wa.me/919310445354" id="whatsapp-btn" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
-    <i class="fab fa-whatsapp"></i>
-</a>
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/919310445354" id="whatsapp-btn" class="whatsapp-float" target="_blank" rel="noopener" title="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
 </body>
 </html>
