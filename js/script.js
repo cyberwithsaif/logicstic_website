@@ -15,6 +15,7 @@
         if (!link) return;
         if (!isInternal(link.getAttribute('href'))) return;
         if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+        if (link.target === '_blank') return;
 
         // Skip loader when mobile menu is open and a dropdown toggle is tapped
         var mobileMenuOpen = document.querySelector('.main-nav.active');
