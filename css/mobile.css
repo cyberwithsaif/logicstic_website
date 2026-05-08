@@ -412,7 +412,7 @@
 @media (max-width: 1024px) {
   .team-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
   .team-photo-wrapper { height: 300px !important; }
-  .team-photo { object-position: 50% 10% !important; }
+  .team-photo { object-position: 50% 30% !important; }
   .team-photo-placeholder { height: 300px !important; }
 }
 @media (max-width: 600px) {
