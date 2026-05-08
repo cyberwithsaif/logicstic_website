@@ -199,12 +199,13 @@
     const statusTxt = document.getElementById('agl-status-text');
     const welcome   = document.getElementById('agl-welcome');
 
-    let socket     = null;
-    let username   = null;
-    let isOpen     = false;
-    let unread     = 0;
-    let typingTimer= null;
-    let connected  = false;
+    let socket          = null;
+    let username        = null;
+    let isOpen          = false;
+    let unread          = 0;
+    let typingTimer     = null;
+    let connected       = false;
+    let historyRestored = false;
 
     // Restore messages and identity from localStorage
     const STORAGE_KEY  = 'agl_chat_msgs';
@@ -219,7 +220,7 @@
         btn.style.transform = 'scale(.9)';
         unread = 0; badge.style.display = 'none';
         if (!connected) connectSocket();
-        restoreHistory();
+        if (!historyRestored) { historyRestored = true; restoreHistory(); }
         setTimeout(() => input.focus(), 300);
     }
 
