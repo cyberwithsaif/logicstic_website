@@ -791,3 +791,51 @@
   .blog-grid { grid-template-columns: 1fr !important; }
   .team-grid { grid-template-columns: 1fr !important; }
 }
+
+/* ==========================================================
+   30. CLIENT MARQUEE — responsive card sizes
+========================================================== */
+@media (max-width: 480px) {
+  .clients-marquee-section { padding: 24px 0 20px; }
+  .client-card { width: 130px; padding: 14px 16px 10px; }
+  .client-logo-wrap { height: 48px; }
+  .client-logo-img { max-height: 38px; max-width: 100px; }
+  .client-card-name { font-size: 0.65rem; }
+}
+@media (max-width: 380px) {
+  .client-card { width: 110px; padding: 12px 12px 8px; }
+  .client-logo-wrap { height: 40px; }
+  .client-logo-img { max-height: 32px; max-width: 86px; }
+  .client-card-name { font-size: 0.6rem; }
+}
+
+/* ==========================================================
+   31. "WHY CHOOSE US" & INLINE FLEX MIN-WIDTH OVERRIDES
+========================================================== */
+@media (max-width: 768px) {
+  /* Prevent horizontal overflow from inline min-width styles */
+  .industries-grid > div,
+  section [style*="min-width: 350px"],
+  section [style*="min-width: 320px"],
+  section [style*="min-width:350px"],
+  section [style*="min-width:320px"] {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  /* About features 2-col grid → single col */
+  [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Contact map height */
+  iframe[src*="google.com/maps"] { height: 260px !important; }
+  /* Footer gap */
+  .footer-grid { gap: 20px !important; }
+  /* Section inline gap overrides */
+  section [style*="gap: 60px"] { gap: 30px !important; }
+  section [style*="gap: 50px"] { gap: 24px !important; }
+}
+@media (max-width: 480px) {
+  iframe[src*="google.com/maps"] { height: 220px !important; }
+  section [style*="gap: 60px"] { gap: 20px !important; }
+  .footer-grid { gap: 16px !important; }
+}

@@ -980,3 +980,48 @@ body {
     .dash-stats-row .system { grid-column: span 2; }
     .dash-name { font-size: 1.4rem; }
 }
+
+/* ========== MOBILE FIXES ========== */
+@media (max-width: 480px) {
+    /* Sidebar nav — smaller tap targets */
+    .nav-item { padding: 8px 10px; font-size: 0.78rem; gap: 6px; }
+    .nav-item i { font-size: 0.85rem; }
+    /* Dashboard welcome */
+    .dash-welcome { padding: 18px 16px; }
+    .dash-greeting-line { font-size: 0.75rem; }
+    .dash-name { font-size: 1.15rem; }
+    .dash-datetime { font-size: 0.7rem; }
+    .dash-action-btn { padding: 8px 14px; font-size: 0.75rem; }
+    /* Stats row — single column on very small */
+    .dash-stats-row { grid-template-columns: 1fr; }
+    .dash-stats-row .system { grid-column: span 1; }
+    .dsb-num { font-size: 1.8rem; }
+    /* Config grid full width */
+    .dash-config-grid { grid-template-columns: 1fr; gap: 12px; }
+    /* Cards */
+    .card { padding: 16px; }
+    .card-header { flex-wrap: wrap; gap: 8px; }
+    /* Quotes */
+    .quote-meta { flex-direction: column; gap: 4px; }
+    .quote-actions { flex-wrap: wrap; gap: 6px; }
+    /* Content header */
+    .content-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    #page-title { font-size: 1.2rem; }
+    /* Chat layout */
+    .ca-sidebar { height: 180px; }
+    .ca-sess-meta { display: none; }
+    .ca-ch-meta { flex-direction: column; gap: 2px; font-size: 0.65rem; }
+    /* Main content */
+    .main-content { padding: 12px 10px; }
+    /* Form inputs */
+    .form-input, .form-textarea { font-size: 0.85rem; padding: 10px 12px; }
+    /* Save btn */
+    .btn-save { padding: 10px 18px; font-size: 0.82rem; }
+}
+@media (max-width: 380px) {
+    .nav-item span:not(.nav-badge) { display: none; }
+    .nav-item { justify-content: center; padding: 10px; }
+    .nav-item i { font-size: 1rem; }
+    .dash-stats-row { gap: 8px; }
+    .dsb-num { font-size: 1.5rem; }
+}

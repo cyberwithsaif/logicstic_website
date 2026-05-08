@@ -139,9 +139,16 @@
     }
     .agl-cw-welcome i { font-size:2.2rem; color:#c8d5e8; margin-bottom:10px; display:block; }
     .agl-cw-welcome p { font-size:.82rem; line-height:1.5; }
-    @media(max-width:420px){
-        #agl-chat-window{width:calc(100vw - 24px); right:12px; bottom:140px;}
-        #agl-chat-btn{right:16px; bottom:80px;}
+    @media(max-width:480px){
+        #agl-chat-window{width:calc(100vw - 20px); right:10px; bottom:148px; max-height:72vh;}
+        #agl-chat-btn{right:16px; bottom:82px; width:50px; height:50px; font-size:1.2rem;}
+    }
+    @media(max-width:380px){
+        #agl-chat-window{width:calc(100vw - 16px); right:8px; bottom:136px; max-height:68vh; border-radius:14px;}
+        #agl-chat-btn{right:12px; bottom:76px; width:46px; height:46px; font-size:1.1rem;}
+        .agl-cw-header{padding:12px 14px;}
+        .agl-cw-hname{font-size:.85rem;}
+        #agl-chat-input{font-size:.8rem;}
     }
     `;
     const styleEl = document.createElement('style');
