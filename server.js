@@ -137,12 +137,15 @@ app.post('/api/admin/update-content', checkAuth, async (req, res) => {
 });
 
 app.get('/api/admin/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/admin/login.html');
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid');
+        res.redirect('/admin/login.html');
+    });
 });
 
 // Serve Admin Panel (Protected)
 app.get('/admin', checkAuth, (req, res) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.sendFile(path.join(__dirname, 'admin', 'index.html'));
 });
 
