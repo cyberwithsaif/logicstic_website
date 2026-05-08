@@ -411,13 +411,16 @@
 ========================================================== */
 @media (max-width: 1024px) {
   .team-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; }
+  .team-photo-wrapper { height: 300px !important; }
+  .team-photo { object-position: center !important; }
+  .team-photo-placeholder { height: 300px !important; }
 }
 @media (max-width: 600px) {
   .team-grid { grid-template-columns: 1fr !important; gap: 16px !important; }
   .team-card { flex-direction: column !important; }
-  .team-photo-wrapper { width: 100% !important; height: 220px !important; border-radius: 12px 12px 0 0 !important; }
-  .team-photo { width: 100% !important; height: 220px !important; object-fit: cover !important; }
-  .team-photo-placeholder { width: 100% !important; height: 220px !important; border-radius: 12px 12px 0 0 !important; font-size: 2.5rem !important; }
+  .team-photo-wrapper { width: 100% !important; height: 280px !important; border-radius: 12px 12px 0 0 !important; }
+  .team-photo { width: 100% !important; height: 280px !important; object-fit: cover !important; object-position: center !important; }
+  .team-photo-placeholder { width: 100% !important; height: 280px !important; border-radius: 12px 12px 0 0 !important; font-size: 2.5rem !important; }
   .team-info { padding: 18px 16px !important; }
   .team-info h3 { font-size: 1.1rem !important; }
   .team-role { font-size: 0.8rem !important; }
