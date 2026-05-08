@@ -286,7 +286,13 @@
             </div>
             
             <!-- Map Container -->
-            <div id="map" class="map-container" style="padding: 0;"></div>
+            <div style="position:relative;">
+                <div id="map" class="map-container" style="padding: 0;"></div>
+                <a href="https://www.google.com/maps?q=28.4686,77.0135" target="_blank" rel="noopener"
+                   style="position:absolute;bottom:16px;left:50%;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;background:var(--primary-color);color:#fff;padding:10px 22px;border-radius:8px;font-size:0.88rem;font-weight:600;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,0.25);z-index:10;white-space:nowrap;">
+                    <i class="fas fa-map-marker-alt" style="color:var(--secondary-color);"></i> Open in Google Maps
+                </a>
+            </div>
         </div>
     </section>
 
@@ -387,12 +393,27 @@
             zoom: 13 // starting zoom
         });
 
+        // Google Maps URL for the office location
+        const googleMapsUrl = 'https://www.google.com/maps?q=28.4686,77.0135';
+
         // Add a marker for Corporate Office
-        new mapboxgl.Marker({ color: '#1e56d3' })
+        const marker = new mapboxgl.Marker({ color: '#1e56d3' })
             .setLngLat([77.0135, 28.4686])
-            .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-                .setHTML('<h4 style="margin:0;color:#0B1F3A;font-weight:700;">Ashtam Global Logistics</h4><p style="margin:5px 0 0;font-size:0.9rem;color:#64748b;">Gurugram, Haryana, India</p>'))
+            .setPopup(new mapboxgl.Popup({ offset: 25 })
+                .setHTML('<h4 style="margin:0;color:#0B1F3A;font-weight:700;">Ashtam Global Logistics</h4><p style="margin:5px 0 0;font-size:0.9rem;color:#64748b;">699/210 Laxman Vihar-II, Gurugram</p><a href="' + googleMapsUrl + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:#0B1F3A;color:#fff;padding:7px 14px;border-radius:6px;font-size:0.8rem;font-weight:600;text-decoration:none;">&#x1F4CD; Open in Google Maps</a>'))
             .addTo(map);
+
+        // Click on marker → open Google Maps directly
+        marker.getElement().style.cursor = 'pointer';
+        marker.getElement().addEventListener('click', function() {
+            window.open(googleMapsUrl, '_blank', 'noopener');
+        });
+
+        // Click anywhere on the map → open popup (default Mapbox behavior already handles this)
+        // Also show a "click to open in Maps" hint
+        map.on('load', function() {
+            map.getCanvas().style.cursor = 'default';
+        });
 
         // Add navigation controls
         map.addControl(new mapboxgl.NavigationControl(), 'top-right');
