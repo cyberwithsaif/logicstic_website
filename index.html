@@ -595,43 +595,66 @@
     const track = document.querySelector('.clients-marquee-track');
     const wrap  = document.querySelector('.clients-marquee-track-wrap');
     if (!track || !wrap) return;
-    let isDragging = false, startX = 0, scrollLeft = 0, dragOffset = 0;
 
-    function pause()  { track.style.animationPlayState = 'paused'; }
-    function resume() { track.style.animationPlayState = 'running'; }
+    // Kill CSS animation — JS drives scrolling instead
+    track.style.animation = 'none';
 
+    const SPEED = 0.7; // px per frame auto-scroll
+    let offset    = 0;
+    let halfWidth = 0;
+    let dragging  = false;
+    let lastX     = 0;
+
+    function init() {
+        halfWidth = track.scrollWidth / 2;
+        requestAnimationFrame(tick);
+    }
+
+    function tick() {
+        if (!dragging) {
+            offset -= SPEED;
+            if (Math.abs(offset) >= halfWidth) offset += halfWidth;
+        }
+        track.style.transform = `translateX(${offset}px)`;
+        requestAnimationFrame(tick);
+    }
+
+    // Mouse
     wrap.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        startX = e.pageX;
-        dragOffset = 0;
-        pause();
+        dragging = true;
+        lastX = e.clientX;
         wrap.style.cursor = 'grabbing';
+        e.preventDefault();
     });
-    window.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        dragOffset = e.pageX - startX;
-        const matrix = new WebKitCSSMatrix(getComputedStyle(track).transform);
-        track.style.transform = `translateX(${matrix.m41 + (e.pageX - startX - dragOffset + dragOffset)}px)`;
-        startX = e.pageX;
-        const matrix2 = new WebKitCSSMatrix(getComputedStyle(track).transform);
-        track.style.transform = `translateX(${matrix2.m41 + (e.pageX - startX)}px)`;
+    document.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        offset += e.clientX - lastX;
+        if (offset > 0) offset -= halfWidth;
+        if (Math.abs(offset) >= halfWidth) offset += halfWidth;
+        lastX = e.clientX;
     });
-    window.addEventListener('mouseup', () => {
-        if (!isDragging) return;
-        isDragging = false;
-        wrap.style.cursor = '';
-        setTimeout(resume, 800);
+    document.addEventListener('mouseup', () => {
+        dragging = false;
+        wrap.style.cursor = 'grab';
     });
 
-    // Touch support
-    wrap.addEventListener('touchstart', (e) => { startX = e.touches[0].pageX; pause(); }, { passive: true });
-    wrap.addEventListener('touchmove', (e) => {
-        const dx = e.touches[0].pageX - startX;
-        const matrix = new WebKitCSSMatrix(getComputedStyle(track).transform);
-        track.style.transform = `translateX(${matrix.m41 + dx}px)`;
-        startX = e.touches[0].pageX;
+    // Touch
+    wrap.addEventListener('touchstart', (e) => {
+        dragging = true;
+        lastX = e.touches[0].clientX;
     }, { passive: true });
-    wrap.addEventListener('touchend', () => setTimeout(resume, 800));
+    wrap.addEventListener('touchmove', (e) => {
+        if (!dragging) return;
+        offset += e.touches[0].clientX - lastX;
+        if (offset > 0) offset -= halfWidth;
+        if (Math.abs(offset) >= halfWidth) offset += halfWidth;
+        lastX = e.touches[0].clientX;
+    }, { passive: true });
+    wrap.addEventListener('touchend', () => { dragging = false; });
+
+    // Init after images load so scrollWidth is correct
+    if (document.readyState === 'complete') { init(); }
+    else { window.addEventListener('load', init); }
 })();
 </script>
 </body>
