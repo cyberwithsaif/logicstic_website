@@ -2414,3 +2414,75 @@ textarea.form-control {
   .perks-grid { grid-template-columns: 1fr; }
   .job-card { flex-direction: column; align-items: flex-start; }
 }
+/* ── CLIENTS MARQUEE ─────────────────────────────────────────────────────── */
+.clients-marquee-section {
+    background: #0b1f3a;
+    padding: 36px 0 32px;
+    overflow: hidden;
+}
+.clients-marquee-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+.clients-marquee-line {
+    flex: 0 0 40px;
+    height: 1px;
+    background: rgba(217,165,33,0.5);
+}
+.clients-marquee-label {
+    color: #d9a521;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    white-space: nowrap;
+}
+.clients-marquee-track-wrap {
+    overflow: hidden;
+    /* fade edges */
+    mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+}
+.clients-marquee-track {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    animation: clients-scroll 38s linear infinite;
+}
+.clients-marquee-track:hover { animation-play-state: paused; }
+@keyframes clients-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+.client-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 50px;
+    padding: 10px 20px;
+    white-space: nowrap;
+    cursor: default;
+    transition: background 0.25s, border-color 0.25s, transform 0.2s;
+    flex-shrink: 0;
+}
+.client-chip:hover {
+    background: rgba(217,165,33,0.1);
+    border-color: rgba(217,165,33,0.4);
+    transform: translateY(-2px);
+}
+.client-chip-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+.client-chip-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #c8d4e8;
+    letter-spacing: 0.3px;
+}
+.client-chip:hover .client-chip-name { color: #d9a521; }
