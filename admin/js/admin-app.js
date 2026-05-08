@@ -67,12 +67,6 @@ async function loadContent() {
 function populateSettings() {
     const s = siteContent.settings || {};
 
-    // Chat
-    const chatEnabled = document.getElementById('chat-enabled');
-    const chatCode = document.getElementById('chat-code');
-    if (chatEnabled) chatEnabled.checked = !!(s.chat?.enabled);
-    if (chatCode) chatCode.value = s.chat?.code || '';
-
     // WhatsApp
     const waEnabled = document.getElementById('wa-enabled');
     const waNumber = document.getElementById('wa-number');
@@ -272,12 +266,6 @@ async function quickSave() {
 async function saveSettings() {
     if (!siteContent.settings) siteContent.settings = {};
     const s = siteContent.settings;
-
-    // Chat
-    s.chat = {
-        enabled: document.getElementById('chat-enabled')?.checked || false,
-        code: document.getElementById('chat-code')?.value || ''
-    };
 
     // WhatsApp
     s.whatsappEnabled = document.getElementById('wa-enabled')?.checked !== false;
@@ -718,13 +706,20 @@ function strColor(str) {
 function playNotif() {
     try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.connect(g); g.connect(ctx.destination);
-        o.frequency.value = 880; o.type = 'sine';
-        g.gain.setValueAtTime(0.1, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-        o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3);
+        let count = 0;
+        function beep() {
+            if (count >= 3) { setTimeout(() => ctx.close(), 500); return; }
+            count++;
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.connect(g); g.connect(ctx.destination);
+            o.frequency.value = 880; o.type = 'sine';
+            g.gain.setValueAtTime(0.15, ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+            o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.45);
+            setTimeout(beep, 1000);
+        }
+        beep();
     } catch(e) {}
 }
 
@@ -740,3 +735,4 @@ function renderChatHeader(sessionId) {
 startClock();
 loadContent();
 loadQuotes();
+initAdminChat(); // connect socket on load so nav badge updates immediately
