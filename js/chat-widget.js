@@ -322,7 +322,7 @@
         div.className = `agl-msg ${from}`;
         const time = new Date(ts).toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
         div.innerHTML = `<div class="agl-msg-bubble">${escHtml(text)}</div><div class="agl-msg-time">${time}</div>`;
-        msgBox.insertBefore(div, typingEl);
+        msgBox.appendChild(div);
         msgBox.scrollTop = msgBox.scrollHeight;
     }
 
@@ -334,7 +334,7 @@
             div.className = `agl-msg ${m.from}`;
             const time = new Date(m.ts).toLocaleTimeString('en-IN', { hour:'2-digit', minute:'2-digit' });
             div.innerHTML = `<div class="agl-msg-bubble">${escHtml(m.text)}</div><div class="agl-msg-time">${time}</div>`;
-            msgBox.insertBefore(div, typingEl);
+            msgBox.appendChild(div);
         });
         msgBox.scrollTop = msgBox.scrollHeight;
     }
