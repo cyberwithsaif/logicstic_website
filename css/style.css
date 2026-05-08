@@ -2448,41 +2448,75 @@ textarea.form-control {
 }
 .clients-marquee-track {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     width: max-content;
-    animation: clients-scroll 38s linear infinite;
+    animation: clients-scroll 45s linear infinite;
 }
 .clients-marquee-track:hover { animation-play-state: paused; }
 @keyframes clients-scroll {
     from { transform: translateX(0); }
     to   { transform: translateX(-50%); }
 }
-.client-chip {
+/* client cards with real logos */
+.client-card {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 10px;
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.09);
-    border-radius: 50px;
-    padding: 10px 20px;
-    white-space: nowrap;
+    border-radius: 16px;
+    padding: 18px 24px 14px;
+    width: 160px;
+    flex-shrink: 0;
     cursor: default;
     transition: background 0.25s, border-color 0.25s, transform 0.2s;
+}
+.client-card:hover {
+    background: rgba(217,165,33,0.08);
+    border-color: rgba(217,165,33,0.35);
+    transform: translateY(-3px);
+}
+.client-logo-wrap {
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+.client-logo-img {
+    max-height: 52px;
+    max-width: 120px;
+    width: auto;
+    object-fit: contain;
+    filter: brightness(0) invert(1);
+    opacity: 0.75;
+    transition: opacity 0.25s;
+}
+.client-card:hover .client-logo-img {
+    opacity: 1;
+    filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg);
+}
+.client-initials {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 1px;
     flex-shrink: 0;
 }
-.client-chip:hover {
-    background: rgba(217,165,33,0.1);
-    border-color: rgba(217,165,33,0.4);
-    transform: translateY(-2px);
-}
-.client-chip-icon {
-    font-size: 1.1rem;
-    line-height: 1;
-}
-.client-chip-name {
-    font-size: 0.82rem;
+.client-card-name {
+    font-size: 0.72rem;
     font-weight: 600;
-    color: #c8d4e8;
-    letter-spacing: 0.3px;
+    color: #8fa8c8;
+    text-align: center;
+    letter-spacing: 0.2px;
+    line-height: 1.35;
+    transition: color 0.25s;
 }
-.client-chip:hover .client-chip-name { color: #d9a521; }
+.client-card:hover .client-card-name { color: #d9a521; }
