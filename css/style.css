@@ -2478,24 +2478,32 @@ textarea.form-control {
     transform: translateY(-3px);
 }
 .client-logo-wrap {
-    height: 52px;
+    height: 60px;
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    transition: box-shadow 0.25s;
+}
+.client-card:hover .client-logo-wrap {
+    box-shadow: 0 0 0 2px rgba(217,165,33,0.5);
 }
 .client-logo-img {
-    max-height: 52px;
+    max-height: 44px;
     max-width: 120px;
     width: auto;
     object-fit: contain;
-    filter: brightness(0) invert(1);
-    opacity: 0.75;
-    transition: opacity 0.25s;
+    filter: none;
+    opacity: 1;
+    transition: transform 0.25s;
 }
 .client-card:hover .client-logo-img {
-    opacity: 1;
-    filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg);
+    transform: scale(1.05);
+    filter: none;
 }
 .client-initials {
     width: 52px;
