@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGL Admin Panel | Ashtam Global Logistics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/admin-style.css?v=1778100002">
+    <link rel="stylesheet" href="css/admin-style.css?v=1778100003">
 </head>
 <body>
 <div class="admin-wrapper">
@@ -26,6 +26,10 @@
             <button class="nav-item" data-tab="quotes">
                 <i class="fas fa-envelope-open-text"></i> Quote Requests
                 <span class="nav-badge" id="nav-unread-badge" style="display:none">0</span>
+            </button>
+            <button class="nav-item" data-tab="chat">
+                <i class="fas fa-comments"></i> Live Chat
+                <span class="nav-badge" id="nav-chat-badge" style="display:none">0</span>
             </button>
             <button class="nav-item" data-tab="settings">
                 <i class="fas fa-cog"></i> Settings
@@ -209,6 +213,45 @@
             <div id="quotes-list"></div>
         </div>
 
+        <!-- ===== LIVE CHAT TAB ===== -->
+        <div class="tab-content" id="tab-chat">
+            <div class="chat-admin-layout">
+
+                <!-- Left: session list -->
+                <div class="ca-sidebar">
+                    <div class="ca-sidebar-head">
+                        <div>
+                            <h3>Live Chat</h3>
+                            <span id="ca-online-count" class="ca-online-pill">0 online</span>
+                        </div>
+                        <div id="ca-conn-status" class="ca-conn-dot offline" title="Connecting…"></div>
+                    </div>
+                    <div class="ca-search-wrap">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="ca-search" placeholder="Search visitors…" oninput="filterSessions(this.value)">
+                    </div>
+                    <div id="ca-sessions" class="ca-sessions-list">
+                        <div class="ca-empty-sessions">
+                            <i class="fas fa-satellite-dish"></i>
+                            <p>Waiting for visitors…</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: message thread -->
+                <div class="ca-main" id="ca-main">
+                    <div class="ca-no-chat">
+                        <div class="ca-no-chat-inner">
+                            <i class="fas fa-comments"></i>
+                            <h3>No conversation selected</h3>
+                            <p>Click a visitor on the left to start chatting</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
         <!-- ===== SETTINGS TAB ===== -->
         <div class="tab-content" id="tab-settings">
 
@@ -318,6 +361,6 @@
     </main>
 </div>
 
-<script src="js/admin-app.js?v=1778100002"></script>
+<script src="js/admin-app.js?v=1778100003"></script>
 </body>
 </html>

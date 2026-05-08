@@ -1,6 +1,13 @@
 // ===== STATE =====
 let siteContent = {};
 
+// ===== ADMIN LIVE CHAT STATE =====
+let adminSocket     = null;
+let chatSessions    = {};        // sessionId → session object
+let activeChatId    = null;      // currently open conversation
+let totalChatUnread = 0;
+let adminTypingTimer= null;
+
 // ===== TOAST =====
 function showToast(msg, type = 'success') {
     const t = document.createElement('div');
@@ -17,8 +24,9 @@ function esc(s) {
 // ===== TAB NAVIGATION =====
 const tabTitles = {
     dashboard: ['Dashboard', 'Welcome back, Administrator'],
-    quotes: ['Quote Requests', 'Manage incoming quote requests'],
-    settings: ['Settings', 'Configure website options — changes go live on save']
+    quotes:    ['Quote Requests', 'Manage incoming quote requests'],
+    chat:      ['Live Chat', 'Real-time chat with website visitors'],
+    settings:  ['Settings', 'Configure website options — changes go live on save']
 };
 
 function switchTab(tab) {
@@ -33,6 +41,7 @@ function switchTab(tab) {
     const saveBtn = document.getElementById('save-btn');
     if (saveBtn) saveBtn.style.display = tab === 'settings' ? 'inline-flex' : 'none';
     if (tab === 'quotes') loadQuotes();
+    if (tab === 'chat')   initAdminChat();
 }
 
 document.querySelectorAll('.nav-item').forEach(btn => {
@@ -401,6 +410,330 @@ async function deleteQuote(id) {
         updateDashboardStats();
         showToast('Quote deleted');
     } catch(e) { showToast('Failed to delete', 'error'); }
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ADMIN LIVE CHAT
+// ═══════════════════════════════════════════════════════════════
+let chatInitialized = false;
+
+function initAdminChat() {
+    if (chatInitialized) return;
+    chatInitialized = true;
+
+    // Load Socket.IO client
+    if (!window.io) {
+        const s = document.createElement('script');
+        s.src = '/socket.io/socket.io.js';
+        s.onload = connectAdminSocket;
+        document.head.appendChild(s);
+    } else {
+        connectAdminSocket();
+    }
+}
+
+function connectAdminSocket() {
+    adminSocket = window.io({ transports: ['websocket', 'polling'] });
+
+    adminSocket.on('connect', () => {
+        setConnStatus(true);
+        adminSocket.emit('admin:auth');
+    });
+
+    adminSocket.on('admin:ready', ({ sessions }) => {
+        chatSessions = {};
+        sessions.forEach(s => chatSessions[s.id] = s);
+        renderSessionList();
+        updateChatNavBadge();
+    });
+
+    adminSocket.on('admin:auth-fail', () => {
+        setConnStatus(false);
+        showToast('Chat auth failed — please re-login', 'error');
+    });
+
+    // New visitor joined
+    adminSocket.on('chat:visitor-joined', (session) => {
+        chatSessions[session.id] = session;
+        renderSessionList();
+        showToast(`New visitor: ${session.username} (${session.ip})`, 'success');
+    });
+
+    // Visitor left
+    adminSocket.on('chat:visitor-left', (sessionId) => {
+        if (chatSessions[sessionId]) {
+            chatSessions[sessionId].active = false;
+            renderSessionList();
+            if (activeChatId === sessionId) renderChatHeader(sessionId);
+        }
+    });
+
+    // Visitor sent a message
+    adminSocket.on('chat:new-message', ({ sessionId, msg, unread }) => {
+        if (!chatSessions[sessionId]) return;
+        chatSessions[sessionId].messages.push(msg);
+        chatSessions[sessionId].unread = unread;
+        renderSessionList();
+
+        if (activeChatId === sessionId) {
+            appendAdminMsg(msg, sessionId);
+            adminSocket.emit('admin:read', sessionId);
+            chatSessions[sessionId].unread = 0;
+            renderSessionList();
+        }
+
+        totalChatUnread = Object.values(chatSessions).reduce((a, s) => a + (s.unread || 0), 0);
+        updateChatNavBadge();
+
+        // Notification sound
+        playNotif();
+    });
+
+    // Admin reply echo (from other tabs / multi-admin)
+    adminSocket.on('chat:reply-sent', ({ sessionId, msg }) => {
+        if (!chatSessions[sessionId]) return;
+        chatSessions[sessionId].messages.push(msg);
+        if (activeChatId === sessionId) appendAdminMsg(msg, sessionId);
+    });
+
+    // Visitor typing
+    adminSocket.on('chat:visitor-typing', ({ sessionId, isTyping }) => {
+        if (activeChatId !== sessionId) return;
+        const te = document.getElementById('ca-typing-indicator');
+        if (te) te.style.display = isTyping ? 'flex' : 'none';
+        scrollChatToBottom();
+    });
+
+    // Session read ack
+    adminSocket.on('chat:session-read', (sessionId) => {
+        if (chatSessions[sessionId]) chatSessions[sessionId].unread = 0;
+        renderSessionList();
+        totalChatUnread = Object.values(chatSessions).reduce((a, s) => a + (s.unread || 0), 0);
+        updateChatNavBadge();
+    });
+
+    adminSocket.on('disconnect', () => setConnStatus(false));
+    adminSocket.on('connect_error', () => setConnStatus(false));
+}
+
+// ── RENDER SESSION LIST ──────────────────────────────────────────────────────
+function renderSessionList(filter = '') {
+    const el = document.getElementById('ca-sessions');
+    if (!el) return;
+
+    const sessions = Object.values(chatSessions)
+        .filter(s => !filter || s.username.toLowerCase().includes(filter.toLowerCase()) || s.ip.includes(filter))
+        .sort((a, b) => {
+            if (a.active !== b.active) return b.active - a.active;
+            const aLast = a.messages[a.messages.length - 1]?.ts || 0;
+            const bLast = b.messages[b.messages.length - 1]?.ts || 0;
+            return bLast - aLast;
+        });
+
+    const online = sessions.filter(s => s.active).length;
+    const pill = document.getElementById('ca-online-count');
+    if (pill) { pill.textContent = `${online} online`; pill.className = `ca-online-pill ${online > 0 ? 'has-online' : ''}`; }
+
+    if (!sessions.length) {
+        el.innerHTML = `<div class="ca-empty-sessions"><i class="fas fa-satellite-dish"></i><p>Waiting for visitors…</p></div>`;
+        return;
+    }
+
+    el.innerHTML = sessions.map(s => {
+        const last    = s.messages[s.messages.length - 1];
+        const preview = last ? (last.from === 'admin' ? '↩ ' : '') + esc(last.text).substring(0, 40) : 'No messages yet';
+        const timeAgo = last ? fmtTime(last.ts) : fmtTime(s.joinedAt);
+        const isActive = s.id === activeChatId;
+        return `
+        <div class="ca-session-item ${isActive ? 'active' : ''} ${!s.active ? 'offline' : ''}"
+             onclick="openChatSession('${s.id}')">
+            <div class="ca-sess-avatar" style="background:${strColor(s.username)}">
+                ${s.username.charAt(0)}
+                <span class="ca-sess-dot ${s.active ? 'online' : 'offline'}"></span>
+            </div>
+            <div class="ca-sess-info">
+                <div class="ca-sess-name">
+                    ${esc(s.username)}
+                    ${s.unread > 0 ? `<span class="ca-unread-badge">${s.unread}</span>` : ''}
+                </div>
+                <div class="ca-sess-preview">${preview}</div>
+                <div class="ca-sess-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> ${esc(s.page)}</span>
+                    <span>${timeAgo}</span>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function filterSessions(val) { renderSessionList(val); }
+
+// ── OPEN CONVERSATION ────────────────────────────────────────────────────────
+function openChatSession(sessionId) {
+    activeChatId = sessionId;
+    const s = chatSessions[sessionId];
+    if (!s) return;
+
+    // Mark read
+    s.unread = 0;
+    adminSocket.emit('admin:read', sessionId);
+    renderSessionList();
+    totalChatUnread = Object.values(chatSessions).reduce((a, x) => a + (x.unread || 0), 0);
+    updateChatNavBadge();
+
+    const main = document.getElementById('ca-main');
+    main.innerHTML = `
+        <div class="ca-chat-header" id="ca-chat-header">
+            <div class="ca-ch-avatar" style="background:${strColor(s.username)}">${s.username.charAt(0)}</div>
+            <div class="ca-ch-info">
+                <div class="ca-ch-name">${esc(s.username)}</div>
+                <div class="ca-ch-meta">
+                    <span><i class="fas fa-globe"></i> ${esc(s.ip)}</span>
+                    <span><i class="fas fa-file"></i> ${esc(s.page)}</span>
+                    <span id="ca-online-status" class="${s.active ? 'ca-status-online' : 'ca-status-offline'}">
+                        <i class="fas fa-circle" style="font-size:.5rem"></i>
+                        ${s.active ? 'Online' : 'Disconnected'}
+                    </span>
+                </div>
+            </div>
+            <button class="ca-clear-btn" onclick="clearChatSession('${sessionId}')" title="Remove session">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+        <div class="ca-messages" id="ca-messages"></div>
+        <div class="ca-typing-indicator" id="ca-typing-indicator" style="display:none">
+            <span class="ca-typing-dots"><span></span><span></span><span></span></span>
+            <span style="font-size:.72rem;color:var(--text-muted)">${esc(s.username)} is typing…</span>
+        </div>
+        <div class="ca-input-area">
+            <textarea id="ca-input" placeholder="Type your reply… (Enter to send, Shift+Enter for new line)"
+                ${!s.active ? 'disabled' : ''}></textarea>
+            <button id="ca-send-btn" onclick="sendAdminReply()" ${!s.active ? 'disabled' : ''}>
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>`;
+
+    // Render history
+    const msgEl = document.getElementById('ca-messages');
+    if (s.messages.length) {
+        s.messages.forEach(m => appendAdminMsg(m, sessionId, true));
+    } else {
+        msgEl.innerHTML = `<div class="ca-msgs-empty"><i class="fas fa-comment-slash"></i><p>No messages yet. Visitor hasn't sent anything.</p></div>`;
+    }
+    scrollChatToBottom();
+
+    // Input events
+    const inp = document.getElementById('ca-input');
+    if (inp) {
+        inp.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAdminReply(); }
+        });
+        inp.addEventListener('input', () => {
+            inp.style.height = 'auto';
+            inp.style.height = Math.min(inp.scrollHeight, 100) + 'px';
+            adminSocket.emit('admin:typing', { sessionId, isTyping: !!inp.value.trim() });
+            clearTimeout(adminTypingTimer);
+            adminTypingTimer = setTimeout(() => adminSocket.emit('admin:typing', { sessionId, isTyping: false }), 1500);
+        });
+    }
+}
+
+// ── SEND REPLY ───────────────────────────────────────────────────────────────
+function sendAdminReply() {
+    const inp = document.getElementById('ca-input');
+    if (!inp || !activeChatId) return;
+    const text = inp.value.trim();
+    if (!text) return;
+    adminSocket.emit('admin:reply', { sessionId: activeChatId, text });
+    adminSocket.emit('admin:typing', { sessionId: activeChatId, isTyping: false });
+    inp.value = '';
+    inp.style.height = 'auto';
+}
+
+// ── APPEND MESSAGE ───────────────────────────────────────────────────────────
+function appendAdminMsg(msg, sessionId, bulk = false) {
+    const msgEl = document.getElementById('ca-messages');
+    if (!msgEl) return;
+    const emptyEl = msgEl.querySelector('.ca-msgs-empty');
+    if (emptyEl) emptyEl.remove();
+    const div = document.createElement('div');
+    div.className = `ca-msg ${msg.from === 'admin' ? 'ca-msg-admin' : 'ca-msg-visitor'}`;
+    const time = new Date(msg.ts).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    div.innerHTML = `
+        <div class="ca-msg-bubble">${esc(msg.text).replace(/\n/g,'<br>')}</div>
+        <div class="ca-msg-time">${msg.from === 'admin' ? 'You' : esc(chatSessions[sessionId]?.username || 'Visitor')} · ${time}</div>`;
+    msgEl.appendChild(div);
+    if (!bulk) scrollChatToBottom();
+}
+
+function scrollChatToBottom() {
+    const el = document.getElementById('ca-messages');
+    if (el) el.scrollTop = el.scrollHeight;
+}
+
+// ── REMOVE SESSION ───────────────────────────────────────────────────────────
+function clearChatSession(sessionId) {
+    if (!confirm('Remove this conversation?')) return;
+    delete chatSessions[sessionId];
+    if (activeChatId === sessionId) {
+        activeChatId = null;
+        const main = document.getElementById('ca-main');
+        if (main) main.innerHTML = `<div class="ca-no-chat"><div class="ca-no-chat-inner"><i class="fas fa-comments"></i><h3>No conversation selected</h3><p>Click a visitor on the left to start chatting</p></div></div>`;
+    }
+    renderSessionList();
+    updateChatNavBadge();
+}
+
+// ── HELPERS ──────────────────────────────────────────────────────────────────
+function setConnStatus(online) {
+    const el = document.getElementById('ca-conn-status');
+    if (el) { el.className = `ca-conn-dot ${online ? 'online' : 'offline'}`; el.title = online ? 'Connected' : 'Disconnected'; }
+}
+
+function updateChatNavBadge() {
+    const b = document.getElementById('nav-chat-badge');
+    if (!b) return;
+    const total = Object.values(chatSessions).reduce((a, s) => a + (s.unread || 0), 0);
+    b.textContent = total;
+    b.style.display = total > 0 ? 'inline-flex' : 'none';
+}
+
+function fmtTime(ts) {
+    const d = new Date(ts);
+    const now = new Date();
+    const diff = Math.floor((now - d) / 1000);
+    if (diff < 60) return 'just now';
+    if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+    if (diff < 86400) return d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+}
+
+function strColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    const h = Math.abs(hash) % 360;
+    return `hsl(${h},55%,35%)`;
+}
+
+function playNotif() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.connect(g); g.connect(ctx.destination);
+        o.frequency.value = 880; o.type = 'sine';
+        g.gain.setValueAtTime(0.1, ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3);
+    } catch(e) {}
+}
+
+function renderChatHeader(sessionId) {
+    const s = chatSessions[sessionId];
+    const el = document.getElementById('ca-online-status');
+    if (!el || !s) return;
+    el.className = s.active ? 'ca-status-online' : 'ca-status-offline';
+    el.innerHTML = `<i class="fas fa-circle" style="font-size:.5rem"></i> ${s.active ? 'Online' : 'Disconnected'}`;
 }
 
 // ===== INIT =====

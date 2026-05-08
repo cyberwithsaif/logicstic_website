@@ -81,20 +81,12 @@
             }
         }
 
-        // --- Chat Widget ---
+        // --- Built-in Live Chat Widget ---
         const chat = content.settings?.chat;
-        if (chat?.enabled && chat?.code && chat.code.trim()) {
-            const chatContainer = document.createElement('div');
-            chatContainer.id = 'agl-chat-widget';
-            chatContainer.innerHTML = chat.code;
-            document.body.appendChild(chatContainer);
-            // Re-execute any script tags injected via innerHTML
-            chatContainer.querySelectorAll('script').forEach(oldScript => {
-                const newScript = document.createElement('script');
-                Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                newScript.textContent = oldScript.textContent;
-                oldScript.parentNode.replaceChild(newScript, oldScript);
-            });
+        if (chat?.enabled !== false) {
+            const s = document.createElement('script');
+            s.src = '/js/chat-widget.js';
+            document.body.appendChild(s);
         }
 
     } catch (err) {

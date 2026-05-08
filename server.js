@@ -1,119 +1,183 @@
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const fs = require('fs-extra');
-const path = require('path');
+const express  = require('express');
+const session   = require('express-session');
+const bodyParser= require('body-parser');
+const fs        = require('fs-extra');
+const path      = require('path');
+const http      = require('http');
+const { Server }= require('socket.io');
 
-const app = express();
+const app  = express();
+const httpServer = http.createServer(app);
+const io   = new Server(httpServer, { cors: { origin: '*' } });
 const PORT = process.env.PORT || 3000;
 
-// In-memory cache for content.json
-let contentCache = null;
-let contentCacheTime = 0;
-const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
-// Middleware
+// ===== SESSION MIDDLEWARE (shared with Socket.IO) =====
+const sessionMiddleware = session({
+    secret: 'agl-secret-key-2026',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+});
+
+// ===== BODY PARSERS =====
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Serve PDFs with correct MIME type
+// ===== STATIC FILES =====
 app.use('/certificates', express.static(path.join(__dirname, 'certificates'), {
-    type: 'application/pdf',
-    setHeaders: (res, path) => {
+    setHeaders: (res) => {
         res.set('Content-Type', 'application/pdf');
         res.set('Content-Disposition', 'inline');
     }
 }));
-
 app.use(express.static(path.join(__dirname, '/'), {
     extensions: ['html', 'htm'],
-    maxAge: 0,         // No caching — always fetch latest
-    etag: false,
-    lastModified: false
-}));
-app.use(session({
-    secret: 'agl-secret-key-2026',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } // Set to true if using HTTPS
+    maxAge: 0, etag: false, lastModified: false
 }));
 
+// ===== SESSION =====
+app.use(sessionMiddleware);
+
+// Share session with Socket.IO
+io.use((socket, next) => sessionMiddleware(socket.request, socket.request.res || {}, next));
+
+// ===== CONTENT CACHE =====
+let contentCache = null, contentCacheTime = 0;
+const CACHE_TTL = 5 * 60 * 1000;
 const CONTENT_FILE = path.join(__dirname, 'content.json');
-const QUOTES_FILE = path.join(__dirname, 'quotes.json');
+const QUOTES_FILE  = path.join(__dirname, 'quotes.json');
 
-// Initialize content.json if it doesn't exist
-async function initContent() {
-    if (!await fs.pathExists(CONTENT_FILE)) {
-        const initialContent = {
-            hero: {
-                title: "Delivering Precision. Ensuring Safety. Building Trust.",
-                subtitle: "India's Leading Specialist in Heavy & Over-Dimensional Cargo Logistics.",
-                stats: [
-                    { label: "Years of Experience", value: "15+" },
-                    { label: "Successful Projects", value: "500+" },
-                    { label: "Cities Covered", value: "2000+" },
-                    { label: "Commitment to Safety", value: "100%" }
-                ]
-            },
-            about: {
-                title: "Excellence in Heavy Logistics",
-                description1: "Ashtam Global Logistics Pvt. Ltd. is a dynamic startup logistics company committed to delivering reliable, efficient, and customized logistics solutions.",
-                description2: "We specialize in end-to-end logistics solutions for Defence, Power Transformers, Hydro Projects, Oil & Gas, Energy, Infrastructure, Renewables, and Heavy Engineering industries.",
-                features: ["Zero-Compromise Safety", "Deadline-Focused Execution", "Technical Expertise", "Seamless Global Logistics"]
-            },
-            projects: [
-                { id: 1, title: "Mega Transformer Transport", category: "Heavy Haulage", description: "Multi-axle transportation of 250MT transformer across 12 states.", image: "images/secind.webp" },
-                { id: 2, title: "Wind Turbine Logistics", category: "Renewable Energy", description: "Delivery of wind turbine blades to remote hilly terrains.", image: "images/secind (1).webp" }
-            ],
-            services: {
-                transformer: { title: "Transformer Transportation Services", subtitle: "End-to-End Power Logistics", description: "End-to-end logistics for oversized power transformers.", features: ["Route surveys", "Multi-axle trailers", "State approvals", "Escort vehicles"] },
-                contract: { title: "Contract Integrated Logistics", subtitle: "Comprehensive Supply Chain", description: "Contract-based integrated logistics solutions.", features: ["Dedicated fleet", "Real-time tracking", "Customs clearance", "Performance reviews"] },
-                general: { title: "General Logistics Services", subtitle: "Agile Freight Solutions", description: "Urgent and JIT cargo movements.", features: ["Short-notice loads", "Pan-India 48hr", "Multi-modal", "Spot pricing"] },
-                international: { title: "International Logistics Services", subtitle: "Global Freight Forwarding", description: "Global supply chain solutions.", features: ["Ocean freight", "Air freight", "Customs brokerage", "190+ countries"] }
-            },
-            industries: [
-                { id: 1, name: "Defence & Aerospace", image: "images/industry.webp" },
-                { id: 2, name: "Power & Energy", image: "images/industry.webp" }
-            ],
-            contact: {
-                address: "699/210 Laxman Vihar-II, G.No-1, Gurugram, Haryana 122001, India",
-                phone: "+91 98765 43210",
-                email: "info@ashtamglobal.com"
-            }
-        };
-        await fs.writeJson(CONTENT_FILE, initialContent, { spaces: 4 });
-    }
+// ===== CHAT STATE (in-memory) =====
+const chatSessions = new Map(); // socketId → session object
+const adminSockets = new Set(); // admin socket IDs
+
+function generateUsername() {
+    const adjs  = ['Swift','Bold','Bright','Quick','Smart','Calm','Brave','Sharp','Cool','Wise','Fast','Blue','Dark','Wild','Iron'];
+    const nouns = ['Eagle','Tiger','Falcon','Wolf','Shark','Bear','Lion','Hawk','Fox','Cobra','Raven','Storm','River','Scout','Blaze'];
+    const num   = Math.floor(Math.random() * 9000) + 1000;
+    return adjs[Math.floor(Math.random()*adjs.length)] + nouns[Math.floor(Math.random()*nouns.length)] + '#' + num;
 }
 
-initContent();
+// ===== SOCKET.IO CHAT =====
+io.on('connection', (socket) => {
+    const rawIp = socket.handshake.headers['x-forwarded-for'] || socket.handshake.address || 'Unknown';
+    const ip    = rawIp.split(',')[0].replace('::ffff:', '').trim();
 
-// Auth Middleware
-const checkAuth = (req, res, next) => {
-    if (req.session.authenticated) {
-        next();
-    } else {
-        // If it's an API request, return JSON instead of redirecting
-        if (req.path.startsWith('/api/admin/')) {
-            return res.status(401).json({ success: false, message: 'Session expired. Please log in again.' });
+    // ── VISITOR: join ──────────────────────────────────────────────────────────
+    socket.on('visitor:join', (data) => {
+        const username = generateUsername();
+        const session  = {
+            id: socket.id, username, ip,
+            page     : data.page || '/',
+            messages : [],
+            unread   : 0,
+            joinedAt : new Date().toISOString(),
+            active   : true
+        };
+        chatSessions.set(socket.id, session);
+        socket.emit('visitor:ready', { username });
+        io.to('admin-room').emit('chat:visitor-joined', session);
+    });
+
+    // ── VISITOR: send message ──────────────────────────────────────────────────
+    socket.on('visitor:message', (text) => {
+        const s = chatSessions.get(socket.id);
+        if (!s || !text?.trim()) return;
+        const msg = { from: 'visitor', text: text.trim(), ts: Date.now() };
+        s.messages.push(msg);
+        s.unread++;
+        socket.emit('visitor:echo', msg);
+        io.to('admin-room').emit('chat:new-message', { sessionId: socket.id, msg, unread: s.unread });
+    });
+
+    // ── VISITOR: typing indicator ──────────────────────────────────────────────
+    socket.on('visitor:typing', (isTyping) => {
+        io.to('admin-room').emit('chat:visitor-typing', { sessionId: socket.id, isTyping });
+    });
+
+    // ── ADMIN: authenticate via shared session ─────────────────────────────────
+    socket.on('admin:auth', () => {
+        if (!socket.request.session?.authenticated) {
+            socket.emit('admin:auth-fail');
+            return;
         }
-        res.redirect('/admin/login.html');
-    }
-};
+        adminSockets.add(socket.id);
+        socket.join('admin-room');
+        socket.emit('admin:ready', { sessions: [...chatSessions.values()] });
+    });
 
-// API Endpoints
-app.get('/api/content', async (req, res) => {
-    const now = Date.now();
-    // Serve from cache if fresh
-    if (contentCache && (now - contentCacheTime) < CACHE_TTL) {
-        res.set('Cache-Control', 'public, max-age=300');
-        return res.json(contentCache);
-    }
-    const content = await fs.readJson(CONTENT_FILE);
-    contentCache = content;
-    contentCacheTime = now;
-    res.set('Cache-Control', 'public, max-age=300');
-    res.json(content);
+    // ── ADMIN: reply to visitor ────────────────────────────────────────────────
+    socket.on('admin:reply', ({ sessionId, text }) => {
+        if (!adminSockets.has(socket.id) || !text?.trim()) return;
+        const s = chatSessions.get(sessionId);
+        if (!s) { socket.emit('chat:error', 'Visitor session not found'); return; }
+        const msg = { from: 'admin', text: text.trim(), ts: Date.now() };
+        s.messages.push(msg);
+        s.unread = 0;
+        io.to(sessionId).emit('admin:message', msg);           // to visitor
+        io.to('admin-room').emit('chat:reply-sent', { sessionId, msg }); // to all admins
+    });
+
+    // ── ADMIN: typing indicator to visitor ────────────────────────────────────
+    socket.on('admin:typing', ({ sessionId, isTyping }) => {
+        if (!adminSockets.has(socket.id)) return;
+        io.to(sessionId).emit('admin:typing', isTyping);
+    });
+
+    // ── ADMIN: mark conversation read ─────────────────────────────────────────
+    socket.on('admin:read', (sessionId) => {
+        const s = chatSessions.get(sessionId);
+        if (s) { s.unread = 0; }
+        io.to('admin-room').emit('chat:session-read', sessionId);
+    });
+
+    // ── DISCONNECT ─────────────────────────────────────────────────────────────
+    socket.on('disconnect', () => {
+        if (adminSockets.has(socket.id)) {
+            adminSockets.delete(socket.id);
+        } else {
+            const s = chatSessions.get(socket.id);
+            if (s) {
+                s.active = false;
+                io.to('admin-room').emit('chat:visitor-left', socket.id);
+            }
+        }
+    });
 });
 
+// ===== INIT CONTENT =====
+async function initContent() {
+    if (!await fs.pathExists(CONTENT_FILE)) {
+        await fs.writeJson(CONTENT_FILE, {
+            hero: { title: "Delivering Precision. Ensuring Safety. Building Trust.", subtitle: "India's Leading Specialist in Heavy & Over-Dimensional Cargo Logistics.", stats: [{ label:"Years of Experience",value:"15+" },{ label:"Successful Projects",value:"500+" },{ label:"Cities Covered",value:"2000+" },{ label:"Commitment to Safety",value:"100%" }] },
+            about: { title: "Excellence in Heavy Logistics", description1: "", description2: "", features: [] },
+            projects: [], services: {}, industries: [],
+            contact: { address: "", phone: "", email: "" },
+            settings: { whatsapp: "", whatsappEnabled: true, chat: { enabled: false }, socialLinks: {}, contact: {} }
+        }, { spaces: 4 });
+    }
+}
+initContent();
+
+// ===== AUTH MIDDLEWARE =====
+const checkAuth = (req, res, next) => {
+    if (req.session.authenticated) return next();
+    if (req.path.startsWith('/api/admin/')) return res.status(401).json({ success: false, message: 'Session expired.' });
+    res.redirect('/admin/login.html');
+};
+
+// ===== API: CONTENT =====
+app.get('/api/content', async (req, res) => {
+    const now = Date.now();
+    if (contentCache && (now - contentCacheTime) < CACHE_TTL) {
+        return res.set('Cache-Control','public,max-age=300').json(contentCache);
+    }
+    const content = await fs.readJson(CONTENT_FILE);
+    contentCache = content; contentCacheTime = now;
+    res.set('Cache-Control','public,max-age=300').json(content);
+});
+
+// ===== API: ADMIN AUTH =====
 app.post('/api/admin/login', (req, res) => {
     const { username, password } = req.body;
     if (username === 'naveenagl' && password === 'Naveen@agl2026') {
@@ -124,18 +188,6 @@ app.post('/api/admin/login', (req, res) => {
     }
 });
 
-app.post('/api/admin/update-content', checkAuth, async (req, res) => {
-    try {
-        await fs.writeJson(CONTENT_FILE, req.body, { spaces: 4 });
-        // Invalidate cache on update
-        contentCache = null;
-        contentCacheTime = 0;
-        res.json({ success: true });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
-
 app.get('/api/admin/logout', (req, res) => {
     req.session.destroy(() => {
         res.clearCookie('connect.sid');
@@ -143,48 +195,40 @@ app.get('/api/admin/logout', (req, res) => {
     });
 });
 
-// Serve Admin Panel (Protected)
+// ===== API: CONTENT UPDATE =====
+app.post('/api/admin/update-content', checkAuth, async (req, res) => {
+    try {
+        await fs.writeJson(CONTENT_FILE, req.body, { spaces: 4 });
+        contentCache = null; contentCacheTime = 0;
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
+});
+
+// ===== ADMIN PANEL ROUTE =====
 app.get('/admin', checkAuth, (req, res) => {
     res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.sendFile(path.join(__dirname, 'admin', 'index.html'));
 });
 
-// ===== QUOTES / INQUIRIES API =====
-
-// Submit a quote request (public)
+// ===== API: QUOTES =====
 app.post('/api/contact/submit', async (req, res) => {
     try {
         const { name, email, phone, service, message } = req.body;
-        if (!name || !email || !phone) {
-            return res.status(400).json({ success: false, message: 'Name, email, and phone are required.' });
-        }
+        if (!name || !email || !phone) return res.status(400).json({ success: false, message: 'Name, email, and phone are required.' });
         const quotes = (await fs.pathExists(QUOTES_FILE)) ? await fs.readJson(QUOTES_FILE) : [];
-        const quote = {
-            id: Date.now(),
-            name, email, phone, service: service || 'Not specified',
-            message: message || '',
-            timestamp: new Date().toISOString(),
-            read: false
-        };
-        quotes.push(quote);
+        quotes.push({ id: Date.now(), name, email, phone, service: service||'Not specified', message: message||'', timestamp: new Date().toISOString(), read: false });
         await fs.writeJson(QUOTES_FILE, quotes, { spaces: 4 });
         res.json({ success: true, message: 'Quote request submitted successfully!' });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
 
-// Get all quotes (admin only)
 app.get('/api/admin/quotes', checkAuth, async (req, res) => {
     try {
         const quotes = (await fs.pathExists(QUOTES_FILE)) ? await fs.readJson(QUOTES_FILE) : [];
         res.json({ success: true, quotes: quotes.reverse() });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
 
-// Delete a quote (admin only)
 app.delete('/api/admin/quotes/:id', checkAuth, async (req, res) => {
     try {
         const id = parseInt(req.params.id);
@@ -192,12 +236,9 @@ app.delete('/api/admin/quotes/:id', checkAuth, async (req, res) => {
         quotes = quotes.filter(q => q.id !== id);
         await fs.writeJson(QUOTES_FILE, quotes, { spaces: 4 });
         res.json({ success: true });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
 
-// Mark quote as read (admin only)
 app.put('/api/admin/quotes/:id/read', checkAuth, async (req, res) => {
     try {
         const id = parseInt(req.params.id);
@@ -205,11 +246,8 @@ app.put('/api/admin/quotes/:id/read', checkAuth, async (req, res) => {
         const q = quotes.find(q => q.id === id);
         if (q) { q.read = true; await fs.writeJson(QUOTES_FILE, quotes, { spaces: 4 }); }
         res.json({ success: true });
-    } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
-    }
+    } catch (e) { res.status(500).json({ success: false, message: e.message }); }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-});
+// ===== START =====
+httpServer.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
